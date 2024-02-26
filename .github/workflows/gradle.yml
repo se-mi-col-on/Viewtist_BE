@@ -60,9 +60,9 @@ jobs:
           port: 22
           timeout: 60s
           script: |
-            sudo docker stop boot-prac-ci
-            sudo docker rm boot-prac-ci
-            sudo docker run -it -d -p 8080:8080 --name boot-prac-ci ${{ secrets.DOCKER_USERNAME }}/viewtist
+            sudo docker stop viewtist
+            sudo docker rm viewtist
+            sudo docker run -it -d -p 8080:8080 --name viewtist ${{ secrets.DOCKER_USERNAME }}/viewtist
 
       # REMOVE Github IP FROM security group (9)
       - name: Remove IP FROM security group
