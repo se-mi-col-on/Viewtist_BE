@@ -16,7 +16,7 @@ spring:
         show_sql: true
     open-in-view: false
 
-# multipartFile 용량 늘려주는 설정
+  # multipartFile 용량 늘려주는 설정
   servlet:
     multipart:
       max-file-size: 10MB
