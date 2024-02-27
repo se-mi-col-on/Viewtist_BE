@@ -41,6 +41,10 @@ subprojects {
     }
 
 }
+project(':core'){
+    bootJar{enabled = true}
+    jar { enabled = false}
+}
 
 project(':chatting-api') {
     dependencies {
@@ -52,7 +56,6 @@ project(':streaming-api') {
         implementation project(':core')
     }
 }
-
 
 bootJar {
     enabled = false
