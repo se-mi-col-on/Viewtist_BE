@@ -1,11 +1,11 @@
-package semicolon.viewtis;
+package semicolon.viewtist;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ChattingApplication {
+public class StreamingApplication {
   public static void main(String[] args) {
-    SpringApplication.run(ChattingApplication.class, args);
+    SpringApplication.run(StreamingApplication.class, args);
   }
 }

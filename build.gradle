@@ -42,5 +42,18 @@ subprojects {
 
 }
 
+project(':chatting-api') {
+    dependencies {
+        implementation project(':core')
+    }
+}
+project(':streaming-api') {
+    dependencies {
+        implementation project(':core')
+    }
+}
 
 
+bootJar {
+    enabled = false
+}
