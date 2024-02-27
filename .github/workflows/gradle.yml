@@ -61,8 +61,16 @@ jobs:
           timeout: 60s
           script: |
             sudo docker stop viewtist
+            sudo docker stop cahtting-api
+            sudo docker stop streaming-api
             sudo docker rm viewtist
+            sudo docker rm cahtting-api
+            sudo docker rm streaming-api
             sudo docker run -it -d -p 8080:8080 --name viewtist ${{ secrets.DOCKER_USERNAME }}/viewtist
+            sudo docker run -it -d -p 8081:8081 --name cahtting-api ${{ secrets.DOCKER_USERNAME }}/viewtist
+            sudo docker run -it -d -p 8082:8082 --name streaming-api ${{ secrets.DOCKER_USERNAME }}/viewtist
+      
+      
 
       # REMOVE Github IP FROM security group
       - name: Remove IP FROM security group
