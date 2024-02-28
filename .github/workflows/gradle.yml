@@ -60,12 +60,12 @@ jobs:
           port: 22
           timeout: 60s
           script: |
-            sudo docker stop core
             sudo docker stop chatting-api
             sudo docker stop streaming-api
-            sudo docker rm core
+            sudo docker stop core
             sudo docker rm chatting-api
             sudo docker rm streaming-api
+            sudo docker rm core
             sudo docker run -it -d -p 8080:8080 --name core ${{ secrets.DOCKER_USERNAME }}/core
             sudo docker run -it -d -p 8081:8081 --name chatting-api ${{ secrets.DOCKER_USERNAME }}/chatting-api
             sudo docker run -it -d -p 8082:8082 --name streaming-api ${{ secrets.DOCKER_USERNAME }}/streaming-api

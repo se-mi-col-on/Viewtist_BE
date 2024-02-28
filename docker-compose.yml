@@ -6,6 +6,9 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
+    networks:
+      - viewtist
+
   chatting-api:
     build:
       context: ./chatting-api
@@ -14,6 +17,9 @@ services:
       - core
     ports:
       - "8081:8081"
+    networks:
+      - viewtist
+
   streaming-api:
     build:
       context: ./streaming-api
@@ -22,3 +28,8 @@ services:
       - core
     ports:
       - "8082:8082"
+    networks:
+      - viewtist
+
+networks:
+  viewtist:
