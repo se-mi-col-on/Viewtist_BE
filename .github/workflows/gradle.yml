@@ -25,13 +25,6 @@ jobs:
       - name: Spring Boot Build
         run: ./gradlew clean build -x test
 
-      - name: Docker Compose up
-        run: |
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker-compose -f docker-compose.yml up -d
-          docker images
-          docker push ${{ secrets.DOCKER_USERNAME }}/viewtist
-
       # GET GitHub IP
       - name: get GitHub IP
         id: ip
@@ -60,17 +53,20 @@ jobs:
           port: 22
           timeout: 60s
           script: |
-            sudo docker stop chatting-api
-            sudo docker stop streaming-api
-            sudo docker stop core
-            sudo docker rm chatting-api
-            sudo docker rm streaming-api
-            sudo docker rm core
-            sudo docker run -it -d -p 8080:8080 --name core ${{ secrets.DOCKER_USERNAME }}/core
-            sudo docker run -it -d -p 8081:8081 --name chatting-api ${{ secrets.DOCKER_USERNAME }}/chatting-api
-            sudo docker run -it -d -p 8082:8082 --name streaming-api ${{ secrets.DOCKER_USERNAME }}/streaming-api
-      
-      
+            sudo docker stop viewtist_be-streaming-api-1
+            sudo docker stop viewtist_be-chatting-api-1
+            sudo docker stop viewtist_be-core-1
+            sudo docker rm viewtist_be-streaming-api-1
+            sudo docker rm viewtist_be-chatting-api-1
+            sudo docker rm viewtist_be-core-1
+            cd ~
+            cd viewtist
+            rm -rf Viewtist_BE
+            git clone https://github.com/se-mi-col-on/Viewtist_BE.git
+            cd Viewtist_BE
+            sudo docker-compose -f docker-compose.yml up -d
+            sudo docker ps -a
+            
 
       # REMOVE Github IP FROM security group
       - name: Remove IP FROM security group
