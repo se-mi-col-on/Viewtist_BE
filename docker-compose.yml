@@ -1,0 +1,24 @@
+# docker-compose.yml
+
+version: '3'
+services:
+  chatting-api:
+    build:
+      context: .
+      dockerfile: ./chatting-api/Dockerfile
+    ports:
+      - "8081:8081"
+
+  streaming-api:
+    build:
+      context: .
+      dockerfile: ./streaming-api/Dockerfile
+    ports:
+      - "8082:8082"
+
+  core:
+    build:
+      context: .
+      dockerfile: ./core/Dockerfile
+    ports:
+      - "8080:8080"
