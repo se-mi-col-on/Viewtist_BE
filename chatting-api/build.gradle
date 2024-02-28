@@ -1,4 +1,6 @@
-
-
+tasks.named("bootJar") {
+    mainClass = 'semicolon.viewtist.ChattingApplication'
+}
+jar { enabled = false }
 dependencies {
 }

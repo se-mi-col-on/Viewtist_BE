@@ -5,8 +5,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class controller {
+
   @GetMapping("/")
-  public String streaming(){
+  public String streaming() {
     return "streaming";
   }
 
