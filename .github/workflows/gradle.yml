@@ -30,9 +30,7 @@ jobs:
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker-compose -f docker-compose.yml up -d
           docker images
-          docker push ${{ secrets.DOCKER_USERNAME }}/viewtist:viewtist_be_core
-          docker push ${{ secrets.DOCKER_USERNAME }}/viewtist:viewtist_be_chatting-api
-          docker push ${{ secrets.DOCKER_USERNAME }}/viewtist:viewtist_be_streaming-api
+          docker push ${{ secrets.DOCKER_USERNAME }}/viewtist
 
       # GET GitHub IP
       - name: get GitHub IP
