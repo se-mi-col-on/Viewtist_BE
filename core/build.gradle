@@ -1,2 +1,8 @@
+project(':core'){
+    tasks.named("bootJar") {
+        mainClass = 'semicolon.viewtist.CoreApplication'
+    }
+    jar { enabled = false }
+}
 dependencies {
 }
