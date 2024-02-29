@@ -63,7 +63,11 @@ jobs:
             cd viewtist
             rm -rf Viewtist_BE
             git clone https://github.com/se-mi-col-on/Viewtist_BE.git
-            cd Viewtist_BE
+            cd Viewtist_BE/core/src/main/resources
+            touch ./application.yml
+            echo "${{ secrets.CORE_APPLICATION }}" > ./application.yml
+            cd ~
+            cd viewtist/Viewtist_BE
             sudo docker-compose -f docker-compose.yml up -d
             sudo docker ps -a
             
