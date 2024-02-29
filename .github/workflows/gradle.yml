@@ -69,6 +69,18 @@ jobs:
             touch ./application.yml
             echo "${{ secrets.CORE_APPLICATION }}" > ./application.yml
             cd ~
+            cd viewtist/Viewtist_BE/chatting-api/src/main
+            mkdir resources
+            cd resources
+            touch ./application.yml
+            echo "${{ secrets.CHATTING_API_APPLICATION }}" > ./application.yml
+            cd ~
+            cd viewtist/Viewtist_BE/streaming-api/src/main
+            mkdir resources
+            cd resources
+            touch ./application.yml
+            echo "${{ secrets.STREAMING_API_APPLICATION }}" > ./application.yml
+            cd ~
             cd viewtist/Viewtist_BE
             sudo docker-compose -f docker-compose.yml up -d
             sudo docker ps -a
