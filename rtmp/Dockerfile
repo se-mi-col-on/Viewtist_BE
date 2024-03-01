@@ -1,5 +1,6 @@
 FROM alpine:3.13.4 as builder
 
+# 도커환경에서 필요한 것들 설치
 RUN apk add --update build-base git bash gcc make g++ zlib-dev linux-headers pcre-dev openssl-dev
 
 # nginx, nginx-rtmp-module 다운
