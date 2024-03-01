@@ -3,4 +3,5 @@ tasks.named("bootJar") {
 }
 jar { enabled = false }
 dependencies {
+
 }

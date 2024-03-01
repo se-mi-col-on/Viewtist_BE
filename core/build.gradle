@@ -1,4 +1,4 @@
-project(':core'){
+project(':core') {
     tasks.named("bootJar") {
         mainClass = 'semicolon.viewtist.CoreApplication'
     }

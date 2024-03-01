@@ -84,7 +84,7 @@ jobs:
             cd viewtist/Viewtist_BE
             sudo docker-compose -f docker-compose.yml up -d
             sudo docker ps -a
-            
+      
 
       # REMOVE Github IP FROM security group
       - name: Remove IP FROM security group
