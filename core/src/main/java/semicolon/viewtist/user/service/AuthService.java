@@ -42,11 +42,8 @@ public class AuthService {
     if (userRepository.existsByNickname(request.getNickname())) {
       throw new UserException(ALREADY_EXISTS_NICKNAME);
     }
-    User user = User.builder()
-        .email(request.getEmail())
-        .nickname(request.getNickname())
-        .password(passwordEncoder.encode(request.getPassword()))
-        .isEmailVerified(false)
+    User user = User.builder().email(request.getEmail()).nickname(request.getNickname())
+        .password(passwordEncoder.encode(request.getPassword())).isEmailVerified(false)
         .build();// 비밀번호는 암호화하여 저장
 
     userRepository.save(user);
@@ -61,13 +58,9 @@ public class AuthService {
     String verificationLink =
         "http://localhost:8080/api/users/verify-email?token=" + token; // 이메일 인증 링크 생성
 
-    SendMailForm sendMailForm = SendMailForm.builder()
-        .from("test@gmail.com")
-        .to(user.getEmail())
+    SendMailForm sendMailForm = SendMailForm.builder().from("test@gmail.com").to(user.getEmail())
         .subject("Verification Email")
-        .text("Please copy and paste the url: " +
-            "\n" + verificationLink)
-        .build();
+        .text("Please copy and paste the url: " + "\n" + verificationLink).build();
 
     mailgunClient.sendEmail(sendMailForm);
   }
@@ -103,11 +96,22 @@ public class AuthService {
 
   // 로그아웃
   public void signout(String token) {
-    // Blacklist에 토큰 추가
+    addTokenBlacklist(token);
+  }
+
+  // 토큰 재발급
+  public String refreshToken(String token) {
+
+    addTokenBlacklist(token);
+
+    return tokenProvider.refreshToken(token.substring(7));
+  }
+
+  private void addTokenBlacklist(String token) {
+
     TokenBlacklist tokenBlacklist = new TokenBlacklist(token.substring(7));
     tokenBlacklistRepository.save(tokenBlacklist);
   }
-
 }
 
 

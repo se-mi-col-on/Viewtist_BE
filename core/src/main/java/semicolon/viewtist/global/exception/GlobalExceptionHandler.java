@@ -10,12 +10,12 @@ import semicolon.viewtist.user.jwt.exception.JwtException;
 public class GlobalExceptionHandler {
 
   @ExceptionHandler(UserException.class)
-  public ResponseEntity<?> handleCategoryException(UserException e) {
+  public ResponseEntity<?> handlerUserException(UserException e) {
     return toResponse(e.getErrorCode(), e.getMessage());
   }
 
   @ExceptionHandler(JwtException.class)
-  public ResponseEntity<?> handleCategoryException(JwtException e) {
+  public ResponseEntity<?> handleJwtException(JwtException e) {
     return toResponse(e.getErrorCode(), e.getMessage());
   }
 

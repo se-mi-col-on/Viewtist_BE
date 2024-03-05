@@ -47,4 +47,10 @@ public class AuthController {
     return ResponseEntity.ok("로그아웃이 완료 되었습니다.");
   }
 
+  @PreAuthorize("isAuthenticated()")
+  @PostMapping("/refresh-token")
+  public ResponseEntity<String> refreshToken(@RequestHeader("Authorization") String token) {
+    String newToken = authService.refreshToken(token); // 'Bearer ' 제거
+    return ResponseEntity.ok(newToken);
+  }
 }

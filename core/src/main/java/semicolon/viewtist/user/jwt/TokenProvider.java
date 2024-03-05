@@ -1,9 +1,12 @@
 package semicolon.viewtist.user.jwt;
 
+import static semicolon.viewtist.global.exception.ErrorCode.EMAIL_NOT_FUND;
+import static semicolon.viewtist.global.exception.ErrorCode.INVALID_TOKEN;
 import static semicolon.viewtist.global.exception.ErrorCode.VERIFY_YOUR_EMAIL;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -20,15 +23,17 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import semicolon.viewtist.user.dto.UserDto;
 import semicolon.viewtist.user.exception.UserException;
+import semicolon.viewtist.user.repository.UserRepository;
 
 @RequiredArgsConstructor
 @Component
 public class TokenProvider {
 
+  private static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 60; // 1시간
+  private final UserRepository userRepository;
   @Value("${spring.jwt.key}")
   private String key;
   private SecretKey secretKey;
-  private static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 60; // 1시간
 
   @PostConstruct
   private void setSecretKey() {
@@ -76,6 +81,18 @@ public class TokenProvider {
       return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
     } catch (ExpiredJwtException e) {
       return e.getClaims();
+    }
+  }
+
+  public String refreshToken(String token) {
+    if (validateToken(token)) {
+      Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+      String userEmail = claims.getBody().getSubject();
+      semicolon.viewtist.user.entity.User user = userRepository.findByEmail(userEmail)
+          .orElseThrow(() -> new UserException(EMAIL_NOT_FUND));
+      return generateToken(UserDto.fromEntity(user));
+    } else {
+      throw new UserException(INVALID_TOKEN);
     }
   }
 }
