@@ -35,7 +35,7 @@ public class User extends BaseTimeEntity {
   private String password;
 
   @Column
-  private String profilePhotoUrl = "기본이미지 URL";
+  private String profilePhotoUrl;
 
   @JoinColumn(name = "account_id")
   @OneToOne

@@ -24,7 +24,7 @@ public class UserDto implements UserDetails {
   private String password;
   private String profilePhotoUrl;
   private Account account;
-  private boolean isEmailVerified = false;
+  private boolean isEmailVerified;
   private String emailVerificationToken;
 
   public static UserDto fromEntity(User user) {
