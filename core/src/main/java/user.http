@@ -29,3 +29,8 @@ POST http://localhost:8080/api/users/signout
 Content-Type: application/x-www-form-urlencoded
 Authorization:Bearer ${{$auth.token}}
 
+
+### 토큰 재발급
+POST http://localhost:8080/api/users/refresh-token
+Content-Type: application/x-www-form-urlencoded
+Authorization:Bearer ${{$auth.token()}}
