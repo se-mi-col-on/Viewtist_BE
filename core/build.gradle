@@ -4,5 +4,29 @@ project(':core') {
     }
     jar { enabled = false }
 }
+ext {
+    set('springCloudVersion', "2021.0.3")
+}
 dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+
+    // jwt
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+    //mailgun
+    implementation 'net.sargue:mailgun:2.0.0'
+
+    implementation 'javax.validation:validation-api:2.0.1.Final'
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
 }

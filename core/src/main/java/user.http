@@ -1,0 +1,31 @@
+### 회원가입
+POST http://localhost:8080/api/users/signup
+Content-Type: application/json
+
+{
+  "email": "lht990e@naver.com",
+  "nickname": "nickname",
+  "password": "password!123",
+  "profilePhotoUrl": "",
+  "account": {
+    "accountNumber": ""
+  }
+}
+
+### 이메일 활성화
+GET http://localhost:8080/api/users/verify-email?token=${{UUID}}
+
+### 로그인
+POST http://localhost:8080/api/users/signin
+Content-Type: application/json
+
+{
+  "email": "lht990e@naver.com",
+  "password": "password!123"
+}
+
+### 로그아웃
+POST http://localhost:8080/api/users/signout
+Content-Type: application/x-www-form-urlencoded
+Authorization:Bearer ${{$auth.token}}
+
