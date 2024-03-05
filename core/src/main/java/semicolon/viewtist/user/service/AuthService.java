@@ -56,7 +56,7 @@ public class AuthService {
     userRepository.save(user);
 
     String verificationLink =
-        "http://localhost:8080/api/users/verify-email?token=" + token; // 이메일 인증 링크 생성
+        "http://54.180.97.181:8080/api/users/verify-email?token=" + token; // 이메일 인증 링크 생성
 
     SendMailForm sendMailForm = SendMailForm.builder().from("test@gmail.com").to(user.getEmail())
         .subject("Verification Email")
