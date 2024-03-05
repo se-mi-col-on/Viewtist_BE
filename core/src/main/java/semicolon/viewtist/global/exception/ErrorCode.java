@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum ErrorCode {
-  LIVE_STREAMING_NOT_FOUND(NOT_FOUND, "Live Streaming Not Found"),
+  LIVE_STREAMING_NOT_FOUND(NOT_FOUND, "라이브 스트리밍을 찾을 수 없습니다"),
 
   ALREADY_EXISTS_EMAIL(BAD_REQUEST, "이미 존재하는 회원입니다."),
   ALREADY_EXISTS_NICKNAME(BAD_REQUEST, "이미 존재하는 닉네임입니다."),

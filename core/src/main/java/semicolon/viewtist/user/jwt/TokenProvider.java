@@ -86,7 +86,8 @@ public class TokenProvider {
 
   public String refreshToken(String token) {
     if (validateToken(token)) {
-      Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
+      Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(secretKey).build()
+          .parseClaimsJws(token);
       String userEmail = claims.getBody().getSubject();
       semicolon.viewtist.user.entity.User user = userRepository.findByEmail(userEmail)
           .orElseThrow(() -> new UserException(EMAIL_NOT_FUND));

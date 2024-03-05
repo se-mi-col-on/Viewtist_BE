@@ -13,9 +13,11 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import semicolon.viewtist.user.handler.OAuth2SuccessHandler;
 import semicolon.viewtist.user.jwt.AuthenticationFilter;
 
 @RequiredArgsConstructor
@@ -24,12 +26,14 @@ import semicolon.viewtist.user.jwt.AuthenticationFilter;
 @EnableMethodSecurity
 public class SecurityConfig {
 
+  private final OAuth2SuccessHandler oAuth2SuccessHandler;
+  private final DefaultOAuth2UserService defaultOAuth2UserService;
+  private final AuthenticationFilter authenticationFilter;
+
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
-
-  private final AuthenticationFilter authenticationFilter;
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -48,7 +52,12 @@ public class SecurityConfig {
                 ).permitAll()
                 .anyRequest().authenticated()
         )
-//        .oauth2Login(Customizer.withDefaults())
+        .oauth2Login(oauth2 -> oauth2
+            .authorizationEndpoint(endpoint -> endpoint.baseUri("/api/users/oauth2"))
+            .redirectionEndpoint(endpoint -> endpoint.baseUri("/oauth2/callback/*"))
+            .userInfoEndpoint(endpoint -> endpoint.userService(defaultOAuth2UserService))
+            .successHandler(oAuth2SuccessHandler)
+        )
 
         .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

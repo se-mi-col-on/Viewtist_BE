@@ -49,4 +49,15 @@ public class User extends BaseTimeEntity {
   @Column
   private String emailVerificationToken;
 
+  @Column
+  private String type;
+
+  public User(String userId, String type, String email, String profilePhotoUrl) {
+    this.nickname = userId;
+    this.type = type;
+    this.email = email;
+    this.password = "******";
+    this.profilePhotoUrl = profilePhotoUrl;
+    this.isEmailVerified = true;
+  }
 }
