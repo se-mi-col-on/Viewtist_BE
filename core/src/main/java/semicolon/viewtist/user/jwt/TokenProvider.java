@@ -78,7 +78,7 @@ public class TokenProvider {
   // 토큰 복호화
   private Claims parseClaims(String token) {
     try {
-      return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+      return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody();
     } catch (ExpiredJwtException e) {
       return e.getClaims();
     }
@@ -86,7 +86,7 @@ public class TokenProvider {
 
   public String refreshToken(String token) {
     if (validateToken(token)) {
-      Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+      Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
       String userEmail = claims.getBody().getSubject();
       semicolon.viewtist.user.entity.User user = userRepository.findByEmail(userEmail)
           .orElseThrow(() -> new UserException(EMAIL_NOT_FUND));
