@@ -1,4 +1,4 @@
-package semicolon.viewtist.user.mailgun;
+package semicolon.viewtist.mailgun;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

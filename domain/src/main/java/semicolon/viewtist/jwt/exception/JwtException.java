@@ -1,4 +1,4 @@
-package semicolon.viewtist.user.jwt.exception;
+package semicolon.viewtist.jwt.exception;
 
 import semicolon.viewtist.global.exception.CustomException;
 import semicolon.viewtist.global.exception.ErrorCode;

@@ -1,4 +1,4 @@
-package semicolon.viewtist.user.mailgun;
+package semicolon.viewtist.mailgun;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.openfeign.FeignClient;

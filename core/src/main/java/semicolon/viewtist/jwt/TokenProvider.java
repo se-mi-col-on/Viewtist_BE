@@ -1,8 +1,9 @@
-package semicolon.viewtist.user.jwt;
+package semicolon.viewtist.jwt;
+
+
 
 import static semicolon.viewtist.global.exception.ErrorCode.EMAIL_NOT_FUND;
 import static semicolon.viewtist.global.exception.ErrorCode.INVALID_TOKEN;
-import static semicolon.viewtist.global.exception.ErrorCode.VERIFY_YOUR_EMAIL;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -21,9 +22,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import semicolon.viewtist.global.exception.ErrorCode;
 import semicolon.viewtist.user.dto.UserDto;
 import semicolon.viewtist.user.exception.UserException;
 import semicolon.viewtist.user.repository.UserRepository;
+
 
 @RequiredArgsConstructor
 @Component
@@ -31,6 +34,7 @@ public class TokenProvider {
 
   private static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 60; // 1시간
   private final UserRepository userRepository;
+
   @Value("${spring.jwt.key}")
   private String key;
   private SecretKey secretKey;
@@ -43,7 +47,7 @@ public class TokenProvider {
   // 토큰생성
   public String generateToken(UserDto userDto) {
     if (!userDto.isEmailVerified()) {
-      throw new UserException(VERIFY_YOUR_EMAIL);
+      throw new UserException(ErrorCode.VERIFY_YOUR_EMAIL);
     }
 
     Date now = new Date();

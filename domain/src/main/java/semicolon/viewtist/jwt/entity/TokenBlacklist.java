@@ -1,4 +1,4 @@
-package semicolon.viewtist.user.jwt.entity;
+package semicolon.viewtist.jwt.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

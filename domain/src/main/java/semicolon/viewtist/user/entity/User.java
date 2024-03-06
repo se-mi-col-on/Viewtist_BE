@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,6 +36,7 @@ public class User extends BaseTimeEntity {
   private String password;
 
   @Column
+  @Setter
   private String profilePhotoUrl;
 
   @JoinColumn(name = "account_id")
@@ -52,6 +54,9 @@ public class User extends BaseTimeEntity {
   @Column
   private String type;
 
+  @Column
+  private String streamKey;
+
   public User(String userId, String type, String email, String profilePhotoUrl) {
     this.nickname = userId;
     this.type = type;
@@ -59,5 +64,6 @@ public class User extends BaseTimeEntity {
     this.password = "******";
     this.profilePhotoUrl = profilePhotoUrl;
     this.isEmailVerified = true;
+    this.streamKey = UUID.randomUUID().toString();
   }
 }

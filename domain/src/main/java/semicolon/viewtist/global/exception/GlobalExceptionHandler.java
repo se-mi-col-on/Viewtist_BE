@@ -3,8 +3,9 @@ package semicolon.viewtist.global.exception;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import semicolon.viewtist.jwt.exception.JwtException;
 import semicolon.viewtist.user.exception.UserException;
-import semicolon.viewtist.user.jwt.exception.JwtException;
+
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
