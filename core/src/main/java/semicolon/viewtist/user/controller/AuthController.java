@@ -15,6 +15,7 @@ import semicolon.viewtist.user.dto.request.UserSiginupRequest;
 import semicolon.viewtist.user.dto.request.UserSigninRequest;
 import semicolon.viewtist.user.service.AuthService;
 
+
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
@@ -50,7 +51,7 @@ public class AuthController {
   @PreAuthorize("isAuthenticated()")
   @PostMapping("/refresh-token")
   public ResponseEntity<String> refreshToken(@RequestHeader("Authorization") String token) {
-    String newToken = authService.refreshToken(token); // 'Bearer ' 제거
+    String newToken = authService.refreshToken(token);
     return ResponseEntity.ok(newToken);
   }
 }

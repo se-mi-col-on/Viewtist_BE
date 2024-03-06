@@ -12,16 +12,16 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import semicolon.viewtist.jwt.TokenProvider;
+import semicolon.viewtist.jwt.entity.TokenBlacklist;
+import semicolon.viewtist.jwt.repository.TokenBlacklistRepository;
+import semicolon.viewtist.mailgun.MailgunClient;
+import semicolon.viewtist.mailgun.SendMailForm;
 import semicolon.viewtist.user.dto.UserDto;
 import semicolon.viewtist.user.dto.request.UserSiginupRequest;
 import semicolon.viewtist.user.dto.request.UserSigninRequest;
 import semicolon.viewtist.user.entity.User;
 import semicolon.viewtist.user.exception.UserException;
-import semicolon.viewtist.user.jwt.TokenProvider;
-import semicolon.viewtist.user.jwt.entity.TokenBlacklist;
-import semicolon.viewtist.user.jwt.repository.TokenBlacklistRepository;
-import semicolon.viewtist.user.mailgun.MailgunClient;
-import semicolon.viewtist.user.mailgun.SendMailForm;
 import semicolon.viewtist.user.repository.UserRepository;
 
 @Service
@@ -44,6 +44,7 @@ public class AuthService {
     }
     User user = User.builder().email(request.getEmail()).nickname(request.getNickname())
         .password(passwordEncoder.encode(request.getPassword())).isEmailVerified(false)
+        .streamKey(UUID.randomUUID().toString())
         .build();// 비밀번호는 암호화하여 저장
 
     userRepository.save(user);

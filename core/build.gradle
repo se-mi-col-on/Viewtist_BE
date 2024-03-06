@@ -8,25 +8,27 @@ ext {
     set('springCloudVersion', "2021.0.3")
 }
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation project(':domain')
 
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
     // jwt
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
-    //mailgun
+    // mailgun
     implementation 'net.sargue:mailgun:2.0.0'
 
     implementation 'javax.validation:validation-api:2.0.1.Final'
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    runtimeOnly 'com.mysql:mysql-connector-j'
+    // s3
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.268'
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
 }
 
