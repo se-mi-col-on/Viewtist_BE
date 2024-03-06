@@ -1,4 +1,4 @@
-package semicolon.viewtist.controller;
+package semicolon.viewtist.user.controller;
 
 
 import lombok.RequiredArgsConstructor;
