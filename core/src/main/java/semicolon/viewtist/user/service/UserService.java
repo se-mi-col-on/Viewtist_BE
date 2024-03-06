@@ -1,5 +1,6 @@
 package semicolon.viewtist.user.service;
 
+import static semicolon.viewtist.global.exception.ErrorCode.ALREADY_EXISTS_NICKNAME;
 import static semicolon.viewtist.global.exception.ErrorCode.PASSWORDS_NOT_MATCH;
 import static semicolon.viewtist.global.exception.ErrorCode.USER_NOT_FOUND;
 
@@ -113,6 +114,18 @@ public class UserService {
     user.setStreamKey(UUID.randomUUID().toString());
     userRepository.save(user);
     return user.getStreamKey(); // 새로운 스트림키 반환
+  }
+
+  // 유저 닉네임 수정
+  public void updateNickname(String nickname, Authentication authentication) {
+    User user = findByEmailOrThrow(authentication.getName());
+    // 닉네임 중복 확인
+    if (userRepository.existsByNickname(nickname)) {
+      throw new UserException(ALREADY_EXISTS_NICKNAME);
+    } else {
+      user.setNickname(nickname);
+    }
+    userRepository.save(user);
   }
 
   public static String getFileNameFromUrl(String url) {

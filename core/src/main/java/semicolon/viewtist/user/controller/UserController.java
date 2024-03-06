@@ -64,5 +64,14 @@ public class UserController {
   public ResponseEntity<String> updateStreamKey(Authentication authentication) {
     return ResponseEntity.ok(userService.reissueStreamKey(authentication));
   }
+
+  @PreAuthorize("isAuthenticated()")
+  @PutMapping("/update-nickname")
+  public ResponseEntity<String> updateNickname(@RequestBody String nickname,
+      Authentication authentication) {
+    userService.updateNickname(nickname, authentication);
+    return ResponseEntity.ok("닉네임이 변경되었습니다.");
+  }
+
 }
 
