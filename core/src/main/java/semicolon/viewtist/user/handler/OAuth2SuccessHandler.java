@@ -11,11 +11,11 @@ import net.minidev.json.JSONObject;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import semicolon.viewtist.jwt.TokenProvider;
 import semicolon.viewtist.user.dto.UserDto;
 import semicolon.viewtist.user.entity.CustomOAuth2User;
 import semicolon.viewtist.user.entity.User;
 import semicolon.viewtist.user.exception.UserException;
-import semicolon.viewtist.user.jwt.TokenProvider;
 import semicolon.viewtist.user.repository.UserRepository;
 
 @Component

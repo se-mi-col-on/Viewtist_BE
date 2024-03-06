@@ -12,6 +12,7 @@ import semicolon.viewtist.user.entity.CustomOAuth2User;
 import semicolon.viewtist.user.entity.User;
 import semicolon.viewtist.user.repository.UserRepository;
 
+
 @Service
 @RequiredArgsConstructor
 public class OAuth2UserServiceImplement extends DefaultOAuth2UserService {
@@ -23,7 +24,7 @@ public class OAuth2UserServiceImplement extends DefaultOAuth2UserService {
     OAuth2User oAuth2User = super.loadUser(userRequest);
     String oauthClientName = userRequest.getClientRegistration().getClientName();
 
-    //사용자 정보 출력을 위해 주석 처리
+//    사용자 정보 출력을 위해 주석 처리
 //    try {
 //      System.out.println(new ObjectMapper().writeValueAsString(oAuth2User.getAttributes()));
 //    } catch (Exception e) {
