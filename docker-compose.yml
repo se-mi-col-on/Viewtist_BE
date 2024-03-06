@@ -4,6 +4,8 @@ services:
     build:
       context: ./core
       dockerfile: Dockerfile
+    depends_on:
+      - domain
     ports:
       - "8080:8080"
     networks:
@@ -14,7 +16,7 @@ services:
       context: ./chatting-api
       dockerfile: Dockerfile
     depends_on:
-      - core
+      - domain
     ports:
       - "8081:8081"
     networks:
@@ -25,11 +27,19 @@ services:
       context: ./streaming-api
       dockerfile: Dockerfile
     depends_on:
-      - core
+      - domain
     ports:
       - "8082:8082"
     networks:
       - viewtist
+
+  domain:
+    build:
+      context: ./domain
+      dockerfile: Dockerfile
+    networks:
+      - viewtist
+
 
 networks:
   viewtist:
