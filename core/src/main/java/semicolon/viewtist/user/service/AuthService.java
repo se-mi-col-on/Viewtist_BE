@@ -44,7 +44,7 @@ public class AuthService {
     }
     User user = User.builder().email(request.getEmail()).nickname(request.getNickname())
         .password(passwordEncoder.encode(request.getPassword())).isEmailVerified(false)
-        .streamKey(UUID.randomUUID().toString())
+        .streamKey(UUID.randomUUID().toString()).type("local")
         .build();// 비밀번호는 암호화하여 저장
 
     userRepository.save(user);
