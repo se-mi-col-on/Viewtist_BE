@@ -1,6 +1,7 @@
 package semicolon.viewtist.user.dto;
 
 import java.util.Collection;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,6 +27,7 @@ public class UserDto implements UserDetails {
   private Account account;
   private boolean isEmailVerified;
   private String emailVerificationToken;
+  private String streamKey;
 
   public static UserDto fromEntity(User user) {
     return UserDto.builder()
@@ -36,6 +38,7 @@ public class UserDto implements UserDetails {
         .profilePhotoUrl(user.getProfilePhotoUrl())
         .account(user.getAccount())
         .isEmailVerified(user.isEmailVerified())
+        .streamKey(UUID.randomUUID().toString())
         .build();
   }
 

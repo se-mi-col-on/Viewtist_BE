@@ -1,4 +1,4 @@
-package semicolon.viewtist.service;
+package semicolon.viewtist.user.service;
 
 import static semicolon.viewtist.global.exception.ErrorCode.ALREADY_EXISTS_EMAIL;
 import static semicolon.viewtist.global.exception.ErrorCode.ALREADY_EXISTS_NICKNAME;
@@ -12,7 +12,6 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import semicolon.viewtist.jwt.TokenProvider;
 import semicolon.viewtist.jwt.entity.TokenBlacklist;
 import semicolon.viewtist.jwt.repository.TokenBlacklistRepository;

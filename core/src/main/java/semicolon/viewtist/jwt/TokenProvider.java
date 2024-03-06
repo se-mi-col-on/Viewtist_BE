@@ -1,7 +1,6 @@
 package semicolon.viewtist.jwt;
 
 
-
 import static semicolon.viewtist.global.exception.ErrorCode.EMAIL_NOT_FUND;
 import static semicolon.viewtist.global.exception.ErrorCode.INVALID_TOKEN;
 

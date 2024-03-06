@@ -2,7 +2,6 @@ package semicolon.viewtist.jwt;
 
 import static semicolon.viewtist.global.exception.ErrorCode.INVALID_TOKEN;
 
-
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

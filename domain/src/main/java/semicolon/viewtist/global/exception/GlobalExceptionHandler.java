@@ -16,7 +16,7 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(JwtException.class)
-  public ResponseEntity<?> handleJwtException(JwtException e) {
+  public ResponseEntity<?> handlerJwtException(JwtException e) {
     return toResponse(e.getErrorCode(), e.getMessage());
   }
 

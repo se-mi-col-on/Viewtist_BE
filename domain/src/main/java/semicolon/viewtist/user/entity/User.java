@@ -20,6 +20,7 @@ import semicolon.viewtist.global.entitiy.BaseTimeEntity;
 @NoArgsConstructor
 @Entity
 @Builder
+@Setter
 public class User extends BaseTimeEntity {
 
   @Id
@@ -36,18 +37,15 @@ public class User extends BaseTimeEntity {
   private String password;
 
   @Column
-  @Setter
   private String profilePhotoUrl;
 
   @JoinColumn(name = "account_id")
   @OneToOne
   private Account account;
 
-  @Setter
   @Column
   private boolean isEmailVerified;
 
-  @Setter
   @Column
   private String emailVerificationToken;
 
