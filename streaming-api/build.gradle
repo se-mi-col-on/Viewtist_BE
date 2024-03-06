@@ -2,6 +2,8 @@ tasks.named("bootJar") {
     mainClass = 'semicolon.viewtist.StreamingApplication'
 }
 jar { enabled = false }
-dependencies {
 
+dependencies {
+    implementation project(':domain')
+    implementation 'org.springframework.boot:spring-boot-starter-web'
 }

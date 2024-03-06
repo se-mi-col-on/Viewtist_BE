@@ -2,5 +2,8 @@ tasks.named("bootJar") {
     mainClass = 'semicolon.viewtist.ChattingApplication'
 }
 jar { enabled = false }
+
 dependencies {
+    implementation project(':domain')
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
 }

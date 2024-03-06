@@ -29,29 +29,9 @@ subprojects {
     apply plugin: 'io.spring.dependency-management'
 
     dependencies {
-        implementation 'org.springframework.boot:spring-boot-starter-web'
-        implementation 'org.springframework.boot:spring-boot-starter-data-redis'
         compileOnly 'org.projectlombok:lombok'
-        runtimeOnly 'com.mysql:mysql-connector-j'
         annotationProcessor 'org.projectlombok:lombok'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
-        // developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
-    }
-
-
-}
-
-
-project(':chatting-api') {
-
-    dependencies {
-        implementation project(':core')
-    }
-}
-project(':streaming-api') {
-
-    dependencies {
-        implementation project(':core')
     }
 }
 
