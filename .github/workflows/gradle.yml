@@ -22,8 +22,51 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      # 각각의 yml 파일 생성
+      - name: application.yml create file
+        run: cd core/src/main
+          mkdir resources
+          cd resources
+          touch ./application.yml
+          echo "${{ secrets.CORE_APPLICATION }}" > ./application.yml
+          cd ../../../..
+          cd chatting-api/src/main
+          mkdir resources
+          cd resources
+          touch ./application.yml
+          echo "${{ secrets.CHATTING_API_APPLICATION }}" > ./application.yml
+          cd ../../../..
+          cd streaming-api/src/main
+          mkdir resources
+          cd resources
+          touch ./application.yml
+          echo "${{ secrets.STREAMING_API_APPLICATION }}" > ./application.yml
+          cd ../../../..
+          cd domain/src/main
+          mkdir resources
+          cd resources
+          touch ./application.yml
+          echo "${{ secrets.DOMAIN_APPLICATION }}" > ./application.yml
+          cd ../../../..
+
       - name: Spring Boot Build
-        run: ./gradlew clean build -x test
+        run: ./gradlew build
+
+      # Docker-compose 빌드
+      - name: docker-compose build
+        run: docker-compose build
+
+      # DockerHub Login (3)
+      - name: docker login
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+
+      # Docker-compose Hub에 풀
+      - name: docker-compose Hub pull
+        run: docker-compose pull
 
       # GET GitHub IP
       - name: get GitHub IP
@@ -53,45 +96,17 @@ jobs:
           port: 22
           timeout: 60s
           script: |
-            sudo docker stop viewtist_be-streaming-api-1
-            sudo docker stop viewtist_be-chatting-api-1
-            sudo docker stop viewtist_be-core-1
-            sudo docker rm viewtist_be-streaming-api-1
-            sudo docker rm viewtist_be-chatting-api-1
-            sudo docker rm viewtist_be-core-1
-            cd ~
-            cd viewtist
-            rm -rf Viewtist_BE
-            git clone https://github.com/se-mi-col-on/Viewtist_BE.git
-            cd Viewtist_BE/core/src/main
-            mkdir resources
-            cd resources
-            touch ./application.yml
-            echo "${{ secrets.CORE_APPLICATION }}" > ./application.yml
-            cd ~
-            cd viewtist/Viewtist_BE/chatting-api/src/main
-            mkdir resources
-            cd resources
-            touch ./application.yml
-            echo "${{ secrets.CHATTING_API_APPLICATION }}" > ./application.yml
-            cd ~
-            cd viewtist/Viewtist_BE/streaming-api/src/main
-            mkdir resources
-            cd resources
-            touch ./application.yml
-            echo "${{ secrets.STREAMING_API_APPLICATION }}" > ./application.yml
-            cd ~
-            cd viewtist/Viewtist_BE/domain/src/main
-            mkdir resources
-            cd resources
-            touch ./application.yml
-            echo "${{ secrets.DOMAIN_APPLICATION }}" > ./application.yml
-            cd ~
-            cd viewtist/Viewtist_BE
-            ./gradlew clean build -x test
-            sudo docker-compose -f docker-compose.yml up -d
+            sudo docker stop chatting-api
+            sudo docker stop streaming-api
+            sudo docker stop core 
+            sudo docker rm chatting-api
+            sudo docker rm streaming-api
+            sudo docker rm core 
+            sudo docker run -d -p 8080:8080 --name core limhyeantaek/core
+            sudo docker run -d -p 8081:8081 --name chatting-api limhyeantaek/chatting-api
+            sudo docker run -d -p 8082:8082 --name streaming-api limhyeantaek/streaming-api
             sudo docker ps -a
-      
+            sudo docker run -d -p 1935:1935 -p 8000:8000 --name rtmp limhyeantaek/rtmp
 
       # REMOVE Github IP FROM security group
       - name: Remove IP FROM security group
