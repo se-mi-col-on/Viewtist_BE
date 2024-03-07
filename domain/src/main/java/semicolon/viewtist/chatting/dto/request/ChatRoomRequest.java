@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ChatRoomRequest {
+
   private String streamKey;
   private Long streamerId;
   private String studioName;

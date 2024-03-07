@@ -17,6 +17,7 @@ import semicolon.viewtist.global.entitiy.BaseTimeEntity;
 @Entity
 @Builder
 public class ChatRoom extends BaseTimeEntity {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -24,7 +25,7 @@ public class ChatRoom extends BaseTimeEntity {
   private Long streamerId;
   private String studioName;
 
-  public static ChatRoom from(ChatRoomRequest request){
+  public static ChatRoom from(ChatRoomRequest request) {
     return ChatRoom.builder()
         .streamKey(request.getStreamKey())
         .streamerId(request.getStreamerId())

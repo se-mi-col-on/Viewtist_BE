@@ -18,6 +18,7 @@ import semicolon.viewtist.global.entitiy.BaseTimeEntity;
 @Entity
 @Builder
 public class ChatMessage extends BaseTimeEntity {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -26,7 +27,7 @@ public class ChatMessage extends BaseTimeEntity {
   private Long senderId; // 채팅을 보낸 사람
   private String message; // 메시지
 
-  public static ChatMessage from(ChatMessageRequest request){
+  public static ChatMessage from(ChatMessageRequest request) {
     return ChatMessage.builder()
         .streamKey(request.getStreamKey())
         .senderId(request.getSenderId())
