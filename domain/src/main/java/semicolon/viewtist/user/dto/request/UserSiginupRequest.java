@@ -6,7 +6,6 @@ import javax.validation.constraints.Pattern;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import semicolon.viewtist.user.entity.Account;
 import semicolon.viewtist.user.entity.User;
 
 @Getter
@@ -28,14 +27,12 @@ public class UserSiginupRequest {
 
   private String profilePhotoUrl;
 
-  private Account account;
 
   public static UserSiginupRequest from(User user) {
     return UserSiginupRequest.builder()
         .email(user.getEmail())
         .nickname(user.getNickname())
         .profilePhotoUrl(user.getProfilePhotoUrl())
-        .account(user.getAccount())
         .build();
   }
 }

@@ -13,7 +13,7 @@ public class SwaggerConfig {
     Info info = new Info()
         .title("Viewtist API Document")
         .version("v0.0.1")
-        .description("뷰티스트 실시간 채팅 api 명세서입니다.");
+        .description("뷰티스트 유저서비스 명세서입니다.");
     return new OpenAPI()
         .info(info);
   }

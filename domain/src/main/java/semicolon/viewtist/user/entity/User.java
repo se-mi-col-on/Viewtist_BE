@@ -6,7 +6,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,8 +37,7 @@ public class User extends BaseTimeEntity {
   private String profilePhotoUrl;
 
   @JoinColumn(name = "account_id")
-  @OneToOne
-  private Account account;
+  private Long accountId;
 
   @Column
   private boolean isEmailVerified;
@@ -53,14 +51,6 @@ public class User extends BaseTimeEntity {
   @Column
   private LocalDateTime tokenExpiryAt;
 
-  public User(String userId, String type, String email, String profilePhotoUrl) {
-    this.nickname = userId;
-    this.type = type;
-    this.email = email;
-    this.password = "******";
-    this.profilePhotoUrl = profilePhotoUrl;
-    this.isEmailVerified = true;
-  }
 
   public void setEmailVerified(boolean emailVerified, String emailVerificationToken) {
     isEmailVerified = emailVerified;
