@@ -39,7 +39,7 @@ public class OAuth2UserServiceImplement extends DefaultOAuth2UserService {
       Map<String, String> properties = (Map<String, String>) oAuth2User.getAttributes()
           .get("properties");
       photoUrl = properties.get("profile_image");
-      user = new User(userId, "kakao", "email@email.com", photoUrl);
+      user = new User(userId, "kakao", userId + "@email.com", photoUrl);
     }
 
     if (oauthClientName.equals("naver")) {

@@ -3,7 +3,6 @@ package semicolon.viewtist.user.dto.response;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import semicolon.viewtist.user.entity.Account;
 import semicolon.viewtist.user.entity.User;
 
 @Getter
@@ -17,7 +16,7 @@ public class UserResponse {
 
   private String profilePhotoUrl;
 
-  private Account account;
+  private Long accountId;
 
 
   public static UserResponse from(User user) {
@@ -26,7 +25,7 @@ public class UserResponse {
         .email(user.getEmail())
         .nickname(user.getNickname())
         .profilePhotoUrl(user.getProfilePhotoUrl())
-        .account(user.getAccount())
+        .accountId(user.getAccountId())
         .build();
   }
 }
