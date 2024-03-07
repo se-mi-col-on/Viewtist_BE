@@ -88,6 +88,7 @@ jobs:
             echo "${{ secrets.DOMAIN_APPLICATION }}" > ./application.yml
             cd ~
             cd viewtist/Viewtist_BE
+            ./gradlew clean build -x test
             sudo docker-compose -f docker-compose.yml up -d
             sudo docker ps -a
       
