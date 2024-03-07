@@ -1,4 +1,4 @@
-package semicolon.viewtist.user.entity;
+package semicolon.viewtist.oauth;
 
 import java.util.Collection;
 import java.util.Map;

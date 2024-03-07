@@ -1,4 +1,4 @@
-package semicolon.viewtist.user.handler;
+package semicolon.viewtist.oauth.handler;
 
 import static semicolon.viewtist.global.exception.ErrorCode.USER_NOT_FOUND;
 
@@ -12,7 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import semicolon.viewtist.jwt.TokenProvider;
-import semicolon.viewtist.user.entity.CustomOAuth2User;
+import semicolon.viewtist.oauth.CustomOAuth2User;
 import semicolon.viewtist.user.entity.User;
 import semicolon.viewtist.user.exception.UserException;
 import semicolon.viewtist.user.repository.UserRepository;
