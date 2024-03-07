@@ -5,9 +5,9 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import semicolon.viewtist.chatting.dto.ChatRoomDto;
+import semicolon.viewtist.chatting.dto.response.ChatRoomResponse;
 import semicolon.viewtist.chatting.entity.ChatRoom;
-import semicolon.viewtist.chatting.form.ChatRoomForm;
+import semicolon.viewtist.chatting.dto.request.ChatRoomRequest;
 import semicolon.viewtist.chatting.repository.ChatRoomRepository;
 import semicolon.viewtist.exception.ChattingException;
 import semicolon.viewtist.global.exception.ErrorCode;
@@ -19,17 +19,17 @@ import semicolon.viewtist.websocket.WebSocketChatHandler;
 public class LiveChatService {
   private final WebSocketChatHandler webSocketChatHandler;
   private final ChatRoomRepository chatRoomRepository;
-  public String createChatroom(ChatRoomForm chatRoomForm) throws Exception {
-    if(chatRoomRepository.findByStreamKey(chatRoomForm.getStreamKey()).isPresent()){
+  public String createChatroom(ChatRoomRequest chatRoomRequest) throws Exception {
+    if(chatRoomRepository.findByStreamKey(chatRoomRequest.getStreamKey()).isPresent()){
       throw new ChattingException(ErrorCode.ALREADY_EXIST_STREAMKEY);
     }
-    chatRoomRepository.save(ChatRoom.from(chatRoomForm));
-    webSocketChatHandler.createChatRoom(chatRoomForm.getStreamKey());
-    return  chatRoomForm.getStudioName();
+    chatRoomRepository.save(ChatRoom.from(chatRoomRequest));
+    webSocketChatHandler.createChatRoom(chatRoomRequest.getStreamKey());
+    return  chatRoomRequest.getStudioName();
   }
-  public List<ChatRoomDto> getAllChatroom() {
+  public List<ChatRoomResponse> getAllChatroom() {
     return chatRoomRepository.findAll().stream()
-        .map(ChatRoomDto::from)
+        .map(ChatRoomResponse::from)
         .collect(Collectors.toList());
   }
 

@@ -1,4 +1,4 @@
-package semicolon.viewtist.chatting.dto;
+package semicolon.viewtist.chatting.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,12 +12,12 @@ import semicolon.viewtist.chatting.entity.ChatRoom;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ChatRoomDto {
+public class ChatRoomResponse {
   private String streamKey;
   private String studioName;
 
-  public static ChatRoomDto from(ChatRoom chatroom){
-    return ChatRoomDto.builder()
+  public static ChatRoomResponse from(ChatRoom chatroom){
+    return ChatRoomResponse.builder()
         .streamKey(chatroom.getStreamKey())
         .studioName(chatroom.getStudioName())
         .build();

@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import semicolon.viewtist.chatting.form.ChatRoomForm;
+import semicolon.viewtist.chatting.dto.request.ChatRoomRequest;
 import semicolon.viewtist.global.entitiy.BaseTimeEntity;
 
 @Getter
@@ -24,11 +24,11 @@ public class ChatRoom extends BaseTimeEntity {
   private Long streamerId;
   private String studioName;
 
-  public static ChatRoom from(ChatRoomForm form){
+  public static ChatRoom from(ChatRoomRequest request){
     return ChatRoom.builder()
-        .streamKey(form.getStreamKey())
-        .streamerId(form.getStreamerId())
-        .studioName(form.getStudioName())
+        .streamKey(request.getStreamKey())
+        .streamerId(request.getStreamerId())
+        .studioName(request.getStudioName())
         .build();
   }
 }
