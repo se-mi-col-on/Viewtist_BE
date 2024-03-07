@@ -1,5 +1,6 @@
 package semicolon.viewtist.user.dto.response;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import semicolon.viewtist.user.entity.Account;
@@ -7,7 +8,8 @@ import semicolon.viewtist.user.entity.User;
 
 @Getter
 @Setter
-public class UserDetailResponse {
+@Builder
+public class UserResponse {
 
   private String email;
 
@@ -17,13 +19,14 @@ public class UserDetailResponse {
 
   private Account account;
 
-  private String steamKey;
 
-  public UserDetailResponse(User user) {
-    this.email = user.getEmail();
-    this.nickname = user.getNickname();
-    this.profilePhotoUrl = user.getProfilePhotoUrl();
-    this.account = user.getAccount();
-    this.steamKey = user.getStreamKey();
+  public static UserResponse from(User user) {
+
+    return UserResponse.builder()
+        .email(user.getEmail())
+        .nickname(user.getNickname())
+        .profilePhotoUrl(user.getProfilePhotoUrl())
+        .account(user.getAccount())
+        .build();
   }
 }
