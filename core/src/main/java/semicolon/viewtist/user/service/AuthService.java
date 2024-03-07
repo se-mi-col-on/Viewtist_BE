@@ -91,7 +91,7 @@ public class AuthService {
     User user = userRepository.findByEmailVerificationToken(token)
         .orElseThrow(() -> new UserException(USER_NOT_FOUND));
 
-    if (user.getTokenExpiryDate().isBefore(LocalDateTime.now())) {
+    if (user.getTokenExpiryAt().isBefore(LocalDateTime.now())) {
       throw new UserException(TIME_OUT_INVALID_TOKEN); // 만료된 토큰일 경우 예외 발생
     }
 

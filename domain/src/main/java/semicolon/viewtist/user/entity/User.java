@@ -51,7 +51,7 @@ public class User extends BaseTimeEntity {
   private String type;
 
   @Column
-  private LocalDateTime tokenExpiryDate;
+  private LocalDateTime tokenExpiryAt;
 
   public User(String userId, String type, String email, String profilePhotoUrl) {
     this.nickname = userId;
@@ -81,6 +81,6 @@ public class User extends BaseTimeEntity {
 
   public void setToken(String token, LocalDateTime expiryDate) {
     this.emailVerificationToken = token;
-    this.tokenExpiryDate = expiryDate;
+    this.tokenExpiryAt = expiryDate;
   }
 }
