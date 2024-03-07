@@ -1,4 +1,4 @@
-package semicolon.viewtist.config;
+package semicolon.viewtist.s3;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;

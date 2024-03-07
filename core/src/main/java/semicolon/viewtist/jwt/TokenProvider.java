@@ -18,11 +18,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import semicolon.viewtist.global.exception.ErrorCode;
-import semicolon.viewtist.user.dto.UserDto;
+import semicolon.viewtist.user.entity.User;
 import semicolon.viewtist.user.exception.UserException;
 import semicolon.viewtist.user.repository.UserRepository;
 
@@ -44,8 +43,8 @@ public class TokenProvider {
   }
 
   // 토큰생성
-  public String generateToken(UserDto userDto) {
-    if (!userDto.isEmailVerified()) {
+  public String generateToken(User user) {
+    if (!user.isEmailVerified()) {
       throw new UserException(ErrorCode.VERIFY_YOUR_EMAIL);
     }
 
@@ -53,7 +52,7 @@ public class TokenProvider {
     Date expiredDate = new Date(now.getTime() + TOKEN_EXPIRE_TIME);
 
     return Jwts.builder()
-        .setSubject(userDto.getEmail())
+        .setSubject(user.getEmail())
         .setIssuedAt(now)
         .setExpiration(expiredDate)
         .signWith(secretKey, SignatureAlgorithm.HS256)
@@ -64,7 +63,9 @@ public class TokenProvider {
   public Authentication getAuthentication(String token) {
     Claims claims = parseClaims(token);
 
-    User user = new User(claims.getSubject(), "", Collections.emptyList());
+    org.springframework.security.core.userdetails.User user =
+        new org.springframework.security.core.userdetails.User(
+            claims.getSubject(), "", Collections.emptyList());
     return new UsernamePasswordAuthenticationToken(user, token, Collections.emptyList());
   }
 
@@ -92,11 +93,12 @@ public class TokenProvider {
       Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(secretKey).build()
           .parseClaimsJws(token);
       String userEmail = claims.getBody().getSubject();
-      semicolon.viewtist.user.entity.User user = userRepository.findByEmail(userEmail)
+      User user = userRepository.findByEmail(userEmail)
           .orElseThrow(() -> new UserException(EMAIL_NOT_FUND));
-      return generateToken(UserDto.fromEntity(user));
+      return generateToken(user);
     } else {
       throw new UserException(INVALID_TOKEN);
     }
   }
+
 }

@@ -3,12 +3,15 @@ package semicolon.viewtist.user.dto.request;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import semicolon.viewtist.user.entity.Account;
+import semicolon.viewtist.user.entity.User;
 
 @Getter
 @Setter
+@Builder
 public class UserSiginupRequest {
 
   @NotBlank(message = "이메일을 입력해 주세요")
@@ -27,4 +30,12 @@ public class UserSiginupRequest {
 
   private Account account;
 
+  public static UserSiginupRequest from(User user) {
+    return UserSiginupRequest.builder()
+        .email(user.getEmail())
+        .nickname(user.getNickname())
+        .profilePhotoUrl(user.getProfilePhotoUrl())
+        .account(user.getAccount())
+        .build();
+  }
 }
