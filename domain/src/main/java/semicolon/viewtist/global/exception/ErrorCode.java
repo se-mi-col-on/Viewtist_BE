@@ -27,6 +27,10 @@ public enum ErrorCode {
   IMAGE_INFORMATION_DB_NOT_FOUND(NOT_FOUND, "이미지 정보를 찾을 수 없습니다."),
   // image
 
+  // chatting
+  ALREADY_EXIST_STREAMKEY(HttpStatus.BAD_REQUEST, "이미 존재하는 스트리밍 방입니다."),
+  NOT_EXIST_STREAMKEY(HttpStatus.BAD_REQUEST, "존재하지 않는 스트리밍 방입니다.")
+
   ;
 
   private final HttpStatus status;

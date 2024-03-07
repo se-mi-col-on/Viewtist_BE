@@ -5,12 +5,12 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import semicolon.viewtis.chatting.dto.ChatRoomDto;
-import semicolon.viewtis.chatting.entity.ChatRoom;
-import semicolon.viewtis.chatting.form.ChatRoomForm;
-import semicolon.viewtis.chatting.repository.ChatRoomRepository;
+import semicolon.viewtist.chatting.dto.ChatRoomDto;
+import semicolon.viewtist.chatting.entity.ChatRoom;
+import semicolon.viewtist.chatting.form.ChatRoomForm;
+import semicolon.viewtist.chatting.repository.ChatRoomRepository;
 import semicolon.viewtist.exception.ChattingException;
-import semicolon.viewtist.exception.ErrorCode;
+import semicolon.viewtist.global.exception.ErrorCode;
 import semicolon.viewtist.websocket.WebSocketChatHandler;
 
 @Slf4j

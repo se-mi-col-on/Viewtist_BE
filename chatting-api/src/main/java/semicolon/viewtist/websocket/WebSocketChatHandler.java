@@ -1,5 +1,7 @@
 package semicolon.viewtist.websocket;
 
+import static semicolon.viewtist.global.exception.ErrorCode.NOT_EXIST_STREAMKEY;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -15,10 +17,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import semicolon.viewtis.chatting.dto.ChatMessageDto;
-import semicolon.viewtis.chatting.form.ChatRoomForm;
+import semicolon.viewtist.chatting.dto.ChatMessageDto;
 import semicolon.viewtist.exception.ChattingException;
-import semicolon.viewtist.exception.ErrorCode;
+import semicolon.viewtist.global.exception.ErrorCode;
 
 @Slf4j
 @Component
@@ -41,7 +42,7 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
     ChatMessageDto chatMessageDto = mapper.readValue(payload, ChatMessageDto.class);
     String streamKey = chatMessageDto.getStreamKey();
     if(!chatRoomSessionMap.containsKey(streamKey)){
-      throw new ChattingException(ErrorCode.NOT_EXIST_STREAMKEY);
+      throw new ChattingException(NOT_EXIST_STREAMKEY);
     }
     Set<WebSocketSession> chatRoomSession  = chatRoomSessionMap.get(chatMessageDto.getStreamKey());
     if (chatMessageDto.getMessageType().equals(ChatMessageDto.MessageType.ENTER)) {

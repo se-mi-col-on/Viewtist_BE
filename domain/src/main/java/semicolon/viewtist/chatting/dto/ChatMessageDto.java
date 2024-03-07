@@ -1,4 +1,4 @@
-package semicolon.viewtis.chatting.dto;
+package semicolon.viewtist.chatting.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

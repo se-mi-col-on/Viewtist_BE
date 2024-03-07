@@ -1,4 +1,4 @@
-package semicolon.viewtis.chatting.entity;
+package semicolon.viewtist.chatting.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,15 +8,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.envers.AuditOverride;
-import semicolon.viewtis.chatting.dto.ChatMessageDto.MessageType;
-import semicolon.viewtis.core.global.BaseTimeEntity;
+import semicolon.viewtist.chatting.dto.ChatMessageDto.MessageType;
+import semicolon.viewtist.global.entitiy.BaseTimeEntity;
+
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Builder
-@AuditOverride(forClass = BaseTimeEntity.class)
 public class ChatMessage extends BaseTimeEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
