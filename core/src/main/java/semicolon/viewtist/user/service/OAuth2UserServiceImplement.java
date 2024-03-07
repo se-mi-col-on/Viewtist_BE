@@ -1,5 +1,6 @@
 package semicolon.viewtist.user.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;

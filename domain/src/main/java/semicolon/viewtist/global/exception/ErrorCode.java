@@ -19,6 +19,7 @@ public enum ErrorCode {
   PASSWORDS_NOT_MATCH(BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
   VERIFY_YOUR_EMAIL(BAD_REQUEST, "이메일 인증이 필요합니다."),
   INVALID_TOKEN(BAD_REQUEST, "유효하지 않은 토큰입니다."),
+  TIME_OUT_INVALID_TOKEN(BAD_REQUEST, "인증시간이 만료되었습니다."),
 
   // s3
   S3_FILE_CONVERT_ERROR(BAD_REQUEST, "S3 파일변환 에러입니다."),

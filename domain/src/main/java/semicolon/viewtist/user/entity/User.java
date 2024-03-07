@@ -7,12 +7,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
-import java.util.UUID;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import semicolon.viewtist.global.entitiy.BaseTimeEntity;
 
 @Getter
@@ -20,7 +19,6 @@ import semicolon.viewtist.global.entitiy.BaseTimeEntity;
 @NoArgsConstructor
 @Entity
 @Builder
-@Setter
 public class User extends BaseTimeEntity {
 
   @Id
@@ -53,7 +51,7 @@ public class User extends BaseTimeEntity {
   private String type;
 
   @Column
-  private String streamKey;
+  private LocalDateTime tokenExpiryDate;
 
   public User(String userId, String type, String email, String profilePhotoUrl) {
     this.nickname = userId;
@@ -62,6 +60,27 @@ public class User extends BaseTimeEntity {
     this.password = "******";
     this.profilePhotoUrl = profilePhotoUrl;
     this.isEmailVerified = true;
-    this.streamKey = UUID.randomUUID().toString();
+  }
+
+  public void setEmailVerified(boolean emailVerified, String emailVerificationToken) {
+    isEmailVerified = emailVerified;
+    this.emailVerificationToken = emailVerificationToken;
+  }
+
+  public void setProfilePhotoUrl(String newImageUrl) {
+    this.profilePhotoUrl = newImageUrl;
+  }
+
+  public void setPassword(String encode) {
+    this.password = encode;
+  }
+
+  public void setNickname(String nickname) {
+    this.nickname = nickname;
+  }
+
+  public void setToken(String token, LocalDateTime expiryDate) {
+    this.emailVerificationToken = token;
+    this.tokenExpiryDate = expiryDate;
   }
 }
