@@ -12,7 +12,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import semicolon.viewtist.jwt.TokenProvider;
-import semicolon.viewtist.user.dto.UserDto;
 import semicolon.viewtist.user.entity.CustomOAuth2User;
 import semicolon.viewtist.user.entity.User;
 import semicolon.viewtist.user.exception.UserException;
@@ -33,7 +32,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     User user = userRepository.findByNickname(userId)
         .orElseThrow(() -> new UserException(USER_NOT_FOUND));
 
-    String token = tokenProvider.generateToken(UserDto.fromEntity(user));
+    String token = tokenProvider.generateToken(user);
     response.setContentType("application/json");
     response.setCharacterEncoding("UTF-8");
 

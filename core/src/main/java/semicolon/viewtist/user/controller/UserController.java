@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import semicolon.viewtist.s3.S3UploaderService;
 import semicolon.viewtist.user.dto.request.UpdatePasswordRequest;
-import semicolon.viewtist.user.dto.response.UserDetailResponse;
+import semicolon.viewtist.user.dto.response.UserResponse;
 import semicolon.viewtist.user.service.UserService;
 
 @RestController
@@ -22,13 +23,14 @@ import semicolon.viewtist.user.service.UserService;
 @RequestMapping("/api/users")
 public class UserController {
 
+  private final S3UploaderService s3UploaderService;
   private final UserService userService;
 
 
   // 마이페이지
   @PreAuthorize("isAuthenticated()")
   @GetMapping("/mypage")
-  public ResponseEntity<UserDetailResponse> userDetail(Authentication authentication) {
+  public ResponseEntity<UserResponse> userDetail(Authentication authentication) {
     return ResponseEntity.ok(userService.userDetail(authentication));
   }
 
@@ -52,25 +54,26 @@ public class UserController {
   // 비밀번호 변경
   @PreAuthorize("isAuthenticated()")
   @PutMapping("/password")
-  public ResponseEntity<Void> updatePassword(
+  public ResponseEntity<String> updatePassword(
       @RequestBody UpdatePasswordRequest updatePasswordRequest, Authentication authentication) {
     userService.updatePassword(updatePasswordRequest, authentication);
-    return ResponseEntity.ok().build();
+    return ResponseEntity.ok("비밀번호가 변경되었습니다.");
   }
 
-  // 스트림키 재발급
-  @PreAuthorize("isAuthenticated()")
-  @PutMapping("/refresh-stream-key")
-  public ResponseEntity<String> updateStreamKey(Authentication authentication) {
-    return ResponseEntity.ok(userService.reissueStreamKey(authentication));
-  }
-
+  // 닉네임 변경
   @PreAuthorize("isAuthenticated()")
   @PutMapping("/update-nickname")
   public ResponseEntity<String> updateNickname(@RequestBody String nickname,
       Authentication authentication) {
     userService.updateNickname(nickname, authentication);
     return ResponseEntity.ok("닉네임이 변경되었습니다.");
+  }
+
+  @PostMapping("/upload")
+  public ResponseEntity<String> uploadPhoto(@RequestParam("file") MultipartFile file)
+      throws IOException {
+    s3UploaderService.uploadImage(file);
+    return ResponseEntity.ok("사진이 업로드 되었습니다.");
   }
 
 }
