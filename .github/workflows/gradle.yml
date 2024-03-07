@@ -24,7 +24,8 @@ jobs:
 
       # 각각의 yml 파일 생성
       - name: application.yml create file
-        run: cd core/src/main
+        run: |
+          cd core/src/main
           mkdir resources
           cd resources
           touch ./application.yml
@@ -106,7 +107,6 @@ jobs:
             sudo docker run -d -p 8081:8081 --name chatting-api limhyeantaek/chatting-api
             sudo docker run -d -p 8082:8082 --name streaming-api limhyeantaek/streaming-api
             sudo docker ps -a
-            sudo docker run -d -p 1935:1935 -p 8000:8000 --name rtmp limhyeantaek/rtmp
 
       # REMOVE Github IP FROM security group
       - name: Remove IP FROM security group
