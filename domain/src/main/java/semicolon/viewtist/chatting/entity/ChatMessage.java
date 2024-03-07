@@ -1,4 +1,4 @@
-package semicolon.viewtis.chatting.entity;
+package semicolon.viewtist.chatting.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,15 +8,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.envers.AuditOverride;
-import semicolon.viewtis.chatting.dto.ChatMessageDto.MessageType;
-import semicolon.viewtis.core.global.BaseTimeEntity;
+import semicolon.viewtist.chatting.dto.request.ChatMessageRequest;
+import semicolon.viewtist.chatting.dto.request.ChatMessageRequest.MessageType;
+import semicolon.viewtist.global.entitiy.BaseTimeEntity;
+
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Builder
-@AuditOverride(forClass = BaseTimeEntity.class)
 public class ChatMessage extends BaseTimeEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,4 +25,12 @@ public class ChatMessage extends BaseTimeEntity {
   private String streamKey; // 방 번호
   private Long senderId; // 채팅을 보낸 사람
   private String message; // 메시지
+
+  public static ChatMessage from(ChatMessageRequest request){
+    return ChatMessage.builder()
+        .streamKey(request.getStreamKey())
+        .senderId(request.getSenderId())
+        .message(request.getMessage())
+        .build();
+  }
 }

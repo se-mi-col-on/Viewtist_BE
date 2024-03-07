@@ -1,4 +1,4 @@
-package semicolon.viewtis.chatting.form;
+package semicolon.viewtist.chatting.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ChatRoomForm {
+public class ChatRoomRequest {
   private String streamKey;
   private Long streamerId;
   private String studioName;

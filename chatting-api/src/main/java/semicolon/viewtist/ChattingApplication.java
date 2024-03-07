@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaAuditing
-@EnableJpaRepositories(basePackages = "semicolon.viewtis.chatting.repository")
-@EntityScan(basePackages = "semicolon.viewtis.chatting.entity")
+@EnableJpaRepositories(basePackages = "semicolon.viewtist.chatting.repository")
+@EntityScan(basePackages = "semicolon.viewtist.chatting.entity")
 @SpringBootApplication
 public class ChattingApplication {
   public static void main(String[] args) {

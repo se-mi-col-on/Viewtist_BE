@@ -1,6 +1,7 @@
 package semicolon.viewtist.exception;
 
 import lombok.Getter;
+import semicolon.viewtist.global.exception.ErrorCode;
 
 @Getter
 public class ChattingException extends RuntimeException{

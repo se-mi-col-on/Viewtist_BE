@@ -1,4 +1,4 @@
-package semicolon.viewtis.chatting.dto;
+package semicolon.viewtist.chatting.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ChatMessageDto {
+public class ChatMessageRequest {
   // 메시지  타입 : 입장, 채팅
   public enum MessageType{
     ENTER, TALK
