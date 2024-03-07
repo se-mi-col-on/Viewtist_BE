@@ -17,7 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import semicolon.viewtist.jwt.AuthenticationFilter;
-import semicolon.viewtist.user.handler.OAuth2SuccessHandler;
+import semicolon.viewtist.oauth.handler.OAuth2SuccessHandler;
 
 @RequiredArgsConstructor
 @Configuration
