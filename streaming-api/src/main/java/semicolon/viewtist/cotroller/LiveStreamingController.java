@@ -26,6 +26,7 @@ public class LiveStreamingController {
 
   private final LiveStreamingService liveStreamingService;
 
+  // 스트리밍 시작
   @PreAuthorize("isAuthenticated()")
   @PostMapping("/start")
   public ResponseEntity<String> startLiveStreaming(
@@ -35,11 +36,13 @@ public class LiveStreamingController {
     return ResponseEntity.ok("스트리밍이 시작되었습니다.");
   }
 
+  // 스트리밍 정보
   @GetMapping("/{streamingId}")
   public ResponseEntity<LiveStreamingResponse> liveStreamingPage(@PathVariable Long streamingId) {
     return ResponseEntity.ok(liveStreamingService.liveStreamingPage(streamingId));
   }
 
+  // 스트리밍 업데이트
   @PreAuthorize("isAuthenticated()")
   @PutMapping("/update")
   public ResponseEntity<String> updateLiveStreaming(
@@ -49,6 +52,7 @@ public class LiveStreamingController {
     return ResponseEntity.ok("스트리밍이 업데이트 되었습니다.");
   }
 
+  // 스트리밍 종료
   @PreAuthorize("isAuthenticated()")
   @GetMapping("/stop")
   public ResponseEntity<String> stopLiveStreaming(Authentication authentication) {
@@ -56,7 +60,7 @@ public class LiveStreamingController {
     return ResponseEntity.ok("스트리밍이 종료되었습니다.");
   }
 
-  // 시청자 순으로
+  // 스트리밍 나열 시청자 순으로
   @GetMapping()
   public Page<LiveStreamingResponse> getLiveStreamings(
       Pageable pageable) {
