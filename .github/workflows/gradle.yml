@@ -97,11 +97,7 @@ jobs:
           key: ${{ secrets.AWS_SSH_KEY }}
           port: ${{ secrets.PORT }}
           timeout: 60s
-          script: |
-            sudo docker run -d -p 8081:8081 --name chatting-api limhyeantaek/chatting-api
-            sudo docker run -d -p 8082:8082 --name streaming-api limhyeantaek/streaming-api
-            sudo docker ps -a
-
+        
       # REMOVE Github IP FROM security group
       - name: 🟧 Remove IP FROM security group 2
         run: |
