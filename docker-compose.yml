@@ -1,10 +1,10 @@
 version: "3.8"
 services:
-  core:
+  common:
     build:
-      context: ./core
+      context: ./common
       dockerfile: Dockerfile
-    image: limhyeantaek/core
+    image: limhyeantaek/common:viewtist
     ports:
       - "8080:8080"
     networks:
@@ -15,7 +15,7 @@ services:
     build:
       context: ./chatting-api
       dockerfile: Dockerfile
-    image: limhyeantaek/chatting-api
+    image: limhyeantaek/chatting-api:viewtist
     ports:
       - "8081:8081"
     networks:
@@ -26,7 +26,7 @@ services:
     build:
       context: ./streaming-api
       dockerfile: Dockerfile
-    image: limhyeantaek/streaming-api
+    image: limhyeantaek/streaming-api:viewtist
     ports:
       - "8082:8082"
     networks:

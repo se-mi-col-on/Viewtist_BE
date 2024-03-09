@@ -3,7 +3,7 @@ name: Java CI with Gradle
 # main 브랜치에 push, PR 이벤트 발생시 동작.
 on:
   push:
-    branches: [ "main","develop" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
@@ -25,11 +25,11 @@ jobs:
       # 각각의 yml 파일 생성
       - name: application.yml create file
         run: |
-          cd core/src/main
+          cd common/src/main
           mkdir resources
           cd resources
           touch ./application.yml
-          echo "${{ secrets.CORE_APPLICATION }}" > ./application.yml
+          echo "${{ secrets.COMMON_APPLICATION }}" > ./application.yml
           cd ../../../..
           cd chatting-api/src/main
           mkdir resources
@@ -66,8 +66,8 @@ jobs:
 
 
       # Docker-compose Hub에 풀
-      - name: docker-compose Hub pull
-        run: docker-compose pull
+      - name: docker-compose Hub push
+        run: docker-compose push
 
       # GET GitHub IP
       - name: get GitHub IP
@@ -97,15 +97,9 @@ jobs:
           port: 22
           timeout: 60s
           script: |
-            sudo docker stop chatting-api
-            sudo docker stop streaming-api
-            sudo docker stop core 
-            sudo docker rm chatting-api
-            sudo docker rm streaming-api
-            sudo docker rm core 
-            sudo docker run -d -p 8080:8080 --name core limhyeantaek/core
-            sudo docker run -d -p 8081:8081 --name chatting-api limhyeantaek/chatting-api
-            sudo docker run -d -p 8082:8082 --name streaming-api limhyeantaek/streaming-api
+            sudo docker stop common
+            sudo docker rm common
+            sudo docker run -d -p 8080:8080 --name common limhyeantaek/common:viewtist
             sudo docker ps -a
 
       # REMOVE Github IP FROM security group
