@@ -128,7 +128,7 @@ jobs:
         with:
           host: ${{ secrets.HOST_2 }}
           username: ubuntu
-          key: ${{AWS_SSH_KEY}}
+          key: ${{ secrets.AWS_SSH_KEY }}
           port: 22
           timeout: 60s
           script: |
