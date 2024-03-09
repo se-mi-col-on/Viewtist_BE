@@ -16,7 +16,7 @@ jobs:
       - name: ✅ Checkout
         uses: actions/checkout@v4
 
-      - name: ☕️☕ Set up JDK 17
+      - name: ☕️ Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
@@ -99,7 +99,7 @@ jobs:
           script: |
             sudo docker stop common
             sudo docker rm common
-            sudo docker run -d -p 8080:8080 --name common limhyeantaek/common:viewtist
+            sudo docker run -d -p 8080:8080 --name common limhyeantaek/common
             sudo docker ps -a
 
       # REMOVE Github IP FROM security group
@@ -132,8 +132,8 @@ jobs:
           port: 22
           timeout: 60s
           script: |
-            sudo docker run -d -p 8081:8081 --name chatting-api limhyeantaek/chatting-api:viewtist
-            sudo docker run -d -p 8082:8082 --name streaming-api limhyeantaek/streaming-api:viewtist
+            sudo docker run -d -p 8081:8081 --name chatting-api limhyeantaek/chatting-api
+            sudo docker run -d -p 8082:8082 --name streaming-api limhyeantaek/streaming-api
             sudo docker ps -a
 
       # REMOVE Github IP FROM security group
