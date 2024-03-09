@@ -22,9 +22,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @ImportAutoConfiguration({FeignAutoConfiguration.class, HttpClientConfiguration.class})
 @ServletComponentScan
 @EnableJpaAuditing
-public class CoreApplication {
+public class CommonApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(CoreApplication.class, args);
+    SpringApplication.run(CommonApplication.class, args);
   }
 }
