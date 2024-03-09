@@ -78,6 +78,7 @@ public class AuthService {
         .isEmailVerified(false)
         .emailVerificationToken(token)
         .tokenExpiryAt(LocalDateTime.now().plusMinutes(3)) // 3분 후 만료
+        .type("local")
         .build();// 이메일 저장
 
     // User 객체에 토큰과 만료 시간 저장
