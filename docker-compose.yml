@@ -4,7 +4,7 @@ services:
     build:
       context: ./common
       dockerfile: Dockerfile
-    image: limhyeantaek/common:viewtist
+    image: limhyeantaek/common
     ports:
       - "8080:8080"
     networks:
@@ -15,7 +15,7 @@ services:
     build:
       context: ./chatting-api
       dockerfile: Dockerfile
-    image: limhyeantaek/chatting-api:viewtist
+    image: limhyeantaek/chatting-api
     ports:
       - "8081:8081"
     networks:
@@ -26,7 +26,7 @@ services:
     build:
       context: ./streaming-api
       dockerfile: Dockerfile
-    image: limhyeantaek/streaming-api:viewtist
+    image: limhyeantaek/streaming-api
     ports:
       - "8082:8082"
     networks:
