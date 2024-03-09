@@ -127,8 +127,8 @@ jobs:
         uses: appleboy/ssh-action@v0.1.6
         with:
           host: ${{ secrets.HOST_2 }}
-          username: ubuntu
-          password: ${{ secrets.EC2_PASSWORD_2 }}
+          username: ${{ secrets.AWS_SSH_USERNAME }}
+          key: ${{ secrets.AWS_SSH_KEY }}
           port: 22
           timeout: 60s
           script: |
