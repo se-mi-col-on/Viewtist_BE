@@ -1,6 +1,6 @@
 rootProject.name = 'viewtist'
 include 'chatting-api'
 include 'streaming-api'
-include 'core'
 include 'domain'
+include 'common'
 

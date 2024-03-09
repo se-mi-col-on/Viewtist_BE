@@ -1,10 +1,10 @@
 version: "3.8"
 services:
-  core:
+  common:
     build:
-      context: ./core
+      context: ./common
       dockerfile: Dockerfile
-    image: limhyeantaek/core
+    image: limhyeantaek/common
     ports:
       - "8080:8080"
     networks:

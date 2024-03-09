@@ -1,6 +1,6 @@
-project(':core') {
+project(':common') {
     tasks.named("bootJar") {
-        mainClass = 'semicolon.viewtist.CoreApplication'
+        mainClass = 'semicolon.viewtist.CommonApplication'
     }
     jar { enabled = false }
 }
