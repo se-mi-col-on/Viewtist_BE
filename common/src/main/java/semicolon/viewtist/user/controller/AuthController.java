@@ -43,7 +43,7 @@ public class AuthController {
   @GetMapping("/verify-email")
   public ResponseEntity<String> verifyEmail(@RequestParam("token") String token) {
     authService.verifyEmailToken(token);
-    return ResponseEntity.ok("이메일이 활성화 되었습니다.");
+    return ResponseEntity.ok("이메일이 인증 되었습니다.");
   }
 
   // 로그인

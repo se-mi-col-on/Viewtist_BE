@@ -73,4 +73,5 @@ public class User extends BaseTimeEntity {
     this.emailVerificationToken = token;
     this.tokenExpiryAt = expiryDate;
   }
+
 }

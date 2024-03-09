@@ -5,6 +5,7 @@ import static semicolon.viewtist.global.exception.ErrorCode.ALREADY_EXISTS_NICKN
 import static semicolon.viewtist.global.exception.ErrorCode.EMAIL_NOT_FUND;
 import static semicolon.viewtist.global.exception.ErrorCode.INVALID_TOKEN;
 import static semicolon.viewtist.global.exception.ErrorCode.PASSWORDS_NOT_MATCH;
+import static semicolon.viewtist.global.exception.ErrorCode.PROCEED_EMAIL_VERIFICATION;
 import static semicolon.viewtist.global.exception.ErrorCode.TIME_OUT_INVALID_TOKEN;
 import static semicolon.viewtist.global.exception.ErrorCode.USER_NOT_FOUND;
 import static semicolon.viewtist.global.exception.ErrorCode.VERIFY_YOUR_EMAIL;
@@ -46,32 +47,40 @@ public class AuthService {
 
   // 회원가입
   public void signup(UserSiginupRequest request) {
-    if (userRepository.existsByEmail(request.getEmail())) {
-      throw new UserException(ALREADY_EXISTS_EMAIL);
-    }
+    User user = userRepository.findByEmail(request.getEmail())
+        .orElseThrow(() -> new UserException(PROCEED_EMAIL_VERIFICATION));
 
     if (userRepository.existsByNickname(request.getNickname())) {
       throw new UserException(ALREADY_EXISTS_NICKNAME);
     }
-    User user = User.builder().email(request.getEmail()).nickname(request.getNickname())
-        .password(passwordEncoder.encode(request.getPassword())).isEmailVerified(false)
-        .build();// 비밀번호는 암호화하여 저장
+    if (userRepository.existsByEmail(user.getEmail()) && user.isEmailVerified()) {
+      user.setNickname(request.getNickname());
+      user.setPassword(passwordEncoder.encode(request.getPassword()));
+      user.setProfilePhotoUrl(request.getProfilePhotoUrl());
 
-    userRepository.save(user);
+      userRepository.save(user);
+    } else {
+      throw new UserException(PROCEED_EMAIL_VERIFICATION);
+    }
   }
 
   // 인증 이메일 발송
   public void sendEmail(String email) {
+    // 이미 이메일이 있는지 확인
+    if (userRepository.existsByEmail(email)) {
+      throw new UserException(ALREADY_EXISTS_EMAIL);
+    }
+
     String token = UUID.randomUUID().toString(); // 랜덤한 토큰 생성
 
-    // 토큰 만료 시간 설정
-    LocalDateTime expiryDate = LocalDateTime.now().plusMinutes(3); // 3분 후 만료
-
-    User user = userRepository.findByEmail(email)
-        .orElseThrow(() -> new UserException(EMAIL_NOT_FUND));
+    User user = User.builder()
+        .email(email)
+        .isEmailVerified(false)
+        .emailVerificationToken(token)
+        .tokenExpiryAt(LocalDateTime.now().plusMinutes(3)) // 3분 후 만료
+        .build();// 이메일 저장
 
     // User 객체에 토큰과 만료 시간 저장
-    user.setToken(token, expiryDate);
     userRepository.save(user);
 
     String verificationLink =
