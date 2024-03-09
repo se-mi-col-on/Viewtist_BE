@@ -12,7 +12,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import semicolon.viewtist.global.entitiy.BaseTimeEntity;
-import semicolon.viewtist.liveStreaming.dto.request.LiveStreamingUpdateRequest;
+import semicolon.viewtist.liveStreaming.dto.request.LiveStreamingRequest;
 import semicolon.viewtist.liveStreaming.dto.response.LiveStreamingResponse;
 import semicolon.viewtist.user.entity.User;
 
@@ -52,8 +52,8 @@ public class LiveStreaming extends BaseTimeEntity {
         .build();
   }
 
-  public void update(LiveStreamingUpdateRequest liveStreamingUpdateRequest) {
-    this.title = liveStreamingUpdateRequest.getUpdateTitle();
-    this.category = liveStreamingUpdateRequest.getUpdateCategory();
+  public void update(LiveStreamingRequest liveStreamingRequest) {
+    this.title = liveStreamingRequest.getTitle();
+    this.category = liveStreamingRequest.getCategory();
   }
 }

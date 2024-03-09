@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import semicolon.viewtist.global.exception.ErrorCode;
-import semicolon.viewtist.liveStreaming.dto.request.LiveStreamingCreateRequest;
+import semicolon.viewtist.liveStreaming.dto.request.LiveStreamingRequest;
 import semicolon.viewtist.liveStreaming.dto.response.LiveStreamingResponse;
 import semicolon.viewtist.liveStreaming.entity.LiveStreaming;
 import semicolon.viewtist.liveStreaming.exception.LiveStreamingException;
@@ -21,11 +21,11 @@ public class LiveStreamingService {
   private final UserRepository userRepository;
 
   // 스트리밍 시작
-  public void startLiveStreaming(LiveStreamingCreateRequest liveStreamingCreateRequest,
+  public void startLiveStreaming(LiveStreamingRequest liveStreamingRequest,
       Authentication authentication) {
 
     User user = findByEmailOrThrow(authentication);
-    LiveStreaming liveStreaming = liveStreamingCreateRequest.from(liveStreamingCreateRequest, user);
+    LiveStreaming liveStreaming = liveStreamingRequest.from(liveStreamingRequest, user);
     liveStreamingRepository.save(liveStreaming);
   }
 

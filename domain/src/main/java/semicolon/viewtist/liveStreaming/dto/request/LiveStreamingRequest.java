@@ -9,18 +9,17 @@ import semicolon.viewtist.user.entity.User;
 
 @Getter
 @Setter
-public class LiveStreamingCreateRequest {
+public class LiveStreamingRequest {
 
   private String title;
 
   private Category category;
 
-
-  public LiveStreaming from(LiveStreamingCreateRequest liveStreamingCreateRequest, User user) {
+  public LiveStreaming from(LiveStreamingRequest liveStreamingRequest, User user) {
     return LiveStreaming.builder()
-        .title(liveStreamingCreateRequest.getTitle())
+        .title(liveStreamingRequest.getTitle())
+        .category(liveStreamingRequest.getCategory())
         .user(user)
-        .category(liveStreamingCreateRequest.getCategory())
         .startAt(LocalDateTime.now())
         .build();
   }

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import semicolon.viewtist.liveStreaming.dto.request.LiveStreamingCreateRequest;
+import semicolon.viewtist.liveStreaming.dto.request.LiveStreamingRequest;
 import semicolon.viewtist.liveStreaming.dto.response.LiveStreamingResponse;
 import semicolon.viewtist.service.LiveStreamingService;
 
@@ -25,9 +25,9 @@ public class LiveStreamingController {
   @PreAuthorize("isAuthenticated()")
   @PostMapping("/start")
   public ResponseEntity<String> startLiveStreaming(
-      @RequestBody LiveStreamingCreateRequest liveStreamingCreateRequest,
+      @RequestBody LiveStreamingRequest liveStreamingRequest,
       Authentication authentication) {
-    liveStreamingService.startLiveStreaming(liveStreamingCreateRequest, authentication);
+    liveStreamingService.startLiveStreaming(liveStreamingRequest, authentication);
     return ResponseEntity.ok("스트리밍이 시작되었습니다.");
   }
 
