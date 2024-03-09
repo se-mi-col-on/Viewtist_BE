@@ -95,7 +95,7 @@ jobs:
           host: ${{ secrets.HOST_2 }}          
           username: ubuntu
           key: ${{ secrets.AWS_SSH_KEY }}
-          port: ${{ secrets.PORT }}
+          port: 22
           timeout: 60s
         
       # REMOVE Github IP FROM security group
