@@ -65,7 +65,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
 
-      # Docker-compose Hub에 풀
+      # Docker-compose를 통해 docker Hub에 push
       - name: docker-compose Hub push
         run: docker-compose push
 
@@ -106,3 +106,28 @@ jobs:
       - name: Remove IP FROM security group
         run: |
           aws ec2 revoke-security-group-ingress --group-id ${{ secrets.EC2_SG_ID }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
+
+      # Add github ip to AWS server2
+      - name: Add GitHub IP to AWS Server2
+        run: |
+          aws ec2 authorize-security-group-ingress --group-id ${{ secrets.EC2_SG_ID_2 }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
+
+      # AWS EC2 Server Connect & Docker 명령어 실행
+      - name: AWS EC2 Server2 Connection
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.HOST_2 }}
+          username: ubuntu
+          password: ${{ secrets.EC2_PASSWORD_2 }}
+          port: 22
+          timeout: 60s
+          script: |
+            sudo docker run -d -p 8081:8081 --name chatting-api limhyeantaek/chatting-api:viewtist
+            sudo docker run -d -p 8082:8082 --name streaming-api limhyeantaek/streaming-api:viewtist
+            sudo docker ps -a
+
+      # REMOVE Github IP FROM security group
+      - name: Remove IP FROM security group2
+        run: |
+          aws ec2 revoke-security-group-ingress --group-id ${{ secrets.EC2_SG_ID_2 }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
+          
