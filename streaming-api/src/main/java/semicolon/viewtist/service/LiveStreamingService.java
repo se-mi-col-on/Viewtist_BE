@@ -5,6 +5,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import semicolon.viewtist.global.exception.ErrorCode;
 import semicolon.viewtist.liveStreaming.dto.request.LiveStreamingCreateRequest;
+import semicolon.viewtist.liveStreaming.dto.response.LiveStreamingResponse;
 import semicolon.viewtist.liveStreaming.entity.LiveStreaming;
 import semicolon.viewtist.liveStreaming.exception.LiveStreamingException;
 import semicolon.viewtist.liveStreaming.repository.LiveStreamingRepository;
@@ -26,6 +27,15 @@ public class LiveStreamingService {
     User user = findByEmailOrThrow(authentication);
     LiveStreaming liveStreaming = liveStreamingCreateRequest.from(liveStreamingCreateRequest, user);
     liveStreamingRepository.save(liveStreaming);
+  }
+
+  // 스트리밍 정보
+  public LiveStreamingResponse liveStreamingPage(Long StreamingId) {
+
+    LiveStreaming liveStreaming = liveStreamingRepository.findById(StreamingId)
+        .orElseThrow(() -> new LiveStreamingException(ErrorCode.LIVE_STREAMING_NOT_FOUND));
+
+    return liveStreaming.form(liveStreaming);
   }
 
 
