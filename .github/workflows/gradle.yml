@@ -90,12 +90,12 @@ jobs:
 
       # AWS EC2 Server Connect & Docker 명령어 실행
       - name: 🟧 AWS EC2 Connection2
-        uses: appleboy/ssh-action@v0.1.6
+        uses: appleboy/ssh-action@v0.1.4        
         with:
-          host: ${{ secrets.HOST_2 }}
+          host: ${{ secrets.HOST_2 }}          
           username: ubuntu
-          password: ${{ secrets.EC2_PASSWORD_2 }}
-          port: 22
+          key: ${{ secrets.AWS_SSH_KEY }}
+          port: ${{ secrets.PORT }}
           timeout: 60s
           script: |
             sudo docker run -d -p 8081:8081 --name chatting-api limhyeantaek/chatting-api
