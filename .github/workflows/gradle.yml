@@ -88,14 +88,12 @@ jobs:
           aws ec2 authorize-security-group-ingress --group-id ${{ secrets.EC2_SG_ID }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
 
       # AWS EC2 Server Connect & Docker 명령어 실행
-      - name: 🟠 AWS EC2 Connection
-        uses: appleboy/ssh-action@v0.1.6
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
-          username: ubuntu
-          password: ${{ secrets.EC2_PASSWORD }}
-          port: 22
-          timeout: 60s
+          username: ${{ secrets.AWS_SSH_USERNAME }}
+          key: ${{ secrets.EC2_PASSWORD }}
           script: |
             sudo docker stop common
             sudo docker rm common
