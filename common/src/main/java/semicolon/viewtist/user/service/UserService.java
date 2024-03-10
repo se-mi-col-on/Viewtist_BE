@@ -77,15 +77,23 @@ public class UserService {
   }
 
   // 비밀번호 찾기
-  public void findPassword(String email) {
+  public void resetAndSendTemporaryPassword(String email) {
     User user = findByEmailOrThrow(email);
     // 임시 비밀번호 지정
-    String temporaryPassword = UUID.randomUUID().toString();
+    String temporaryPassword = generateTemporaryPassword();
     user.setPassword(passwordEncoder.encode(temporaryPassword));
     userRepository.save(user);
     // 메일 발송
+    sendTemporaryPasswordEmail(user.getEmail(), temporaryPassword);
+  }
+
+  private String generateTemporaryPassword() {
+    return UUID.randomUUID().toString();
+  }
+
+  private void sendTemporaryPasswordEmail(String to, String temporaryPassword) {
     SendMailForm sendMailForm = SendMailForm.builder().from(from)
-        .to(user.getEmail())
+        .to(to)
         .subject(subject)
         .text(text + temporaryPassword)
         .build();

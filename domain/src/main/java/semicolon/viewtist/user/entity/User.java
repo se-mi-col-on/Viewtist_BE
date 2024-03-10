@@ -69,9 +69,9 @@ public class User extends BaseTimeEntity {
     this.nickname = nickname;
   }
 
-  public void setToken(String token, LocalDateTime expiryDate) {
+  public void setToken(String token, LocalDateTime tokenExpiryAt) {
     this.emailVerificationToken = token;
-    this.tokenExpiryAt = expiryDate;
+    this.tokenExpiryAt = tokenExpiryAt;
   }
 
 }

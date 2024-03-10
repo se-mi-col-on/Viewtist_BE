@@ -47,7 +47,7 @@ public class UserController {
   // 비밀번호 찾기
   @PostMapping("/find-password")
   public ResponseEntity<String> findPassword(@RequestBody String email) {
-    userService.findPassword(email);
+    userService.resetAndSendTemporaryPassword(email);
     return ResponseEntity.ok("입력된 이메일로 임시비밀번호가 발송 되었습니다.");
   }
 
