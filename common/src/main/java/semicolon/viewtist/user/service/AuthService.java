@@ -83,6 +83,7 @@ public class AuthService {
         throw new UserException(ALREADY_EXISTS_EMAIL);
       } else {
         user.setToken(token, tokenExpiryAt);
+        userRepository.save(user);
       }
     } else {
       User user = User.builder()
