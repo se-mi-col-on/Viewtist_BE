@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import semicolon.viewtist.user.dto.request.UserSiginupRequest;
+import semicolon.viewtist.user.dto.request.UserSignupRequest;
 import semicolon.viewtist.user.dto.request.UserSigninRequest;
 import semicolon.viewtist.user.service.AuthService;
 
@@ -27,7 +27,7 @@ public class AuthController {
 
   // 회원가입
   @PostMapping("/signup")
-  public ResponseEntity<String> signup(@RequestBody UserSiginupRequest request) throws IOException {
+  public ResponseEntity<String> signup(@RequestBody UserSignupRequest request) throws IOException {
     authService.signup(request);
     return ResponseEntity.ok("회원가입 성공적으로 완료되었습니다.");
   }
