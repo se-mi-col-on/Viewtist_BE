@@ -97,6 +97,7 @@ jobs:
           script: |
             sudo docker stop common
             sudo docker rm common
+            sudo docker rmi limhyeantaek/common
             sudo docker run -d -p 8080:8080 --name common limhyeantaek/common
             sudo docker ps -a
 
@@ -132,6 +133,8 @@ jobs:
             sudo docker stop streaming-api
             sudo docker rm chatting-api
             sudo docker rm streaming-api
+            sudo docker rmi limhyeantaek/chatting-api
+            sudo docker rmi limhyeantaek/streaming-api
             sudo docker run -d -p 8081:8081 --name chatting-api limhyeantaek/chatting-api
             sudo docker run -d -p 8082:8082 --name streaming-api limhyeantaek/streaming-api
             sudo docker ps -a
