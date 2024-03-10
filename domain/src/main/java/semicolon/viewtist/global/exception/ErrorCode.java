@@ -20,7 +20,7 @@ public enum ErrorCode {
   VERIFY_YOUR_EMAIL(BAD_REQUEST, "이메일 인증이 필요합니다."),
   INVALID_TOKEN(BAD_REQUEST, "유효하지 않은 토큰입니다."),
   TIME_OUT_INVALID_TOKEN(BAD_REQUEST, "인증시간이 만료되었습니다."),
-  PROCEED_EMAIL_VERIFICATION(BAD_REQUEST, "이메일 인증을 진행해 주세요."),
+  NOT_VERIFIED_EMAIL(BAD_REQUEST, "이메일 인증을 진행해 주세요."),
 
   // s3
   S3_FILE_CONVERT_ERROR(BAD_REQUEST, "S3 파일변환 에러입니다."),

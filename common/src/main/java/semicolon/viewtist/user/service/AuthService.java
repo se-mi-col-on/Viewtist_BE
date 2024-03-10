@@ -4,8 +4,8 @@ import static semicolon.viewtist.global.exception.ErrorCode.ALREADY_EXISTS_EMAIL
 import static semicolon.viewtist.global.exception.ErrorCode.ALREADY_EXISTS_NICKNAME;
 import static semicolon.viewtist.global.exception.ErrorCode.EMAIL_NOT_FUND;
 import static semicolon.viewtist.global.exception.ErrorCode.INVALID_TOKEN;
+import static semicolon.viewtist.global.exception.ErrorCode.NOT_VERIFIED_EMAIL;
 import static semicolon.viewtist.global.exception.ErrorCode.PASSWORDS_NOT_MATCH;
-import static semicolon.viewtist.global.exception.ErrorCode.PROCEED_EMAIL_VERIFICATION;
 import static semicolon.viewtist.global.exception.ErrorCode.TIME_OUT_INVALID_TOKEN;
 import static semicolon.viewtist.global.exception.ErrorCode.USER_NOT_FOUND;
 import static semicolon.viewtist.global.exception.ErrorCode.VERIFY_YOUR_EMAIL;
@@ -48,7 +48,7 @@ public class AuthService {
   // 회원가입
   public void signup(UserSiginupRequest request) {
     User user = userRepository.findByEmail(request.getEmail())
-        .orElseThrow(() -> new UserException(PROCEED_EMAIL_VERIFICATION));
+        .orElseThrow(() -> new UserException(USER_NOT_FOUND));
 
     if (userRepository.existsByNickname(request.getNickname())) {
       throw new UserException(ALREADY_EXISTS_NICKNAME);
@@ -60,7 +60,7 @@ public class AuthService {
 
       userRepository.save(user);
     } else {
-      throw new UserException(PROCEED_EMAIL_VERIFICATION);
+      throw new UserException(NOT_VERIFIED_EMAIL);
     }
   }
 
