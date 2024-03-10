@@ -129,6 +129,8 @@ jobs:
           key: ${{ secrets.EC2_PASSWORD_2 }}
           script: |
             whoami
+            echo "$HOST"
+            ls -a
 
       # REMOVE Github IP FROM security group
       - name: 🟧 Remove IP FROM security group 2
