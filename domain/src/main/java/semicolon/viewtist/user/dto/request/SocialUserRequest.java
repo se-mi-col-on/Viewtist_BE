@@ -3,6 +3,7 @@ package semicolon.viewtist.user.dto.request;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import semicolon.viewtist.user.entity.Type;
 import semicolon.viewtist.user.entity.User;
 
 @Getter
@@ -11,7 +12,7 @@ import semicolon.viewtist.user.entity.User;
 public class SocialUserRequest {
 
   private String userId;
-  private String type;
+  private Type type;
   private String email;
   private String profilePhotoUrl;
 

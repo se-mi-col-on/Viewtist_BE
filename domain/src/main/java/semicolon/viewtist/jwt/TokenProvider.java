@@ -1,7 +1,7 @@
 package semicolon.viewtist.jwt;
 
 
-import static semicolon.viewtist.global.exception.ErrorCode.EMAIL_NOT_FUND;
+import static semicolon.viewtist.global.exception.ErrorCode.EMAIL_NOT_FOUND;
 import static semicolon.viewtist.global.exception.ErrorCode.INVALID_TOKEN;
 
 import io.jsonwebtoken.Claims;
@@ -94,7 +94,7 @@ public class TokenProvider {
           .parseClaimsJws(token);
       String userEmail = claims.getBody().getSubject();
       User user = userRepository.findByEmail(userEmail)
-          .orElseThrow(() -> new UserException(EMAIL_NOT_FUND));
+          .orElseThrow(() -> new UserException(EMAIL_NOT_FOUND));
       return generateToken(user);
     } else {
       throw new UserException(INVALID_TOKEN);

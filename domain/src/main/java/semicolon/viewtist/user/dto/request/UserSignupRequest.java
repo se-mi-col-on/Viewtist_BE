@@ -11,7 +11,7 @@ import semicolon.viewtist.user.entity.User;
 @Getter
 @Setter
 @Builder
-public class UserSiginupRequest {
+public class UserSignupRequest {
 
   @NotBlank(message = "이메일을 입력해 주세요")
   @Email(message = "이메일 형식으로 입력해 주세요.")
@@ -28,8 +28,8 @@ public class UserSiginupRequest {
   private String profilePhotoUrl;
 
 
-  public static UserSiginupRequest from(User user) {
-    return UserSiginupRequest.builder()
+  public static UserSignupRequest from(User user) {
+    return UserSignupRequest.builder()
         .email(user.getEmail())
         .nickname(user.getNickname())
         .profilePhotoUrl(user.getProfilePhotoUrl())
