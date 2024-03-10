@@ -25,6 +25,7 @@ import semicolon.viewtist.mailgun.MailgunClient;
 import semicolon.viewtist.mailgun.SendMailForm;
 import semicolon.viewtist.user.dto.request.UserSignupRequest;
 import semicolon.viewtist.user.dto.request.UserSigninRequest;
+import semicolon.viewtist.user.entity.Type;
 import semicolon.viewtist.user.entity.User;
 import semicolon.viewtist.user.exception.UserException;
 import semicolon.viewtist.user.repository.UserRepository;
@@ -87,7 +88,7 @@ public class AuthService {
           .isEmailVerified(false)
           .emailVerificationToken(token)
           .tokenExpiryAt(tokenExpiryAt)
-          .type("local")
+          .type(Type.local)
           .build();
       userRepository.save(user);
     }
@@ -102,6 +103,7 @@ public class AuthService {
   }
 
   // 이메일 인증
+  @Transactional
   public void verifyEmailToken(String token) {
     User user = userRepository.findByEmailVerificationToken(token)
         .orElseThrow(() -> new UserException(USER_NOT_FOUND));

@@ -46,7 +46,7 @@ public class User extends BaseTimeEntity {
   private String emailVerificationToken;
 
   @Column
-  private String type;
+  private Type type;
 
   @Column
   private LocalDateTime tokenExpiryAt;

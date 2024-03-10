@@ -9,6 +9,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import semicolon.viewtist.user.dto.request.SocialUserRequest;
+import semicolon.viewtist.user.entity.Type;
 import semicolon.viewtist.user.entity.User;
 import semicolon.viewtist.user.repository.UserRepository;
 
@@ -43,7 +44,7 @@ public class OAuth2UserServiceImplement extends DefaultOAuth2UserService {
       photoUrl = properties.get("profile_image");
       socialUserRequest = SocialUserRequest.builder()
           .userId(userId)
-          .type("kakao")
+          .type(Type.kakao)
           .profilePhotoUrl(photoUrl)
           .email(userId + "@email.com")
           .build();
@@ -58,7 +59,7 @@ public class OAuth2UserServiceImplement extends DefaultOAuth2UserService {
       photoUrl = response.get("profile_image");
       socialUserRequest = SocialUserRequest.builder()
           .userId(userId)
-          .type("kakao")
+          .type(Type.naver)
           .profilePhotoUrl(photoUrl)
           .email(email)
           .build();
@@ -72,7 +73,7 @@ public class OAuth2UserServiceImplement extends DefaultOAuth2UserService {
 
       socialUserRequest = SocialUserRequest.builder()
           .userId(userId)
-          .type("kakao")
+          .type(Type.google)
           .profilePhotoUrl(photoUrl)
           .email(email)
           .build();
