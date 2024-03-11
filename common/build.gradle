@@ -23,6 +23,8 @@ ext {
 dependencies {
     implementation project(':domain')
 
+    implementation 'org.slf4j:jcl-over-slf4j:1.7.30'
+
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
     // mailgun
