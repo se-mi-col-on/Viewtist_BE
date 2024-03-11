@@ -32,12 +32,18 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     User user = userRepository.findByNickname(userId)
         .orElseThrow(() -> new UserException(USER_NOT_FOUND));
 
-    String token = tokenProvider.generateToken(user);
+    String accessToken = tokenProvider.generateToken(user);
+    String refreshToken = tokenProvider.generateRefreshToken(user);
+
+    user.setRefreshToken(refreshToken);
+    userRepository.save(user);
+
     response.setContentType("application/json");
     response.setCharacterEncoding("UTF-8");
 
     JSONObject jsonResponse = new JSONObject();
-    jsonResponse.put("token", token);
+    jsonResponse.put("accessToken", accessToken);
+    jsonResponse.put("refreshToken", refreshToken);
 
     response.getWriter().write(jsonResponse.toString());
   }
