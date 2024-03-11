@@ -18,6 +18,8 @@ public class UserResponse {
 
   private Long accountId;
 
+  private String channelIntroduction;
+
 
   public static UserResponse from(User user) {
 

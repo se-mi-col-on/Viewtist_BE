@@ -51,6 +51,15 @@ public class User extends BaseTimeEntity {
   @Column
   private LocalDateTime tokenExpiryAt;
 
+  @Column
+  private String refreshToken;
+
+  @Column
+  private String streamKey;
+
+  @Column
+  private String channelIntroduction;
+
 
   public void setEmailVerified(boolean emailVerified, String emailVerificationToken) {
     isEmailVerified = emailVerified;
@@ -74,4 +83,7 @@ public class User extends BaseTimeEntity {
     this.tokenExpiryAt = tokenExpiryAt;
   }
 
+  public void setRefreshToken(String refreshToken) {
+    this.refreshToken = refreshToken;
+  }
 }

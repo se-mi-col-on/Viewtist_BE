@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import semicolon.viewtist.user.dto.request.UserSignupRequest;
 import semicolon.viewtist.user.dto.request.UserSigninRequest;
+import semicolon.viewtist.user.dto.request.UserSignupRequest;
+import semicolon.viewtist.user.dto.response.SigninResponse;
 import semicolon.viewtist.user.service.AuthService;
 
 
@@ -48,9 +49,8 @@ public class AuthController {
 
   // 로그인
   @PostMapping("/signin")
-  public ResponseEntity<Map<String, String>> signin(@RequestBody UserSigninRequest request) {
-    String token = authService.signin(request);
-    Map<String, String> response = Map.of("token", token);
+  public ResponseEntity<SigninResponse> signin(@RequestBody UserSigninRequest request) {
+    SigninResponse response = authService.signin(request);
     return ResponseEntity.ok(response);
   }
 
@@ -66,11 +66,10 @@ public class AuthController {
   @PreAuthorize("isAuthenticated()")
   @PostMapping("/refresh-token")
   public ResponseEntity<Map<String, String>> refreshToken(
-      @RequestHeader("Authorization") String token) {
-    String newToken = authService.refreshToken(token);
-    Map<String, String> response = Map.of("token", newToken);
+      @RequestHeader("Authorization") String refreshToken) {
+    String newToken = authService.refreshToken(refreshToken);
+    Map<String, String> response = Map.of("accessToken", newToken);
     return ResponseEntity.ok(response);
   }
-
 
 }
