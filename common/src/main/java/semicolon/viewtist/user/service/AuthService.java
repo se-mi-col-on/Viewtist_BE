@@ -61,9 +61,9 @@ public class AuthService {
       throw new UserException(NOT_VERIFIED_EMAIL);
     }
 
-    user.setNickname(request.getNickname());
-    user.setPassword(passwordEncoder.encode(request.getPassword()));
-    user.setProfilePhotoUrl(request.getProfilePhotoUrl());
+    user.setSignup(request.getNickname(), passwordEncoder.encode(request.getPassword()),
+        request.getProfilePhotoUrl());
+
     userRepository.save(user);
   }
 

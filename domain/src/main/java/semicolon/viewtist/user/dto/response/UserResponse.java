@@ -28,6 +28,7 @@ public class UserResponse {
         .nickname(user.getNickname())
         .profilePhotoUrl(user.getProfilePhotoUrl())
         .accountId(user.getAccountId())
+        .channelIntroduction(user.getChannelIntroduction())
         .build();
   }
 }
