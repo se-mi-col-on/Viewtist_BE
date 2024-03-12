@@ -23,7 +23,7 @@ public class ChatRoom extends BaseTimeEntity {
   private Long id;
   private String streamKey;
   private Long streamerId;
-  private boolean activated;
+  private boolean active;
 
   public static ChatRoom from(ChatRoomRequest request) {
     return ChatRoom.builder()
@@ -32,6 +32,9 @@ public class ChatRoom extends BaseTimeEntity {
         .build();
   }
   public void setChatRoomActivate(boolean status){
-    this.activated = status;
+    this.active = status;
+  }
+  public boolean isActive(){
+    return active;
   }
 }

@@ -34,7 +34,7 @@ public class ChatRoomService {
   }
   // 채팅방 상태 설정
   @Transactional
-  public void setChatRoomStatus(String streamKey, String status) {
+  public String setChatRoomStatus(String streamKey, String status) {
     ChatRoom chatRoom = chatRoomRepository.findByStreamKey(streamKey).orElseThrow(
         () -> new ChattingException(ErrorCode.NOT_EXIST_STREAMKEY)
     );
@@ -43,12 +43,13 @@ public class ChatRoomService {
     }else{
       setStatus(chatRoom,false);
     }
+    return status;
   }
   private void setStatus(ChatRoom chatRoom, boolean status){
     chatRoom.setChatRoomActivate(status);
   }
   public List<ChatRoomResponse> findActivatedRoom() {
-    List<ChatRoomResponse> result = chatRoomRepository.findByActivatedTrue()
+    List<ChatRoomResponse> result = chatRoomRepository.findByActiveIsTrue()
         .stream().map(ChatRoomResponse::from)
         .collect(Collectors.toList());
     Collections.reverse(result);

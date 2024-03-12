@@ -31,6 +31,7 @@ public enum ErrorCode {
   // chatting
   ALREADY_EXIST_STREAMKEY(HttpStatus.BAD_REQUEST, "이미 존재하는 스트리밍 방입니다."),
   ALREADY_CREATE_ANOTHER_ROOM(HttpStatus.BAD_REQUEST, "이미 다른 방을 생성했습니다."),
+  DISABLED_CHAT_ROOM(HttpStatus.BAD_REQUEST, "비활성화된 방입니다."),
   NOT_EXIST_STREAMKEY(HttpStatus.BAD_REQUEST, "존재하지 않는 스트리밍 방입니다."),
   NOT_EXIST_DESTINATION(HttpStatus.BAD_REQUEST, "destination이 존재하지 않습니다."),
   NOT_ENTER_ANY_ROOM(HttpStatus.BAD_REQUEST, "아직 채팅방에 들어가지 않았습니다."),

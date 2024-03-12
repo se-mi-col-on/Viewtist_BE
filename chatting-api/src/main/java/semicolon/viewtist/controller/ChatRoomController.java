@@ -31,8 +31,8 @@ public class ChatRoomController {
   @PutMapping("/chatroom/{streamKey}")
   @Operation(summary = "채팅방 상태 설정", description = "스트리밍 시작할때는 status = ON 종료할때는 status = OFF")
   public ResponseEntity<String> enableChatRoom(@PathVariable String streamKey, String status) throws Exception {
-    chatRoomService.setChatRoomStatus(streamKey,status);
-    return ResponseEntity.ok("채팅방이 종료되었습니다.");
+
+    return ResponseEntity.ok(chatRoomService.setChatRoomStatus(streamKey,status));
   }
   @GetMapping("/chatroom")
   @Operation(summary = "현재 활성화된 채팅방을 조회한다.", description = "스트리밍방송이 켜져있는 채팅방 조회.")
