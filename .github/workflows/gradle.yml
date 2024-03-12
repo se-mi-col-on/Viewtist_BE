@@ -108,38 +108,38 @@ jobs:
 
       
 
-      # Configure AWS Credentials - AWS 접근 권한 취득(IAM)
-      - name: 🟧 Configure AWS Credentials2
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_2 }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_2 }}
-          aws-region: ap-northeast-2
+      # # Configure AWS Credentials - AWS 접근 권한 취득(IAM)
+      # - name: 🟧 Configure AWS Credentials2
+      #   uses: aws-actions/configure-aws-credentials@v4
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_2 }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_2 }}
+      #     aws-region: ap-northeast-2
 
-      # Add github ip to AWS
-      - name: 🟧 Add GitHub IP to AWS server 2
-        run: |
-          aws ec2 authorize-security-group-ingress --group-id ${{ secrets.EC2_SG_ID_2 }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
+      # # Add github ip to AWS
+      # - name: 🟧 Add GitHub IP to AWS server 2
+      #   run: |
+      #     aws ec2 authorize-security-group-ingress --group-id ${{ secrets.EC2_SG_ID_2 }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
 
-      # AWS EC2 Server Connect & Docker 명령어 실행
-      - name: Deploy to EC2
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST_2 }}
-          username: ${{ secrets.AWS_SSH_USERNAME }}
-          key: ${{ secrets.EC2_PASSWORD_2 }}
-          script: |
-            sudo docker stop chatting-api
-            sudo docker stop streaming-api
-            sudo docker rm chatting-api
-            sudo docker rm streaming-api
-            sudo docker rmi limhyeantaek/chatting-api
-            sudo docker rmi limhyeantaek/streaming-api
-            sudo docker run -d -p 8081:8081 --name chatting-api limhyeantaek/chatting-api
-            sudo docker run -d -p 8082:8082 --name streaming-api limhyeantaek/streaming-api
-            sudo docker ps -a
+      # # AWS EC2 Server Connect & Docker 명령어 실행
+      # - name: Deploy to EC2
+      #   uses: appleboy/ssh-action@master
+      #   with:
+      #     host: ${{ secrets.HOST_2 }}
+      #     username: ${{ secrets.AWS_SSH_USERNAME }}
+      #     key: ${{ secrets.EC2_PASSWORD_2 }}
+      #     script: |
+      #       sudo docker stop chatting-api
+      #       sudo docker stop streaming-api
+      #       sudo docker rm chatting-api
+      #       sudo docker rm streaming-api
+      #       sudo docker rmi limhyeantaek/chatting-api
+      #       sudo docker rmi limhyeantaek/streaming-api
+      #       sudo docker run -d -p 8081:8081 --name chatting-api limhyeantaek/chatting-api
+      #       sudo docker run -d -p 8082:8082 --name streaming-api limhyeantaek/streaming-api
+      #       sudo docker ps -a
 
-      # REMOVE Github IP FROM security group
-      - name: 🟧 Remove IP FROM security group 2
-        run: |
-          aws ec2 revoke-security-group-ingress --group-id ${{ secrets.EC2_SG_ID_2 }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
+      # # REMOVE Github IP FROM security group
+      # - name: 🟧 Remove IP FROM security group 2
+      #   run: |
+      #     aws ec2 revoke-security-group-ingress --group-id ${{ secrets.EC2_SG_ID_2 }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
