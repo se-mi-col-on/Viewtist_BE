@@ -23,13 +23,15 @@ public class ChatRoom extends BaseTimeEntity {
   private Long id;
   private String streamKey;
   private Long streamerId;
-  private String studioName;
+  private boolean activated;
 
   public static ChatRoom from(ChatRoomRequest request) {
     return ChatRoom.builder()
         .streamKey(request.getStreamKey())
         .streamerId(request.getStreamerId())
-        .studioName(request.getStudioName())
         .build();
+  }
+  public void setChatRoomActivate(boolean status){
+    this.activated = status;
   }
 }

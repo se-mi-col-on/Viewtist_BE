@@ -13,5 +13,4 @@ public class ChatRoomRequest {
 
   private String streamKey;
   private Long streamerId;
-  private String studioName;
 }

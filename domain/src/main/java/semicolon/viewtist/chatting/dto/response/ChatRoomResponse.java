@@ -9,18 +9,17 @@ import semicolon.viewtist.chatting.entity.ChatRoom;
 
 @Builder
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChatRoomResponse {
 
   private String streamKey;
-  private String studioName;
+  private Long streamerId;
 
   public static ChatRoomResponse from(ChatRoom chatroom) {
     return ChatRoomResponse.builder()
         .streamKey(chatroom.getStreamKey())
-        .studioName(chatroom.getStudioName())
+        .streamerId(chatroom.getStreamerId())
         .build();
   }
 }
