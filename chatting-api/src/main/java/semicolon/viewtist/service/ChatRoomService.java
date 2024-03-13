@@ -49,11 +49,8 @@ public class ChatRoomService {
   private void setStatus(ChatRoom chatRoom, boolean status){
     chatRoom.setChatRoomActivate(status);
   }
-  public List<ChatRoomResponse> findActivatedRoom(Pageable pageable) {
-    List<ChatRoomResponse> result = chatRoomRepository.findByActiveIsTrue(pageable)
-        .stream().map(ChatRoomResponse::from)
-        .collect(Collectors.toList());
-    Collections.reverse(result);
-    return result;
+  public Page<ChatRoomResponse> findActivatedRoom(Pageable pageable) {
+    Page<ChatRoom> activatedRooms = chatRoomRepository.findByActiveIsTrue(pageable);
+    return activatedRooms.map(ChatRoomResponse::from);
   }
 }
