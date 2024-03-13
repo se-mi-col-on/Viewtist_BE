@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import semicolon.viewtist.chatting.dto.request.ChatRoomRequest;
@@ -26,7 +27,7 @@ public class ChatRoomService {
     if(chatRoomRepository.existsByStreamKey(request.getStreamKey())){
       throw new ChattingException(ErrorCode.ALREADY_EXIST_STREAMKEY);
     }
-    if(chatRoomRepository.findByStreamerId(request.getStreamerId()).isPresent()){
+    if(chatRoomRepository.existsByStreamerId(request.getStreamerId())){
       throw new ChattingException(ErrorCode.ALREADY_CREATE_ANOTHER_ROOM);
     }
     ChatRoom chatRoom = chatRoomRepository.save(ChatRoom.from(request));
@@ -48,8 +49,8 @@ public class ChatRoomService {
   private void setStatus(ChatRoom chatRoom, boolean status){
     chatRoom.setChatRoomActivate(status);
   }
-  public List<ChatRoomResponse> findActivatedRoom() {
-    List<ChatRoomResponse> result = chatRoomRepository.findByActiveIsTrue()
+  public List<ChatRoomResponse> findActivatedRoom(Pageable pageable) {
+    List<ChatRoomResponse> result = chatRoomRepository.findByActiveIsTrue(pageable)
         .stream().map(ChatRoomResponse::from)
         .collect(Collectors.toList());
     Collections.reverse(result);

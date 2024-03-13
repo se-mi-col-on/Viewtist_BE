@@ -3,6 +3,8 @@ package semicolon.viewtist.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,21 +24,21 @@ public class ChatRoomController {
   private final ChatRoomService chatRoomService;
   // 스트리밍 시작시 채팅방 생성
   @PostMapping("/chatroom")
-  @Operation(summary = "채팅방 생성", description = "처음 스트리밍을 시작할때 생성됨 status 자동으로 ON")
+  @Operation(summary = "채팅방을 생성한다.", description = "처음 스트리밍을 시작할때 생성됨 status 자동으로 ON")
   public ResponseEntity<String> createChatRoom(
       @RequestBody ChatRoomRequest chatRoomRequest) throws Exception {
     chatRoomService.createRoom(chatRoomRequest);
     return ResponseEntity.ok("채팅방이 생성되었습니다.");
   }
   @PutMapping("/chatroom/{streamKey}")
-  @Operation(summary = "채팅방 상태 설정", description = "스트리밍 시작할때는 status = ON 종료할때는 status = OFF")
+  @Operation(summary = "채팅방 상태를 설정한다.", description = "스트리밍 시작할때는 status = ON 종료할때는 status = OFF")
   public ResponseEntity<String> enableChatRoom(@PathVariable String streamKey, String status) throws Exception {
 
     return ResponseEntity.ok(chatRoomService.setChatRoomStatus(streamKey,status));
   }
   @GetMapping("/chatroom")
   @Operation(summary = "현재 활성화된 채팅방을 조회한다.", description = "스트리밍방송이 켜져있는 채팅방 조회.")
-  public ResponseEntity< List<ChatRoomResponse>> getAllChatroom() throws Exception {
-    return ResponseEntity.ok(chatRoomService.findActivatedRoom());
+  public ResponseEntity< List<ChatRoomResponse>> getAllChatroom(@PageableDefault Pageable pageable) throws Exception {
+    return ResponseEntity.ok(chatRoomService.findActivatedRoom(pageable));
   }
 }
