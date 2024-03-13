@@ -1,8 +1,10 @@
 package semicolon.viewtist.user.controller;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import java.io.IOException;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -11,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import semicolon.viewtist.s3.S3UploaderService;
@@ -61,13 +63,15 @@ public class UserController {
 //  }
 
   @PreAuthorize("isAuthenticated()")
-  @PutMapping("/update-profile-photo")
-  public ResponseEntity<Map<String, String>> updateProfilePhoto(
-      @RequestParam("file") MultipartFile file,
+  @PutMapping(value ="/update-profile-photo",
+      consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<String> updateProfilePhoto(@Parameter(
+      description = "multipart/form-data 형식의 이미지 리스트를 input으로 받습니다. 이때 key 값은 multipartFile 입니다."
+  )
+      @RequestPart("file") MultipartFile file,
       Authentication authentication) throws IOException {
     String photoUrl = userService.updateProfilePhoto(file, authentication);
-    Map<String, String> response = Map.of("profilePhotoUrl", photoUrl);
-    return ResponseEntity.ok(response);
+    return ResponseEntity.ok(photoUrl);
   }
 
   @PreAuthorize("isAuthenticated()")

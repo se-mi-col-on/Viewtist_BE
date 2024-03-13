@@ -67,6 +67,7 @@ public class AuthService {
     userRepository.save(user);
   }
 
+  // 이메일 보내기
   public void sendEmail(String email) {
     String token = UUID.randomUUID().toString();
     LocalDateTime tokenExpiryAt = LocalDateTime.now().plusMinutes(3);
@@ -97,6 +98,7 @@ public class AuthService {
     mailgunClient.sendEmail(sendMailForm);
   }
 
+  // 이메일 인증
   @Transactional
   public void verifyEmailToken(String token) {
     User user = userRepository.findByEmailVerificationToken(token)
@@ -125,7 +127,7 @@ public class AuthService {
 
   // 로그아웃
   public void signout(String token) {
-    String email = extractEmailFromToken(token);
+    String email = emailFormToken(token);
     User user = findUserByEmail(email);
 
     invalidateTokens(token, user);
@@ -133,13 +135,20 @@ public class AuthService {
 
   // 토큰 재발급
   @Transactional
-  public String refreshToken(String refreshToken) {
-    String email = extractEmailFromToken(refreshToken);
-    User user = findUserByEmail(email);
+  public String refreshToken(String accessToken, String refreshToken) {
+    String accessTokenEmail = extractEmailFromToken(accessToken);
 
-    validateRefreshToken(user);
+    String email = tokenProvider.getUserIdFromToken(refreshToken);
 
-    return tokenProvider.generateToken(user);
+    if (!email.equals(accessTokenEmail)) {
+      throw new UserException(INVALID_TOKEN);
+    }
+
+    User refreshUser = findUserByEmail(email);
+
+    validateRefreshToken(refreshUser);
+
+    return tokenProvider.generateToken(refreshUser);
   }
 
   private User findUserByEmail(String email) {
@@ -171,6 +180,9 @@ public class AuthService {
     addTokenBlacklist(token);
   }
 
+  private String emailFormToken(String token) {
+    return tokenProvider.getUserIdFromToken(token);
+  }
   // 토큰에서 유저 아이디 추출(유저 아이디 사용하여 유저 정보 조회)
   private String extractEmailFromToken(String token) {
     return tokenProvider.getUserIdFromToken(token.substring(7));

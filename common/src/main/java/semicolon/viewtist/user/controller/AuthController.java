@@ -1,8 +1,8 @@
 package semicolon.viewtist.user.controller;
 
 
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.io.IOException;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -63,12 +63,11 @@ public class AuthController {
   }
 
   // 토큰 재발급
-  @PreAuthorize("isAuthenticated()")
+  @ApiResponse(responseCode = "200", description = "새로운 accessToken")
   @PostMapping("/refresh-token")
-  public ResponseEntity<Map<String, String>> refreshToken(
-      @RequestHeader("Authorization") String refreshToken) {
-    String newToken = authService.refreshToken(refreshToken);
-    Map<String, String> response = Map.of("accessToken", newToken);
+  public ResponseEntity<String> refreshToken(@RequestHeader("Authorization") String accessToken,
+      @RequestBody String refreshToken) {
+    String response = authService.refreshToken(accessToken, refreshToken);
     return ResponseEntity.ok(response);
   }
 

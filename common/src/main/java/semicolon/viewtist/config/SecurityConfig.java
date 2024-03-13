@@ -15,8 +15,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import semicolon.viewtist.jwt.AuthenticationFilter;
+import semicolon.viewtist.jwt.CustomAccessDeniedHandler;
+import semicolon.viewtist.jwt.CustomAuthenticationEntryPoint;
 import semicolon.viewtist.oauth.handler.OAuth2SuccessHandler;
 
 @RequiredArgsConstructor
@@ -25,6 +26,8 @@ import semicolon.viewtist.oauth.handler.OAuth2SuccessHandler;
 @EnableMethodSecurity
 public class SecurityConfig {
 
+  private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+  private final CustomAccessDeniedHandler customAccessDeniedHandler;
   private final OAuth2SuccessHandler oAuth2SuccessHandler;
   private final DefaultOAuth2UserService defaultOAuth2UserService;
   private final AuthenticationFilter authenticationFilter;
@@ -45,9 +48,9 @@ public class SecurityConfig {
         .sessionManagement(c ->
             c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-        .authorizeHttpRequests((request) ->
+        .authorizeHttpRequests(request ->
             request.requestMatchers(
-                    new AntPathRequestMatcher("/**")
+                    "/**"
                 ).permitAll()
                 .anyRequest().authenticated()
         )
@@ -56,6 +59,10 @@ public class SecurityConfig {
             .redirectionEndpoint(endpoint -> endpoint.baseUri("/oauth2/callback/*"))
             .userInfoEndpoint(endpoint -> endpoint.userService(defaultOAuth2UserService))
             .successHandler(oAuth2SuccessHandler)
+        )
+        .exceptionHandling(exception -> exception
+            .authenticationEntryPoint(customAuthenticationEntryPoint)
+            .accessDeniedHandler(customAccessDeniedHandler)
         )
 
         .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);

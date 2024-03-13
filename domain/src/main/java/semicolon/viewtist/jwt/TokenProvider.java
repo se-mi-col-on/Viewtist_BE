@@ -25,7 +25,7 @@ import semicolon.viewtist.user.exception.UserException;
 @Component
 public class TokenProvider {
 
-  private static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 60; // 24시간
+  private static final long TOKEN_EXPIRE_TIME = 1000 * 60; // 1분
   private static final long REFRESH_TOKEN_EXPIRE_TIME = TOKEN_EXPIRE_TIME * 24; // 24시간
 
   @Value("${spring.jwt.key}")
