@@ -138,13 +138,12 @@ public class AuthService {
   public String refreshToken(String accessToken, String refreshToken) {
     String accessTokenEmail = extractEmailFromToken(accessToken);
 
-    String email = tokenProvider.getUserIdFromToken(refreshToken);
+    String nickname = tokenProvider.getUserIdFromToken(refreshToken);
+    User refreshUser = findUserByNickname(nickname);
 
-    if (!email.equals(accessTokenEmail)) {
+    if (!refreshUser.getEmail().equals(accessTokenEmail)) {
       throw new UserException(INVALID_TOKEN);
     }
-
-    User refreshUser = findUserByEmail(email);
 
     validateRefreshToken(refreshUser);
 
@@ -153,6 +152,11 @@ public class AuthService {
 
   private User findUserByEmail(String email) {
     return userRepository.findByEmail(email)
+        .orElseThrow(() -> new UserException(USER_NOT_FOUND));
+  }
+
+  private User findUserByNickname(String nickname) {
+    return userRepository.findByNickname(nickname)
         .orElseThrow(() -> new UserException(USER_NOT_FOUND));
   }
 

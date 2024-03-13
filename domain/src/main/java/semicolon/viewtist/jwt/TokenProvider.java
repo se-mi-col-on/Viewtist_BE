@@ -89,7 +89,7 @@ public class TokenProvider {
     Date expiredDate = new Date(now.getTime() + REFRESH_TOKEN_EXPIRE_TIME);
 
     return Jwts.builder()
-        .setSubject(user.getEmail())
+        .setSubject(user.getNickname())
         .setIssuedAt(now)
         .setExpiration(expiredDate)
         .signWith(secretKey, SignatureAlgorithm.HS256)
