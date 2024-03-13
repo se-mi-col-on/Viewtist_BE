@@ -13,8 +13,9 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import semicolon.viewtist.jwt.AuthenticationFilter;
+import semicolon.viewtist.jwt.CustomAccessDeniedHandler;
+import semicolon.viewtist.jwt.CustomAuthenticationEntryPoint;
 
 @RequiredArgsConstructor
 @Configuration
@@ -22,6 +23,9 @@ import semicolon.viewtist.jwt.AuthenticationFilter;
 @EnableMethodSecurity
 public class SecurityConfig {
 
+
+  private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+  private final CustomAccessDeniedHandler customAccessDeniedHandler;
   private final AuthenticationFilter authenticationFilter;
 
 
@@ -36,11 +40,15 @@ public class SecurityConfig {
         .sessionManagement(c ->
             c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-        .authorizeHttpRequests((request) ->
+        .authorizeHttpRequests(request ->
             request.requestMatchers(
-                    new AntPathRequestMatcher("/**")
+                    "/**"
                 ).permitAll()
                 .anyRequest().authenticated()
+        )
+        .exceptionHandling(exception -> exception
+            .authenticationEntryPoint(customAuthenticationEntryPoint)
+            .accessDeniedHandler(customAccessDeniedHandler)
         )
 
         .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);

@@ -40,5 +40,4 @@ public class LiveStreamingController {
     return ResponseEntity.ok("스트리밍이 업데이트 되었습니다.");
   }
 
-
 }
