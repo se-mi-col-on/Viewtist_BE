@@ -77,10 +77,13 @@ public class AuthService {
     Optional<User> optionalUser = userRepository.findByEmail(email);
     if (optionalUser.isPresent()) {
       User user = optionalUser.get();
+      user.setToken(token, tokenExpiryAt);
+      userRepository.save(user);
       if (user.isEmailVerified()) {
         throw new UserException(ALREADY_EXISTS_EMAIL);
       } else {
         user.setToken(token, tokenExpiryAt);
+        userRepository.save(user);
       }
     } else {
       User user = User.builder()

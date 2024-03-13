@@ -39,6 +39,7 @@ public class OAuth2UserServiceImplement extends DefaultOAuth2UserService {
     SocialUserRequest socialUserRequest;
     if (oauthClientName.equals("kakao")) {
       userId = "kakao_" + oAuth2User.getAttributes().get("id");
+      @SuppressWarnings("unchecked")
       Map<String, String> properties = (Map<String, String>) oAuth2User.getAttributes()
           .get("properties");
       photoUrl = properties.get("profile_image");
@@ -52,6 +53,7 @@ public class OAuth2UserServiceImplement extends DefaultOAuth2UserService {
     }
 
     if (oauthClientName.equals("naver")) {
+      @SuppressWarnings("unchecked")
       Map<String, String> response = (Map<String, String>) oAuth2User.getAttributes()
           .get("response");
       userId = "naver_" + response.get("id").substring(0, 14);
