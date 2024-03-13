@@ -24,29 +24,28 @@ public class LiveStreamingService {
   public void startLiveStreaming(LiveStreamingCreateRequest liveStreamingCreateRequest,
       Authentication authentication) {
 
-    User user = findByEmailOrThrow(authentication);
+    User user = findByEmail(authentication);
     LiveStreaming liveStreaming = liveStreamingCreateRequest.from(liveStreamingCreateRequest, user);
     liveStreamingRepository.save(liveStreaming);
   }
 
   // 스트리밍 업데이트
-  public void updateLiveStreaming(
-      LiveStreamingUpdateRequest liveStreamingUpdateRequest,
-      Authentication authentication) {
-    User user = findByEmailOrThrow(authentication);
+  public void updateLiveStreaming(Long streamId,
+      LiveStreamingUpdateRequest liveStreamingUpdateRequest) {
 
-    LiveStreaming liveStreaming = findLiveStreamingByUser(user);
+    LiveStreaming liveStreaming = liveStreamingFindById(streamId);
+
     liveStreaming.update(liveStreamingUpdateRequest);
     liveStreamingRepository.save(liveStreaming);
   }
 
-
-  private LiveStreaming findLiveStreamingByUser(User user) {
-    return liveStreamingRepository.findByUser(user)
+  private LiveStreaming liveStreamingFindById(Long streamId) {
+    return liveStreamingRepository.findById(streamId)
         .orElseThrow(() -> new LiveStreamingException(ErrorCode.LIVE_STREAMING_NOT_FOUND));
   }
 
-  private User findByEmailOrThrow(Authentication authentication) {
+
+  private User findByEmail(Authentication authentication) {
     return userRepository.findByEmail(authentication.getName())
         .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
   }
