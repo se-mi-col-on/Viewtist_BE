@@ -1,7 +1,10 @@
 package semicolon.viewtist.user.controller;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import java.io.IOException;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -10,10 +13,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import semicolon.viewtist.s3.S3UploaderService;
+import semicolon.viewtist.user.dto.request.UpdateMypage;
 import semicolon.viewtist.user.dto.request.UpdatePasswordRequest;
 import semicolon.viewtist.user.dto.response.UserResponse;
 import semicolon.viewtist.user.service.UserService;
@@ -34,15 +38,6 @@ public class UserController {
     return ResponseEntity.ok(userService.userDetail(authentication));
   }
 
-  // 프로필 사진 변경
-  @PreAuthorize("isAuthenticated()")
-  @PutMapping("/profile-photo")
-  public ResponseEntity<String> updateProfilePhoto(@RequestParam("file") MultipartFile file,
-      Authentication authentication)
-      throws IOException {
-    userService.updateProfilePhoto(file, authentication);
-    return ResponseEntity.ok("프로필 사진이 변경되었습니다.");
-  }
 
   // 비밀번호 찾기
   @PostMapping("/find-password")
@@ -60,21 +55,46 @@ public class UserController {
     return ResponseEntity.ok("비밀번호가 변경되었습니다.");
   }
 
-  // 닉네임 변경
+//  @PostMapping("/upload")
+//  public ResponseEntity<String> uploadPhoto(@RequestParam("file") MultipartFile file)
+//      throws IOException {
+//    s3UploaderService.uploadImage(file);
+//    return ResponseEntity.ok("사진이 업로드 되었습니다.");
+//  }
+
   @PreAuthorize("isAuthenticated()")
-  @PutMapping("/update-nickname")
-  public ResponseEntity<String> updateNickname(@RequestBody String nickname,
+  @PutMapping(value ="/update-profile-photo",
+      consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<String> updateProfilePhoto(@Parameter(
+      description = "multipart/form-data 형식의 이미지 리스트를 input으로 받습니다. 이때 key 값은 multipartFile 입니다."
+  )
+      @RequestPart("file") MultipartFile file,
+      Authentication authentication) throws IOException {
+    String photoUrl = userService.updateProfilePhoto(file, authentication);
+    return ResponseEntity.ok(photoUrl);
+  }
+
+  @PreAuthorize("isAuthenticated()")
+  @PutMapping("/update-mypage")
+  public ResponseEntity<String> updateMypage(@RequestBody UpdateMypage updateMypage,
       Authentication authentication) {
-    userService.updateNickname(nickname, authentication);
-    return ResponseEntity.ok("닉네임이 변경되었습니다.");
+    userService.updateUserProfile(updateMypage.getNickname(),
+        updateMypage.getChannelIntroduction(), authentication);
+    return ResponseEntity.ok("채널관리가 수정되었습니다.");
   }
 
-  @PostMapping("/upload")
-  public ResponseEntity<String> uploadPhoto(@RequestParam("file") MultipartFile file)
-      throws IOException {
-    s3UploaderService.uploadImage(file);
-    return ResponseEntity.ok("사진이 업로드 되었습니다.");
+  @PreAuthorize("isAuthenticated()")
+  @GetMapping("/stream-key")
+  public ResponseEntity<Map<String, String>> getStreamKey(Authentication authentication) {
+    String streamKey = userService.getStreamKey(authentication);
+    return ResponseEntity.ok(Map.of("streamKey", streamKey));
   }
 
+  @PreAuthorize("isAuthenticated()")
+  @GetMapping("/refresh-stream-key")
+  public ResponseEntity<Map<String, String>> refreshStreamKey(Authentication authentication) {
+    String newStreamKey = userService.refreshStreamKey(authentication);
+    return ResponseEntity.ok(Map.of("streamKey", newStreamKey));
+  }
 }
 

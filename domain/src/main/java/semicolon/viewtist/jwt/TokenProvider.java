@@ -1,12 +1,8 @@
 package semicolon.viewtist.jwt;
 
 
-import static semicolon.viewtist.global.exception.ErrorCode.EMAIL_NOT_FOUND;
-import static semicolon.viewtist.global.exception.ErrorCode.INVALID_TOKEN;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -23,15 +19,14 @@ import org.springframework.util.StringUtils;
 import semicolon.viewtist.global.exception.ErrorCode;
 import semicolon.viewtist.user.entity.User;
 import semicolon.viewtist.user.exception.UserException;
-import semicolon.viewtist.user.repository.UserRepository;
 
 
 @RequiredArgsConstructor
 @Component
 public class TokenProvider {
 
-  private static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 60; // 1시간
-  private final UserRepository userRepository;
+  private static final long TOKEN_EXPIRE_TIME = 1000 * 60; // 1분
+  private static final long REFRESH_TOKEN_EXPIRE_TIME = TOKEN_EXPIRE_TIME * 24; // 24시간
 
   @Value("${spring.jwt.key}")
   private String key;
@@ -88,17 +83,22 @@ public class TokenProvider {
     }
   }
 
-  public String refreshToken(String token) {
-    if (validateToken(token)) {
-      Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(secretKey).build()
-          .parseClaimsJws(token);
-      String userEmail = claims.getBody().getSubject();
-      User user = userRepository.findByEmail(userEmail)
-          .orElseThrow(() -> new UserException(EMAIL_NOT_FOUND));
-      return generateToken(user);
-    } else {
-      throw new UserException(INVALID_TOKEN);
-    }
+  // 리프레시 토큰 생성
+  public String generateRefreshToken(User user) {
+    Date now = new Date();
+    Date expiredDate = new Date(now.getTime() + REFRESH_TOKEN_EXPIRE_TIME);
+
+    return Jwts.builder()
+        .setSubject(user.getEmail())
+        .setIssuedAt(now)
+        .setExpiration(expiredDate)
+        .signWith(secretKey, SignatureAlgorithm.HS256)
+        .compact();
   }
 
+  // 토큰에서 유저 아이디 추출(유저 아이디 사용하여 유저 정보 조회)
+  public String getUserIdFromToken(String token) {
+    Claims claims = parseClaims(token);
+    return claims.getSubject();
+  }
 }

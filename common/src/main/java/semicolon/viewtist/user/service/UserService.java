@@ -54,7 +54,7 @@ public class UserService {
 
   // 프로필 사진 변경
   @Transactional
-  public void updateProfilePhoto(MultipartFile newImageFile, Authentication authentication)
+  public String updateProfilePhoto(MultipartFile newImageFile, Authentication authentication)
       throws IOException {
     User user = findByEmailOrThrow(authentication.getName());
 
@@ -76,6 +76,7 @@ public class UserService {
     // 사용자 정보에 새로운 프로필 사진 URL 업데이트
     user.setProfilePhotoUrl(newImageUrl);
     userRepository.save(user);
+    return newImageUrl;
   }
 
   // 비밀번호 찾기
@@ -124,16 +125,34 @@ public class UserService {
 
   // 유저 닉네임 수정
   @Transactional
-  public void updateNickname(String nickname, Authentication authentication) {
+  public void updateUserProfile(String nickname, String introduction,
+      Authentication authentication) {
     User user = findByEmailOrThrow(authentication.getName());
+
     // 닉네임 중복 확인
     if (userRepository.existsByNickname(nickname)) {
       throw new UserException(ALREADY_EXISTS_NICKNAME);
-    } else {
-      user.setNickname(nickname);
     }
+
+    // 닉네임과 소개글 업데이트
+    user.setUpdateUserProfile(nickname, introduction);
+
     userRepository.save(user);
   }
 
+  // 스트림키 가져오기
+  public String getStreamKey(Authentication authentication) {
+    User user = findByEmailOrThrow(authentication.getName());
+    return user.getStreamKey();
+  }
+
+  // 새로운 스트림키 생성
+  @Transactional
+  public String refreshStreamKey(Authentication authentication) {
+    User user = findByEmailOrThrow(authentication.getName());
+    user.setStreamKey(UUID.randomUUID().toString());
+    userRepository.save(user); // 새로운 스트림 키 생성 후 저장
+    return user.getStreamKey();
+  }
 
 }

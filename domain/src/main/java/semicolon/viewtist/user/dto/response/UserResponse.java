@@ -18,6 +18,8 @@ public class UserResponse {
 
   private Long accountId;
 
+  private String channelIntroduction;
+
 
   public static UserResponse from(User user) {
 
@@ -26,6 +28,7 @@ public class UserResponse {
         .nickname(user.getNickname())
         .profilePhotoUrl(user.getProfilePhotoUrl())
         .accountId(user.getAccountId())
+        .channelIntroduction(user.getChannelIntroduction())
         .build();
   }
 }

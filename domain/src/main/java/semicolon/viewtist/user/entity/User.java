@@ -51,6 +51,15 @@ public class User extends BaseTimeEntity {
   @Column
   private LocalDateTime tokenExpiryAt;
 
+  @Column
+  private String refreshToken;
+
+  @Column
+  private String streamKey;
+
+  @Column
+  private String channelIntroduction;
+
 
   public void setEmailVerified(boolean emailVerified, String emailVerificationToken) {
     isEmailVerified = emailVerified;
@@ -61,17 +70,32 @@ public class User extends BaseTimeEntity {
     this.profilePhotoUrl = newImageUrl;
   }
 
-  public void setPassword(String encode) {
-    this.password = encode;
-  }
-
-  public void setNickname(String nickname) {
-    this.nickname = nickname;
-  }
 
   public void setToken(String token, LocalDateTime tokenExpiryAt) {
     this.emailVerificationToken = token;
     this.tokenExpiryAt = tokenExpiryAt;
   }
 
+  public void setRefreshToken(String refreshToken) {
+    this.refreshToken = refreshToken;
+  }
+
+  public void setStreamKey(String streamKey) {
+    this.streamKey = streamKey;
+  }
+
+  public void setSignup(String nickname, String password, String profilePhotoUrl) {
+    this.nickname = nickname;
+    this.password = password;
+    this.profilePhotoUrl = profilePhotoUrl;
+  }
+
+  public void setUpdateUserProfile(String nickname, String introduction) {
+    this.nickname = nickname;
+    this.channelIntroduction = introduction;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
 }

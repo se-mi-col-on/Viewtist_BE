@@ -1,8 +1,8 @@
 package semicolon.viewtist.user.controller;
 
 
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.io.IOException;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import semicolon.viewtist.user.dto.request.UserSignupRequest;
 import semicolon.viewtist.user.dto.request.UserSigninRequest;
+import semicolon.viewtist.user.dto.request.UserSignupRequest;
+import semicolon.viewtist.user.dto.response.SigninResponse;
 import semicolon.viewtist.user.service.AuthService;
 
 
@@ -48,9 +49,8 @@ public class AuthController {
 
   // 로그인
   @PostMapping("/signin")
-  public ResponseEntity<Map<String, String>> signin(@RequestBody UserSigninRequest request) {
-    String token = authService.signin(request);
-    Map<String, String> response = Map.of("token", token);
+  public ResponseEntity<SigninResponse> signin(@RequestBody UserSigninRequest request) {
+    SigninResponse response = authService.signin(request);
     return ResponseEntity.ok(response);
   }
 
@@ -63,14 +63,12 @@ public class AuthController {
   }
 
   // 토큰 재발급
-  @PreAuthorize("isAuthenticated()")
+  @ApiResponse(responseCode = "200", description = "새로운 accessToken")
   @PostMapping("/refresh-token")
-  public ResponseEntity<Map<String, String>> refreshToken(
-      @RequestHeader("Authorization") String token) {
-    String newToken = authService.refreshToken(token);
-    Map<String, String> response = Map.of("token", newToken);
+  public ResponseEntity<String> refreshToken(@RequestHeader("Authorization") String accessToken,
+      @RequestBody String refreshToken) {
+    String response = authService.refreshToken(accessToken, refreshToken);
     return ResponseEntity.ok(response);
   }
-
 
 }

@@ -1,5 +1,6 @@
 package semicolon.viewtist.user.dto.request;
 
+import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,6 +25,8 @@ public class SocialUserRequest {
         .email(socialUserRequest.email)
         .password("******")
         .isEmailVerified(true)
+        .streamKey(UUID.randomUUID().toString())
+        .channelIntroduction("채널을 소개해 주세요")
         .build();
   }
 }

@@ -1,7 +1,9 @@
 package semicolon.viewtist.global.exception;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -18,9 +20,13 @@ public enum ErrorCode {
   EMAIL_NOT_FOUND(NOT_FOUND, "존재하지 않는 회원입니다."),
   PASSWORDS_NOT_MATCH(BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
   VERIFY_YOUR_EMAIL(BAD_REQUEST, "이메일 인증이 필요합니다."),
-  INVALID_TOKEN(BAD_REQUEST, "유효하지 않은 토큰입니다."),
+  INVALID_TOKEN(UNAUTHORIZED, "유효하지 않은 토큰입니다."),
   TIME_OUT_INVALID_TOKEN(BAD_REQUEST, "인증시간이 만료되었습니다."),
   NOT_VERIFIED_EMAIL(BAD_REQUEST, "이메일 인증을 진행해 주세요."),
+
+  SECURITY_UNAUTHORIZED(FORBIDDEN, "승인 실패"),
+  ACCESS_DENIED(UNAUTHORIZED, "접근 실패"),
+
 
   // s3
   S3_FILE_CONVERT_ERROR(BAD_REQUEST, "S3 파일변환 에러입니다."),
