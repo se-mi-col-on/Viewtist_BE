@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-import semicolon.viewtist.alarm.EmitterRepository;
 import semicolon.viewtist.global.exception.CustomException;
 import semicolon.viewtist.global.exception.ErrorCode;
 import semicolon.viewtist.user.entity.Subscribe;
@@ -34,29 +33,7 @@ public class SubscriberService {
             .build());
   }
 
-  private SseEmitter connectAlarm(String nickname){
-    SseEmitter sseEmitter = new SseEmitter(DEFAULT_TIMEOUT);
-    emitterRepository.save(username, sseEmitter);
 
-    // 종료 되었을 때 처리
-    sseEmitter.onCompletion(() -> {
-      emitterRepository.delete(username);
-    });
-
-    // timeOut 시 처리
-    sseEmitter.onTimeout(() -> {
-      emitterRepository.delete(username);
-    });
-
-    try {
-      sseEmitter.send(SseEmitter.event().id(createAlarmId(username)).name(ALARM_NAME)
-          .data("connect completed!!"));
-    } catch (IOException e) {
-      throw new CustomException(ErrorCode.SERVER_DISCONNECT);
-    }
-
-    return sseEmitter;
-  }
   public void cancelSubscribe(Long subscribeId, Authentication authentication) {
     Subscribe subscribe = subscribeRepository.findById(subscribeId).orElseThrow(
         () -> new UserException(ErrorCode.SUBSCRIBE_NOT_FOUND)
