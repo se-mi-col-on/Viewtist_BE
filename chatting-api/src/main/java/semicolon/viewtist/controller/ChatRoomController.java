@@ -38,7 +38,7 @@ public class ChatRoomController {
   }
   @GetMapping("/chatroom")
   @Operation(summary = "현재 활성화된 채팅방을 조회한다.", description = "스트리밍방송이 켜져있는 채팅방 조회.")
-  public ResponseEntity< List<ChatRoomResponse>> getAllChatroom(@PageableDefault Pageable pageable) throws Exception {
+  public ResponseEntity<Page<ChatRoomResponse>> getAllChatroom(@PageableDefault Pageable pageable) throws Exception {
     return ResponseEntity.ok(chatRoomService.findActivatedRoom(pageable));
   }
 }
