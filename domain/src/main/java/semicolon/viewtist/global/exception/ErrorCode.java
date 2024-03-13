@@ -13,7 +13,7 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum ErrorCode {
   LIVE_STREAMING_NOT_FOUND(NOT_FOUND, "라이브 스트리밍을 찾을 수 없습니다"),
-
+  // user
   ALREADY_EXISTS_EMAIL(BAD_REQUEST, "이미 존재하는 회원입니다."),
   ALREADY_EXISTS_NICKNAME(BAD_REQUEST, "이미 존재하는 닉네임입니다."),
   USER_NOT_FOUND(NOT_FOUND, "존재하지 않는 회원입니다."),
@@ -24,6 +24,10 @@ public enum ErrorCode {
   TIME_OUT_INVALID_TOKEN(BAD_REQUEST, "인증시간이 만료되었습니다."),
   NOT_VERIFIED_EMAIL(BAD_REQUEST, "이메일 인증을 진행해 주세요."),
 
+  // subscribe
+  SUBSCRIBE_NOT_FOUND(BAD_REQUEST, "존재하지 않는 구독입니다."),
+  UNVALID_SUBSCRIBE_CANCEL(BAD_REQUEST, "유효하지 않은 구독 취소 요청입니다."),
+  // auth
   SECURITY_UNAUTHORIZED(FORBIDDEN, "승인 실패"),
   ACCESS_DENIED(UNAUTHORIZED, "접근 실패"),
 
