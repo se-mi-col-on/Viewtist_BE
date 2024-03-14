@@ -17,7 +17,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import semicolon.viewtist.jwt.TokenProvider;
+import semicolon.viewtist.jwt.entity.RefreshToken;
 import semicolon.viewtist.jwt.entity.TokenBlacklist;
+import semicolon.viewtist.jwt.repository.RefreshTokenRepository;
 import semicolon.viewtist.jwt.repository.TokenBlacklistRepository;
 import semicolon.viewtist.mailgun.MailgunClient;
 import semicolon.viewtist.mailgun.SendMailForm;
@@ -34,6 +36,8 @@ import semicolon.viewtist.user.repository.UserRepository;
 @RequiredArgsConstructor
 public class AuthService {
 
+
+  private final RefreshTokenRepository refreshTokenRepository;
   private final TokenBlacklistRepository tokenBlacklistRepository;
   private final MailgunClient mailgunClient;
   private final TokenProvider tokenProvider;
@@ -120,17 +124,14 @@ public class AuthService {
 
     // 액세스 토큰 및 리프레시 토큰 생성 및 저장
     String accessToken = tokenProvider.generateToken(user);
-    String refreshToken = generateAndPersistRefreshToken(user);
+    String refreshToken = generateAndPersistRefreshToken(accessToken);
 
     return new SigninResponse(accessToken, refreshToken);
   }
 
   // 로그아웃
   public void signout(String token) {
-    String email = emailFormToken(token);
-    User user = findUserByEmail(email);
-
-    invalidateTokens(token, user);
+    invalidateTokens(token);
   }
 
   // 토큰 재발급
@@ -138,25 +139,25 @@ public class AuthService {
   public String refreshToken(String accessToken, String refreshToken) {
     String accessTokenEmail = extractEmailFromToken(accessToken);
 
-    String nickname = tokenProvider.getUserIdFromToken(refreshToken);
-    User refreshUser = findUserByNickname(nickname);
-
-    if (!refreshUser.getEmail().equals(accessTokenEmail)) {
+    if (!refreshTokenRepository.existsByRefreshToken(refreshToken)) {
       throw new UserException(INVALID_TOKEN);
     }
 
-    validateRefreshToken(refreshUser);
+    User user = findUserByEmail(accessTokenEmail);
 
-    return tokenProvider.generateToken(refreshUser);
+    String oldAccessToken = tokenProvider.getAccessTokenFromToken(refreshToken);
+
+    if (!accessToken.substring(7).equals(oldAccessToken)) {
+      throw new UserException(INVALID_TOKEN);
+    }
+
+    validateRefreshToken(refreshToken);
+
+    return tokenProvider.generateToken(user);
   }
 
   private User findUserByEmail(String email) {
     return userRepository.findByEmail(email)
-        .orElseThrow(() -> new UserException(USER_NOT_FOUND));
-  }
-
-  private User findUserByNickname(String nickname) {
-    return userRepository.findByNickname(nickname)
         .orElseThrow(() -> new UserException(USER_NOT_FOUND));
   }
 
@@ -171,31 +172,26 @@ public class AuthService {
   }
 
   // 리프레시 토큰 생성 및 저장
-  private String generateAndPersistRefreshToken(User user) {
-    String refreshToken = tokenProvider.generateRefreshToken(user);
-    user.setRefreshToken(refreshToken);
-    userRepository.save(user);
-    return refreshToken;
+  private String generateAndPersistRefreshToken(String accessToken) {
+    String token = tokenProvider.generateRefreshToken(accessToken);
+    RefreshToken refreshToken = RefreshToken.builder().refreshToken(token).build();
+    refreshTokenRepository.save(refreshToken);
+    return token;
   }
 
-  // 토큰 블랙리스트 추가 및 액세스 토큰 삭제 및 리프레시
-  private void invalidateTokens(String token, User user) {
-    addTokenBlacklist(user.getRefreshToken());
+  // 토큰 블랙리스트 추가 및 액세스 토큰 삭제
+  private void invalidateTokens(String token) {
     addTokenBlacklist(token);
   }
 
-  private String emailFormToken(String token) {
-    return tokenProvider.getUserIdFromToken(token);
-  }
   // 토큰에서 유저 아이디 추출(유저 아이디 사용하여 유저 정보 조회)
   private String extractEmailFromToken(String token) {
-    return tokenProvider.getUserIdFromToken(token.substring(7));
+    return tokenProvider.getAccessTokenFromToken(token.substring(7));
   }
 
   // 리프레시 토큰 유효성 검사(토큰 유효성 검사)
-  private void validateRefreshToken(User user) {
-    String storedRefreshToken = user.getRefreshToken();
-    if (!tokenProvider.validateToken(storedRefreshToken)) {
+  private void validateRefreshToken(String refreshToken) {
+    if (!tokenProvider.validateToken(refreshToken)) {
       throw new UserException(INVALID_TOKEN);
     }
   }

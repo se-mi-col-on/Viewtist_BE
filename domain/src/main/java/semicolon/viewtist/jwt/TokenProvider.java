@@ -84,12 +84,12 @@ public class TokenProvider {
   }
 
   // 리프레시 토큰 생성
-  public String generateRefreshToken(User user) {
+  public String generateRefreshToken(String accessToken) {
     Date now = new Date();
     Date expiredDate = new Date(now.getTime() + REFRESH_TOKEN_EXPIRE_TIME);
 
     return Jwts.builder()
-        .setSubject(user.getNickname())
+        .setSubject(accessToken)
         .setIssuedAt(now)
         .setExpiration(expiredDate)
         .signWith(secretKey, SignatureAlgorithm.HS256)
@@ -97,7 +97,7 @@ public class TokenProvider {
   }
 
   // 토큰에서 유저 아이디 추출(유저 아이디 사용하여 유저 정보 조회)
-  public String getUserIdFromToken(String token) {
+  public String getAccessTokenFromToken(String token) {
     Claims claims = parseClaims(token);
     return claims.getSubject();
   }

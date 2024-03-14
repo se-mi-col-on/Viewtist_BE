@@ -52,9 +52,6 @@ public class User extends BaseTimeEntity {
   private LocalDateTime tokenExpiryAt;
 
   @Column
-  private String refreshToken;
-
-  @Column
   private String streamKey;
 
   @Column
@@ -76,9 +73,6 @@ public class User extends BaseTimeEntity {
     this.tokenExpiryAt = tokenExpiryAt;
   }
 
-  public void setRefreshToken(String refreshToken) {
-    this.refreshToken = refreshToken;
-  }
 
   public void setStreamKey(String streamKey) {
     this.streamKey = streamKey;
