@@ -19,6 +19,8 @@ import semicolon.viewtist.image.repository.ImageRepository;
 import semicolon.viewtist.mailgun.MailgunClient;
 import semicolon.viewtist.mailgun.SendMailForm;
 import semicolon.viewtist.s3.S3UploaderService;
+import semicolon.viewtist.user.dto.request.UpdateIntroduction;
+import semicolon.viewtist.user.dto.request.UpdateNickname;
 import semicolon.viewtist.user.dto.request.UpdatePasswordRequest;
 import semicolon.viewtist.user.dto.response.UserResponse;
 import semicolon.viewtist.user.entity.User;
@@ -125,17 +127,27 @@ public class UserService {
 
   // 유저 닉네임 수정
   @Transactional
-  public void updateUserProfile(String nickname, String introduction,
+  public void updateNickname(UpdateNickname updateNickname,
       Authentication authentication) {
     User user = findByEmailOrThrow(authentication.getName());
 
     // 닉네임 중복 확인
-    if (userRepository.existsByNickname(nickname)) {
+    if (userRepository.existsByNickname(updateNickname.getNickname())) {
       throw new UserException(ALREADY_EXISTS_NICKNAME);
     }
 
-    // 닉네임과 소개글 업데이트
-    user.setUpdateUserProfile(nickname, introduction);
+    // 닉네임과 업데이트
+    user.setNickname(updateNickname.getNickname());
+
+    userRepository.save(user);
+  }
+
+  // 유저 소개글 수정
+  @Transactional
+  public void updateIntroduction(UpdateIntroduction updateIntroduction, Authentication authentication) {
+    User user = findByEmailOrThrow(authentication.getName());
+
+    user.setChannelIntroduction(updateIntroduction.getIntroduction());
 
     userRepository.save(user);
   }
