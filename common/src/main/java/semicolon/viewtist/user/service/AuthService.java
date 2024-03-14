@@ -147,11 +147,14 @@ public class AuthService {
 
     String oldAccessToken = tokenProvider.getAccessTokenFromToken(refreshToken);
 
-    if (!accessToken.substring(7).equals(oldAccessToken)) {
+    String oldAccessTokenEmail = tokenProvider.getAccessTokenFromToken(oldAccessToken);
+
+    if (!accessTokenEmail.equals(oldAccessTokenEmail)) {
       throw new UserException(INVALID_TOKEN);
     }
 
     validateRefreshToken(refreshToken);
+
 
     return tokenProvider.generateToken(user);
   }
