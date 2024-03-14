@@ -10,6 +10,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.cloud.openfeign.FeignAutoConfiguration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 
 @EnableFeignClients(basePackages = "semicolon.viewtist.mailgun")
@@ -21,6 +23,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @ImportAutoConfiguration({FeignAutoConfiguration.class, HttpClientConfiguration.class})
 @ServletComponentScan
 @EnableJpaAuditing
+@EnableScheduling
+@EnableAsync
 public class CommonApplication {
 
   public static void main(String[] args) {
