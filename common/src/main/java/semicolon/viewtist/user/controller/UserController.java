@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import semicolon.viewtist.s3.S3UploaderService;
+import semicolon.viewtist.user.dto.request.UpdateIntroduction;
+import semicolon.viewtist.user.dto.request.UpdateNickname;
 import semicolon.viewtist.user.dto.request.UpdatePasswordRequest;
 import semicolon.viewtist.user.dto.response.UserResponse;
 import semicolon.viewtist.user.service.UserService;
@@ -74,7 +76,7 @@ public class UserController {
 
   @PreAuthorize("isAuthenticated()")
   @PutMapping("/update-nickname")
-  public ResponseEntity<String> updateMypage(@RequestBody String updateNickname,
+  public ResponseEntity<String> updateMypage(@RequestBody UpdateNickname updateNickname,
       Authentication authentication) {
     userService.updateNickname(updateNickname, authentication);
     return ResponseEntity.ok("닉네임이 수정되었습니다.");
@@ -82,7 +84,7 @@ public class UserController {
 
   @PreAuthorize("isAuthenticated()")
   @PutMapping("/update-introduction")
-  public ResponseEntity<String> updateIntroduction(@RequestBody String updateIntroduction,
+  public ResponseEntity<String> updateIntroduction(@RequestBody UpdateIntroduction updateIntroduction,
       Authentication authentication) {
     userService.updateIntroduction(updateIntroduction, authentication);
     return ResponseEntity.ok("소개글이 수정되었습니다.");

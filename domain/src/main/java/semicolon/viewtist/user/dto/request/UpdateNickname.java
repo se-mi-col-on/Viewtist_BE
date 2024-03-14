@@ -10,12 +10,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateMypage {
+public class UpdateNickname {
 
   @NotBlank(message = "닉네임을 입력해 주세요.")
   private String nickname;
-
-  @NotBlank(message = "채널 소개를 적어주세요")
-  private String channelIntroduction;
 
 }
