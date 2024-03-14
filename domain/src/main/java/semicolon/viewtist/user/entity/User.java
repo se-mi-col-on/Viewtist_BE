@@ -84,12 +84,15 @@ public class User extends BaseTimeEntity {
     this.profilePhotoUrl = profilePhotoUrl;
   }
 
-  public void setUpdateUserProfile(String nickname, String introduction) {
-    this.nickname = nickname;
-    this.channelIntroduction = introduction;
-  }
-
   public void setPassword(String password) {
     this.password = password;
+  }
+
+  public void setNickname(String nickname) {
+    this.nickname = nickname;
+  }
+
+  public void setChannelIntroduction(String updateIntroduction) {
+    this.channelIntroduction = updateIntroduction;
   }
 }

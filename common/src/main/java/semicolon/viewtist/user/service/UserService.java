@@ -125,17 +125,27 @@ public class UserService {
 
   // 유저 닉네임 수정
   @Transactional
-  public void updateUserProfile(String nickname, String introduction,
+  public void updateNickname(String updateNickname,
       Authentication authentication) {
     User user = findByEmailOrThrow(authentication.getName());
 
     // 닉네임 중복 확인
-    if (userRepository.existsByNickname(nickname)) {
+    if (userRepository.existsByNickname(updateNickname)) {
       throw new UserException(ALREADY_EXISTS_NICKNAME);
     }
 
-    // 닉네임과 소개글 업데이트
-    user.setUpdateUserProfile(nickname, introduction);
+    // 닉네임과 업데이트
+    user.setNickname(updateNickname);
+
+    userRepository.save(user);
+  }
+
+  // 유저 소개글 수정
+  @Transactional
+  public void updateIntroduction(String updateIntroduction, Authentication authentication) {
+    User user = findByEmailOrThrow(authentication.getName());
+
+    user.setChannelIntroduction(updateIntroduction);
 
     userRepository.save(user);
   }

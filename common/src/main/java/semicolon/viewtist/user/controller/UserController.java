@@ -2,7 +2,6 @@ package semicolon.viewtist.user.controller;
 
 import io.swagger.v3.oas.annotations.Parameter;
 import java.io.IOException;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import semicolon.viewtist.s3.S3UploaderService;
-import semicolon.viewtist.user.dto.request.UpdateMypage;
 import semicolon.viewtist.user.dto.request.UpdatePasswordRequest;
 import semicolon.viewtist.user.dto.response.UserResponse;
 import semicolon.viewtist.user.service.UserService;
@@ -63,38 +61,45 @@ public class UserController {
 //  }
 
   @PreAuthorize("isAuthenticated()")
-  @PutMapping(value ="/update-profile-photo",
+  @PutMapping(value = "/update-profile-photo",
       consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<String> updateProfilePhoto(@Parameter(
       description = "multipart/form-data 형식의 이미지 리스트를 input으로 받습니다. 이때 key 값은 multipartFile 입니다."
   )
-      @RequestPart("file") MultipartFile file,
+  @RequestPart("file") MultipartFile file,
       Authentication authentication) throws IOException {
     String photoUrl = userService.updateProfilePhoto(file, authentication);
     return ResponseEntity.ok(photoUrl);
   }
 
   @PreAuthorize("isAuthenticated()")
-  @PutMapping("/update-mypage")
-  public ResponseEntity<String> updateMypage(@RequestBody UpdateMypage updateMypage,
+  @PutMapping("/update-nickname")
+  public ResponseEntity<String> updateMypage(@RequestBody String updateNickname,
       Authentication authentication) {
-    userService.updateUserProfile(updateMypage.getNickname(),
-        updateMypage.getChannelIntroduction(), authentication);
-    return ResponseEntity.ok("채널관리가 수정되었습니다.");
+    userService.updateNickname(updateNickname, authentication);
+    return ResponseEntity.ok("닉네임이 수정되었습니다.");
+  }
+
+  @PreAuthorize("isAuthenticated()")
+  @PutMapping("/update-introduction")
+  public ResponseEntity<String> updateIntroduction(@RequestBody String updateIntroduction,
+      Authentication authentication) {
+    userService.updateIntroduction(updateIntroduction, authentication);
+    return ResponseEntity.ok("소개글이 수정되었습니다.");
   }
 
   @PreAuthorize("isAuthenticated()")
   @GetMapping("/stream-key")
-  public ResponseEntity<Map<String, String>> getStreamKey(Authentication authentication) {
+  public ResponseEntity<String> getStreamKey(Authentication authentication) {
     String streamKey = userService.getStreamKey(authentication);
-    return ResponseEntity.ok(Map.of("streamKey", streamKey));
+    return ResponseEntity.ok(streamKey);
   }
 
   @PreAuthorize("isAuthenticated()")
   @GetMapping("/refresh-stream-key")
-  public ResponseEntity<Map<String, String>> refreshStreamKey(Authentication authentication) {
+  public ResponseEntity<String> refreshStreamKey(Authentication authentication) {
     String newStreamKey = userService.refreshStreamKey(authentication);
-    return ResponseEntity.ok(Map.of("streamKey", newStreamKey));
+    return ResponseEntity.ok(newStreamKey);
   }
 }
 
