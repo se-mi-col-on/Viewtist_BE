@@ -4,11 +4,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import semicolon.viewtist.jwt.exception.JwtException;
+import semicolon.viewtist.liveStreaming.exception.LiveStreamingException;
 import semicolon.viewtist.user.exception.UserException;
 
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+  @ExceptionHandler(UserException.class)
+  public ResponseEntity<?> handlerLiveStreamingException(LiveStreamingException e) {
+    return toResponse(e.getErrorCode(), e.getMessage());
+  }
 
   @ExceptionHandler(UserException.class)
   public ResponseEntity<?> handlerUserException(UserException e) {
