@@ -2,6 +2,7 @@ package semicolon.viewtist.oauth;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -39,17 +40,22 @@ public class OAuth2UserServiceImplement extends DefaultOAuth2UserService {
     SocialUserRequest socialUserRequest;
     if (oauthClientName.equals("kakao")) {
       userId = "kakao_" + oAuth2User.getAttributes().get("id");
-      @SuppressWarnings("unchecked")
-      Map<String, String> properties = (Map<String, String>) oAuth2User.getAttributes()
-          .get("properties");
-      photoUrl = properties.get("profile_image");
-      socialUserRequest = SocialUserRequest.builder()
-          .userId(userId)
-          .type(Type.kakao)
-          .profilePhotoUrl(photoUrl)
-          .email(userId + "@email.com")
-          .build();
-      user = SocialUserRequest.from(socialUserRequest);
+      Optional<User> optionalUser = userRepository.findByNickname(userId);
+      if (optionalUser.isPresent()) {
+        return new CustomOAuth2User(userId);
+      } else {
+        @SuppressWarnings("unchecked")
+        Map<String, String> properties = (Map<String, String>) oAuth2User.getAttributes()
+            .get("properties");
+        photoUrl = properties.get("profile_image");
+        socialUserRequest = SocialUserRequest.builder()
+            .userId(userId)
+            .type(Type.kakao)
+            .profilePhotoUrl(photoUrl)
+            .email(userId + "@email.com")
+            .build();
+        user = SocialUserRequest.from(socialUserRequest);
+      }
     }
 
     if (oauthClientName.equals("naver")) {
@@ -57,30 +63,40 @@ public class OAuth2UserServiceImplement extends DefaultOAuth2UserService {
       Map<String, String> response = (Map<String, String>) oAuth2User.getAttributes()
           .get("response");
       userId = "naver_" + response.get("id").substring(0, 14);
-      email = response.get("email");
-      photoUrl = response.get("profile_image");
-      socialUserRequest = SocialUserRequest.builder()
-          .userId(userId)
-          .type(Type.naver)
-          .profilePhotoUrl(photoUrl)
-          .email(email)
-          .build();
-      user = SocialUserRequest.from(socialUserRequest);
+      Optional<User> optionalUser = userRepository.findByNickname(userId);
+      if (optionalUser.isPresent()) {
+        return new CustomOAuth2User(userId);
+      } else {
+        email = response.get("email");
+        photoUrl = response.get("profile_image");
+        socialUserRequest = SocialUserRequest.builder()
+            .userId(userId)
+            .type(Type.naver)
+            .profilePhotoUrl(photoUrl)
+            .email(email)
+            .build();
+        user = SocialUserRequest.from(socialUserRequest);
+      }
     }
 
     if (oauthClientName.equals("Google")) {
       userId = "google_" + oAuth2User.getAttributes().get("sub");
-      email = oAuth2User.getAttributes().get("email").toString();
-      photoUrl = oAuth2User.getAttributes().get("picture").toString();
+      Optional<User> optionalUser = userRepository.findByNickname(userId);
+      if (optionalUser.isPresent()) {
+        return new CustomOAuth2User(userId);
+      } else {
+        email = oAuth2User.getAttributes().get("email").toString();
+        photoUrl = oAuth2User.getAttributes().get("picture").toString();
 
-      socialUserRequest = SocialUserRequest.builder()
-          .userId(userId)
-          .type(Type.google)
-          .profilePhotoUrl(photoUrl)
-          .email(email)
-          .build();
+        socialUserRequest = SocialUserRequest.builder()
+            .userId(userId)
+            .type(Type.google)
+            .profilePhotoUrl(photoUrl)
+            .email(email)
+            .build();
 
-      user = SocialUserRequest.from(socialUserRequest);
+        user = SocialUserRequest.from(socialUserRequest);
+      }
     }
     userRepository.save(Objects.requireNonNull(user));
     return new CustomOAuth2User(userId);
