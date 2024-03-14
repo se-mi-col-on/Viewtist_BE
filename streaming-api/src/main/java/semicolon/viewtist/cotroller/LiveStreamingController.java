@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -39,5 +40,14 @@ public class LiveStreamingController {
     liveStreamingService.updateLiveStreaming(streamingId, liveStreamingUpdateRequest);
     return ResponseEntity.ok("스트리밍이 업데이트 되었습니다.");
   }
+
+  // 스트리밍 종료
+  @PreAuthorize("isAuthenticated()")
+  @DeleteMapping("/{streamingId}")
+  public ResponseEntity<String> stopLiveStreaming(@PathVariable Long streamingId) {
+    liveStreamingService.stopLiveStreaming(streamingId);
+    return ResponseEntity.ok("스트리밍이 종료되었습니다.");
+  }
+
 
 }

@@ -39,6 +39,12 @@ public class LiveStreamingService {
     liveStreamingRepository.save(liveStreaming);
   }
 
+  // 스트리밍 종료
+  public void stopLiveStreaming(Long streamingId) {
+    LiveStreaming liveStreaming = liveStreamingFindById(streamingId);
+    liveStreamingRepository.delete(liveStreaming);
+  }
+
   private LiveStreaming liveStreamingFindById(Long streamId) {
     return liveStreamingRepository.findById(streamId)
         .orElseThrow(() -> new LiveStreamingException(ErrorCode.LIVE_STREAMING_NOT_FOUND));
