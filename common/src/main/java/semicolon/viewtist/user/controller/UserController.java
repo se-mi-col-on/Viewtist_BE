@@ -63,8 +63,7 @@ public class UserController {
 //  }
 
   @PreAuthorize("isAuthenticated()")
-  @PutMapping(value = "/update-profile-photo",
-      consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  @PutMapping(value = "/update-profile-photo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<String> updateProfilePhoto(@Parameter(
       description = "multipart/form-data 형식의 이미지 리스트를 input으로 받습니다. 이때 key 값은 multipartFile 입니다."
   )
