@@ -26,7 +26,6 @@ public class SocialUserRequest {
         .password("******")
         .isEmailVerified(true)
         .streamKey(UUID.randomUUID().toString())
-        .channelIntroduction("채널을 소개해 주세요")
         .build();
   }
 }

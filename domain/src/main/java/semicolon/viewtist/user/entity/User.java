@@ -78,10 +78,9 @@ public class User extends BaseTimeEntity {
     this.streamKey = streamKey;
   }
 
-  public void setSignup(String nickname, String password, String profilePhotoUrl) {
+  public void setSignup(String nickname, String password) {
     this.nickname = nickname;
     this.password = password;
-    this.profilePhotoUrl = profilePhotoUrl;
   }
 
   public void setPassword(String password) {

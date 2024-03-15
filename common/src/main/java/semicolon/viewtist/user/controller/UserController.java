@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import semicolon.viewtist.s3.S3UploaderService;
 import semicolon.viewtist.user.dto.request.UpdateIntroduction;
 import semicolon.viewtist.user.dto.request.UpdateNickname;
 import semicolon.viewtist.user.dto.request.UpdatePasswordRequest;
@@ -27,7 +26,6 @@ import semicolon.viewtist.user.service.UserService;
 @RequestMapping("/api/users")
 public class UserController {
 
-  private final S3UploaderService s3UploaderService;
   private final UserService userService;
 
 
@@ -63,7 +61,7 @@ public class UserController {
 //  }
 
   @PreAuthorize("isAuthenticated()")
-  @PutMapping(value = "/update-profile-photo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  @PutMapping(value = "/profile-photo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<String> updateProfilePhoto(@Parameter(
       description = "multipart/form-data 형식의 이미지 리스트를 input으로 받습니다. 이때 key 값은 multipartFile 입니다."
   )
@@ -73,8 +71,16 @@ public class UserController {
     return ResponseEntity.ok(photoUrl);
   }
 
+  // 프로필 사진 초기화
   @PreAuthorize("isAuthenticated()")
-  @PutMapping("/update-nickname")
+  @PutMapping("/reset-profile-photo")
+  public ResponseEntity<String> resetProfilePhoto(Authentication authentication) {
+    String photoUrl = userService.resetProfilePhoto(authentication);
+    return ResponseEntity.ok(photoUrl);
+  }
+
+  @PreAuthorize("isAuthenticated()")
+  @PutMapping("/nickname")
   public ResponseEntity<String> updateMypage(@RequestBody UpdateNickname updateNickname,
       Authentication authentication) {
     userService.updateNickname(updateNickname, authentication);
@@ -82,7 +88,7 @@ public class UserController {
   }
 
   @PreAuthorize("isAuthenticated()")
-  @PutMapping("/update-introduction")
+  @PutMapping("/introduction")
   public ResponseEntity<String> updateIntroduction(@RequestBody UpdateIntroduction updateIntroduction,
       Authentication authentication) {
     userService.updateIntroduction(updateIntroduction, authentication);
