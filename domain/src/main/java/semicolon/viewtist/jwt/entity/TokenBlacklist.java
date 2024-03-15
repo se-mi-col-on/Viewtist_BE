@@ -9,13 +9,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import semicolon.viewtist.global.entitiy.BaseTimeEntity;
 
 @Entity
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class TokenBlacklist {
+public class TokenBlacklist extends BaseTimeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

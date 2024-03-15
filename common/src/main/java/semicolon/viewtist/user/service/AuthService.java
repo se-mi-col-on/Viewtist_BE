@@ -51,6 +51,8 @@ public class AuthService {
   private String text;
   @Value("${mail.verified.url}")
   private String verifiedUrl;
+  @Value("${photo.url}")
+  private String photoUrl;
 
   // 회원가입
   @Transactional
@@ -65,8 +67,8 @@ public class AuthService {
       throw new UserException(NOT_VERIFIED_EMAIL);
     }
 
-    user.setSignup(request.getNickname(), passwordEncoder.encode(request.getPassword()),
-        request.getProfilePhotoUrl());
+    user.setSignup(request.getNickname(), passwordEncoder.encode(request.getPassword()));
+    user.setProfilePhotoUrl(photoUrl);
 
     userRepository.save(user);
   }
@@ -83,7 +85,6 @@ public class AuthService {
         .tokenExpiryAt(tokenExpiryAt)
         .type(Type.local)
         .streamKey(UUID.randomUUID().toString())
-        .channelIntroduction("채널을 소개해 주세요")
         .build());
 
     if (user.isEmailVerified()) {
@@ -154,7 +155,6 @@ public class AuthService {
     }
 
     validateRefreshToken(refreshToken);
-
 
     return tokenProvider.generateToken(user);
   }
