@@ -1,9 +1,12 @@
 package semicolon.viewtist.cotroller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -12,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import semicolon.viewtist.liveStreaming.dto.request.LiveStreamingCreateRequest;
 import semicolon.viewtist.liveStreaming.dto.request.LiveStreamingUpdateRequest;
+import semicolon.viewtist.liveStreaming.dto.response.LiveStreamingResponse;
+import semicolon.viewtist.liveStreaming.entity.Category;
 import semicolon.viewtist.service.LiveStreamingService;
 
 @RestController
@@ -24,11 +29,12 @@ public class LiveStreamingController {
   // 스트리밍 시작
   @PreAuthorize("isAuthenticated()")
   @PostMapping("/start")
-  public ResponseEntity<String> startLiveStreaming(
+  public ResponseEntity<LiveStreamingResponse> startLiveStreaming(
       @RequestBody LiveStreamingCreateRequest liveStreamingCreateRequest,
       Authentication authentication) {
-    liveStreamingService.startLiveStreaming(liveStreamingCreateRequest, authentication);
-    return ResponseEntity.ok("스트리밍이 시작되었습니다.");
+    LiveStreamingResponse liveStreaming = liveStreamingService.startLiveStreaming(
+        liveStreamingCreateRequest, authentication);
+    return ResponseEntity.ok(liveStreaming);
   }
 
   // 스트리밍 업데이트
@@ -38,6 +44,28 @@ public class LiveStreamingController {
       @RequestBody LiveStreamingUpdateRequest liveStreamingUpdateRequest) {
     liveStreamingService.updateLiveStreaming(streamingId, liveStreamingUpdateRequest);
     return ResponseEntity.ok("스트리밍이 업데이트 되었습니다.");
+  }
+
+  // 스트리밍 정보 보기
+  @PreAuthorize("isAuthenticated()")
+  @GetMapping("/{streamingId}")
+  public ResponseEntity<LiveStreamingResponse> getLiveStreaming(@PathVariable Long streamingId) {
+    LiveStreamingResponse liveStreaming = liveStreamingService.getLiveStreaming(streamingId);
+    return ResponseEntity.ok(liveStreaming);
+  }
+
+  // 스트리밍 나열 시청자 순으로
+  @GetMapping("/all-streaming")
+  public Page<LiveStreamingResponse> getLiveStreamings(
+      Pageable pageable) {
+    return liveStreamingService.findLiveStreamings(pageable);
+  }
+
+  // 카테고리로 검색
+  @GetMapping("/category")
+  public Page<LiveStreamingResponse> findLiveSteamingsByCategory(@RequestBody Category category,
+      Pageable pageable) {
+    return liveStreamingService.findLiveStreamingsByCategory(category, pageable);
   }
 
 }
