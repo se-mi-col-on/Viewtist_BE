@@ -138,7 +138,7 @@ jobs:
             sudo docker stop common
             sudo docker rm common
             sudo docker rmi limhyeantaek/common
-            sudo docker run -d -p 8080:8080 --name common limhyeantaek/common
+            sudo docker run -d -p 8083:8083 --name common limhyeantaek/common
             sudo docker ps -a
 
       # REMOVE Github IP FROM security group
