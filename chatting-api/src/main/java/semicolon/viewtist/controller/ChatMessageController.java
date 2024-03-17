@@ -23,7 +23,7 @@ public class ChatMessageController {
     chatMessageService.sendChatMessage(message);
   }
   @GetMapping("/chat/{streamKey}")
-  @Operation(summary = "입장시 이전의 채팅 내역을 불러온다.", description = "채팅방에 있는 채팅 내역들이 불러와짐 (최신 메세지 50개)")
+  @Operation(summary = "입장시 이전의 채팅 내역을 불러온다.", description = "채팅방에 있는 채팅 내역들이 불러와짐")
   public ResponseEntity<List<ChatMessageResponse>> getChatMessageHistory(@PathVariable String streamKey){
     return ResponseEntity.ok(chatMessageService.getChatMessages(streamKey));
   }
