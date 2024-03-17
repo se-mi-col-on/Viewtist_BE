@@ -11,7 +11,7 @@ import semicolon.viewtist.chatting.dto.response.ChatMessageResponse;
 import semicolon.viewtist.chatting.entity.ChatMessage;
 import semicolon.viewtist.chatting.repository.ChatMessageRepository;
 import semicolon.viewtist.chatting.repository.ChatRoomRepository;
-import semicolon.viewtist.exception.ChattingException;
+import semicolon.viewtist.chatting.exception.ChattingException;
 import semicolon.viewtist.global.exception.ErrorCode;
 
 @Service
