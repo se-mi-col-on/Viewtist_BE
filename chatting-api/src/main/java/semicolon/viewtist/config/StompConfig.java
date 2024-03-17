@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
@@ -11,6 +12,7 @@ import semicolon.viewtist.stomp.StompHandler;
 
 @Configuration
 @EnableWebSocketMessageBroker
+@EnableWebSocket
 @RequiredArgsConstructor
 public class StompConfig implements WebSocketMessageBrokerConfigurer { // message broker 설정
 
@@ -19,7 +21,6 @@ public class StompConfig implements WebSocketMessageBrokerConfigurer { // messag
   public void registerStompEndpoints(StompEndpointRegistry registry) {
     // websocket 실행 경로
     registry.addEndpoint("/ws/chat").setAllowedOriginPatterns("*");
-    // .withSockJS();
   }
 
   @Override
