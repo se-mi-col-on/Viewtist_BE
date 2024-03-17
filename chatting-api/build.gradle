@@ -1,7 +1,10 @@
-tasks.named("bootJar") {
-    mainClass = 'semicolon.viewtist.ChattingApplication'
+
+project(':chatting-api') {
+    tasks.named("bootJar") {
+        mainClass = 'semicolon.viewtist.ChattingApplication'
+    }
+    jar { enabled = false }
 }
-jar { enabled = false }
 
 dependencies {
     implementation project(':domain')
