@@ -32,7 +32,7 @@ jobs:
           echo "${{ secrets.COMMON_APPLICATION }}" > ./application.yml
           cd ../../../..
           cd chatting-api/src/main
-          mkdir resources
+        
           cd resources
           touch ./application.yml
           echo "${{ secrets.CHATTING_API_APPLICATION }}" > ./application.yml
