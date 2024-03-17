@@ -1,8 +1,5 @@
 package semicolon.viewtist.service;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -14,7 +11,7 @@ import semicolon.viewtist.chatting.dto.response.ChatRoomResponse;
 import semicolon.viewtist.chatting.entity.ChatRoom;
 import semicolon.viewtist.chatting.entity.type.Status;
 import semicolon.viewtist.chatting.repository.ChatRoomRepository;
-import semicolon.viewtist.exception.ChattingException;
+import semicolon.viewtist.chatting.exception.ChattingException;
 import semicolon.viewtist.global.exception.ErrorCode;
 
 @Slf4j
