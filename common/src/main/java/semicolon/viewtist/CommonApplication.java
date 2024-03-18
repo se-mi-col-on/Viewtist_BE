@@ -16,9 +16,11 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableFeignClients(basePackages = "semicolon.viewtist.mailgun")
 @EnableJpaRepositories(basePackages = {"semicolon.viewtist.user.repository",
-    "semicolon.viewtist.jwt.repository", "semicolon.viewtist.image.repository", "semicolon.viewtist.sse.repository"})
+    "semicolon.viewtist.jwt.repository", "semicolon.viewtist.image.repository",
+    "semicolon.viewtist.sse.repository", "semicolon.viewtist.post.repository"})
 @EntityScan(basePackages = {"semicolon.viewtist.user.entity", "semicolon.viewtist.jwt.entity",
-    "semicolon.viewtist.image.entity","semicolon.viewtist.sse.entity"})
+    "semicolon.viewtist.image.entity", "semicolon.viewtist.sse.entity",
+    "semicolon.viewtist.post.entity"})
 @SpringBootApplication
 @ImportAutoConfiguration({FeignAutoConfiguration.class, HttpClientConfiguration.class})
 @ServletComponentScan
