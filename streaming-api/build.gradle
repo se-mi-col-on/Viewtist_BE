@@ -1,5 +1,5 @@
 tasks.named("bootJar") {
-    mainClass = 'semicolon.viewtist.StreamingApplication'
+    mainClass = 'semicolon.viewtist.LiveStreamingApplication'
 }
 jar { enabled = false }
 
