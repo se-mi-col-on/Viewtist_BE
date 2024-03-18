@@ -177,5 +177,4 @@ public class UserService {
     userRepository.save(user); // 새로운 스트림 키 생성 후 저장
     return user.getStreamKey();
   }
-
 }

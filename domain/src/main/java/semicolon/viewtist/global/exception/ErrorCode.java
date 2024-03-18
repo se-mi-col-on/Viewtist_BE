@@ -41,7 +41,9 @@ public enum ErrorCode {
   NOT_EXIST_STREAMKEY(HttpStatus.BAD_REQUEST, "존재하지 않는 스트리밍 방입니다."),
   NOT_EXIST_DESTINATION(HttpStatus.BAD_REQUEST, "destination이 존재하지 않습니다."),
   NOT_ENTER_ANY_ROOM(HttpStatus.BAD_REQUEST, "아직 채팅방에 들어가지 않았습니다."),
-  ALREADY_ENTER_ANOTHER_ROOM(HttpStatus.BAD_REQUEST,"이미 다른 방에 있습니다.");
+  ALREADY_ENTER_ANOTHER_ROOM(HttpStatus.BAD_REQUEST,"이미 다른 방에 있습니다."),
+
+  POST_NOT_FOUND(NOT_FOUND, "게시글을 찾을 수 없습니다.");
 
   private final HttpStatus status;
   private final String message;
