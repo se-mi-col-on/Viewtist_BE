@@ -31,8 +31,7 @@ jobs:
           touch ./application.yml
           echo "${{ secrets.COMMON_APPLICATION }}" > ./application.yml
           cd ../../../..
-          cd chatting-api/src/main
-          cd resources
+          cd chatting-api/src/main/resources
           touch ./application.yml
           echo "${{ secrets.CHATTING_API_APPLICATION }}" > ./application.yml
           cd ../../../..
