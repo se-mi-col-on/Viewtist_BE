@@ -17,7 +17,7 @@ services:
       dockerfile: Dockerfile
     image: limhyeantaek/chatting-api
     ports:
-      - "443:443"
+      - "8081:8081"
     networks:
       - viewtist
     platform: linux/amd64
