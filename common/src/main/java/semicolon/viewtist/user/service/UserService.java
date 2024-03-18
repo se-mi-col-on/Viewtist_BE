@@ -155,7 +155,8 @@ public class UserService {
 
   // 유저 소개글 수정
   @Transactional
-  public void updateIntroduction(UpdateIntroduction updateIntroduction, Authentication authentication) {
+  public void updateIntroduction(UpdateIntroduction updateIntroduction,
+      Authentication authentication) {
     User user = findByEmail(authentication.getName());
 
     user.setChannelIntroduction(updateIntroduction.getIntroduction());

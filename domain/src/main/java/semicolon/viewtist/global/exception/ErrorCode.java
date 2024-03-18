@@ -24,6 +24,9 @@ public enum ErrorCode {
   INVALID_TOKEN(UNAUTHORIZED, "유효하지 않은 토큰입니다."),
   TIME_OUT_INVALID_TOKEN(BAD_REQUEST, "인증시간이 만료되었습니다."),
   NOT_VERIFIED_EMAIL(BAD_REQUEST, "이메일 인증을 진행해 주세요."),
+  USER_NOT_MATCH(BAD_REQUEST, "유저정보가 맞지 않습니다."),
+
+  ALREADY_EXISTS_SUBSCRIBE(BAD_REQUEST, "이미 구독되어있습니다."),
 
   SECURITY_UNAUTHORIZED(FORBIDDEN, "승인 실패"),
   ACCESS_DENIED(UNAUTHORIZED, "접근 실패"),
@@ -41,9 +44,11 @@ public enum ErrorCode {
   NOT_EXIST_STREAMKEY(HttpStatus.BAD_REQUEST, "존재하지 않는 스트리밍 방입니다."),
   NOT_EXIST_DESTINATION(HttpStatus.BAD_REQUEST, "destination이 존재하지 않습니다."),
   NOT_ENTER_ANY_ROOM(HttpStatus.BAD_REQUEST, "아직 채팅방에 들어가지 않았습니다."),
+
   ALREADY_ENTER_ANOTHER_ROOM(HttpStatus.BAD_REQUEST,"이미 다른 방에 있습니다."),
 
   POST_NOT_FOUND(NOT_FOUND, "게시글을 찾을 수 없습니다.");
+
 
   private final HttpStatus status;
   private final String message;
