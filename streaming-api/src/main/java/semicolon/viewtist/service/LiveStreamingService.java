@@ -1,7 +1,9 @@
 package semicolon.viewtist.service;
 
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -14,19 +16,27 @@ import semicolon.viewtist.liveStreaming.entity.Category;
 import semicolon.viewtist.liveStreaming.entity.LiveStreaming;
 import semicolon.viewtist.liveStreaming.exception.LiveStreamingException;
 import semicolon.viewtist.liveStreaming.repository.LiveStreamingRepository;
+import semicolon.viewtist.sse.entity.Notify.NotificationType;
+import semicolon.viewtist.sse.entity.Subscribe;
+import semicolon.viewtist.sse.repository.SubscribeRepository;
+import semicolon.viewtist.sse.service.NotifyService;
 import semicolon.viewtist.user.entity.User;
 import semicolon.viewtist.user.exception.UserException;
 import semicolon.viewtist.user.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class LiveStreamingService {
 
   private final LiveStreamingRepository liveStreamingRepository;
   private final UserRepository userRepository;
+  private final NotifyService notifyService;
+  private final SubscribeRepository subscribeRepository;
 
   // 스트리밍 시작
-  public LiveStreamingResponse startLiveStreaming(LiveStreamingCreateRequest liveStreamingCreateRequest,
+  public LiveStreamingResponse startLiveStreaming(
+      LiveStreamingCreateRequest liveStreamingCreateRequest,
       Authentication authentication) {
     User user = findByEmail(authentication);
     Optional<LiveStreaming> optionalLiveStreaming = liveStreamingRepository.findByUser(user);
@@ -36,15 +46,25 @@ public class LiveStreamingService {
 
     LiveStreaming liveStreaming = liveStreamingCreateRequest.from(liveStreamingCreateRequest, user);
     liveStreamingRepository.save(liveStreaming);
+    List<Subscribe> subscribeList = subscribeRepository.findByReceiver(user.getNickname());
+    for (Subscribe subscribe : subscribeList) {
+      notifyService.streamingNotifySend(subscribe.getUser(), NotificationType.STREAMING,
+          user.getNickname() + " is start stremaing"
+      );
+      log.info(subscribe.getUser() + "에게 알림을 보냈습니다.");
+    }
     return LiveStreamingResponse.from(liveStreaming);
   }
 
   // 스트리밍 업데이트
   public void updateLiveStreaming(Long streamId,
-      LiveStreamingUpdateRequest liveStreamingUpdateRequest) {
+      LiveStreamingUpdateRequest liveStreamingUpdateRequest, Authentication authentication) {
 
     LiveStreaming liveStreaming = liveStreamingFindById(streamId);
 
+    if (!liveStreaming.getUser().getEmail().equals(authentication.getName())) {
+      throw new UserException(ErrorCode.USER_NOT_MATCH);
+    }
     liveStreaming.update(liveStreamingUpdateRequest);
     liveStreamingRepository.save(liveStreaming);
   }
@@ -67,6 +87,15 @@ public class LiveStreamingService {
     Page<LiveStreaming> liveStreamings = liveStreamingRepository.findAllByCategory(category,
         pageable);
     return liveStreamings.map(LiveStreamingResponse::from);
+  }
+
+  // 스트리밍 삭제
+  public void stopStreaming(Long streamId, Authentication authentication) {
+    LiveStreaming liveStreaming = liveStreamingFindById(streamId);
+    if (!liveStreaming.getUser().getEmail().equals(authentication.getName())) {
+      throw new UserException(ErrorCode.USER_NOT_MATCH);
+    }
+    liveStreamingRepository.delete(liveStreaming);
   }
 
 

@@ -24,6 +24,9 @@ public enum ErrorCode {
   INVALID_TOKEN(UNAUTHORIZED, "유효하지 않은 토큰입니다."),
   TIME_OUT_INVALID_TOKEN(BAD_REQUEST, "인증시간이 만료되었습니다."),
   NOT_VERIFIED_EMAIL(BAD_REQUEST, "이메일 인증을 진행해 주세요."),
+  USER_NOT_MATCH(BAD_REQUEST, "유저정보가 맞지 않습니다."),
+
+  ALREADY_EXISTS_SUBSCRIBE(BAD_REQUEST, "이미 구독되어있습니다."),
 
   SECURITY_UNAUTHORIZED(FORBIDDEN, "승인 실패"),
   ACCESS_DENIED(UNAUTHORIZED, "접근 실패"),
