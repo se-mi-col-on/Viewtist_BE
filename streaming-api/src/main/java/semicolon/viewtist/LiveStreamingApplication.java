@@ -15,9 +15,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
     "semicolon.viewtist.user.entity", "semicolon.viewtist.jwt.entity",
     "semicolon.viewtist.sse.entity"})
 @EnableJpaAuditing
-public class StreamingApplication {
+public class LiveStreamingApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(StreamingApplication.class, args);
+    SpringApplication.run(LiveStreamingApplication.class, args);
   }
 }
