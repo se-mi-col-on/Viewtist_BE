@@ -13,13 +13,14 @@ import semicolon.viewtist.chatting.repository.ChatMessageRepository;
 import semicolon.viewtist.chatting.repository.ChatRoomRepository;
 import semicolon.viewtist.chatting.exception.ChattingException;
 import semicolon.viewtist.global.exception.ErrorCode;
+import semicolon.viewtist.websocket.WebSocketChatHandler;
 
 @Service
 @RequiredArgsConstructor
 public class ChatMessageService {
   private final ChatMessageRepository chatMessageRepository;
   private final ChatRoomRepository chatRoomRepository;
-  private final SimpMessageSendingOperations sendingOperations;
+  private final WebSocketChatHandler webSocketChatHandler;
 
 
   public void sendChatMessage(ChatMessageRequest message) {
@@ -30,7 +31,7 @@ public class ChatMessageService {
       message.setMessage(message.getSenderId()+"님이 입장하였습니다.");
     }
     chatMessageRepository.save(ChatMessage.from(message));
-    sendingOperations.convertAndSend("/topic/chat/room/"+message.getStreamKey(),message);
+   // webSocketChatHandler.sendMessage();
   }
   // 이전 채팅 메세지 내역
   public List<ChatMessageResponse> getChatMessages(String streamKey){
