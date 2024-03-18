@@ -11,11 +11,8 @@ import semicolon.viewtist.chatting.entity.ChatRoom;
 @Repository
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
 
-  boolean existsByStreamKey(String streamKey);
   boolean existsByStreamerId(Long streamerId);
-  boolean findByStreamKeyAndActiveIsTrue(String streamKey);
 
   Page<ChatRoom> findByActiveIsTrue(Pageable pageable);
 
-  Optional<ChatRoom> findByStreamKey(String streamKey);
 }

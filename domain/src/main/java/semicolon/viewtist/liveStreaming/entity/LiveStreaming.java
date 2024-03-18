@@ -1,18 +1,22 @@
 package semicolon.viewtist.liveStreaming.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import semicolon.viewtist.chatting.entity.ChatRoom;
 import semicolon.viewtist.global.entitiy.BaseTimeEntity;
 import semicolon.viewtist.liveStreaming.dto.request.LiveStreamingUpdateRequest;
 import semicolon.viewtist.liveStreaming.dto.response.LiveStreamingResponse;
@@ -45,6 +49,9 @@ public class LiveStreaming extends BaseTimeEntity {
   @Column
   private Long viewerCount;
 
+  @OneToOne(mappedBy = "streaming",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+  private ChatRoom chatRoom;
+
   public LiveStreamingResponse form(LiveStreaming liveStreaming) {
     return LiveStreamingResponse.builder()
         .title(liveStreaming.getTitle())
@@ -58,5 +65,10 @@ public class LiveStreaming extends BaseTimeEntity {
   public void update(LiveStreamingUpdateRequest liveStreamingUpdateRequest) {
     this.title = liveStreamingUpdateRequest.getUpdateTitle();
     this.category = liveStreamingUpdateRequest.getUpdateCategory();
+  }
+
+  public void createChatRoom(ChatRoom chatRoom){
+    this.chatRoom = chatRoom;
+    chatRoom.createdByStreaming(this);
   }
 }

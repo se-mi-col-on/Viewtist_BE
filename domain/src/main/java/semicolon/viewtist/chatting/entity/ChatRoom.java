@@ -1,15 +1,21 @@
 package semicolon.viewtist.chatting.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import semicolon.viewtist.chatting.dto.request.ChatRoomRequest;
 import semicolon.viewtist.global.entitiy.BaseTimeEntity;
+import semicolon.viewtist.liveStreaming.entity.LiveStreaming;
+import semicolon.viewtist.user.entity.User;
 
 @Getter
 @AllArgsConstructor
@@ -21,20 +27,30 @@ public class ChatRoom extends BaseTimeEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  private String streamKey;
+
+  @OneToOne
+  @JoinColumn(name="streaming_id")
+  private LiveStreaming streaming;
   private Long streamerId;
+  private String streamKey;
   private boolean active;
 
-  public static ChatRoom from(ChatRoomRequest request) {
+
+  public static ChatRoom madeByUser(User user) {
     return ChatRoom.builder()
-        .streamKey(request.getStreamKey())
-        .streamerId(request.getStreamerId())
+        .streamerId(user.getId())
+        .streamKey(user.getStreamKey())
+        .active(true)
         .build();
   }
+
   public void setChatRoomActivate(boolean status){
     this.active = status;
   }
   public boolean isActive(){
     return active;
+  }
+  public void createdByStreaming(LiveStreaming liveStreaming){
+    this.streaming = liveStreaming;
   }
 }
