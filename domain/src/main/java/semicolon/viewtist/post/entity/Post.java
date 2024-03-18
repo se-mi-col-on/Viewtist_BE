@@ -6,10 +6,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import semicolon.viewtist.user.entity.User;
 
 @Entity
 @Getter
@@ -22,8 +24,9 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JoinColumn(name= "user_id")
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column
     private String title;
@@ -31,11 +34,12 @@ public class Post {
     @Column
     private String content;
 
-    public void setTitle(String updateTitleRequest) {
-        this.title = updateTitleRequest;
+    public void setTitle(String updatePostRequest) {
+        this.title = updatePostRequest;
     }
 
-    public void setContent(String updateContentRequest) {
-        this.content = updateContentRequest;
+    public void setContent(String updatePostRequest) {
+        this.content = updatePostRequest;
     }
+
 }
