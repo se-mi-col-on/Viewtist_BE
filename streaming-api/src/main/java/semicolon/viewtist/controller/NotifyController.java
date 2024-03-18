@@ -1,6 +1,5 @@
 package semicolon.viewtist.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -20,11 +19,10 @@ public class NotifyController {
 
 
   @PreAuthorize("isAuthenticated()")
-  @GetMapping(value = "/subscribe", produces = "text/event-stream")
-  public SseEmitter subscribe(Authentication authentication,
-      @RequestHeader(value = "Last-Event-ID", required = false, defaultValue = "") String lastEventId)
-      throws JsonProcessingException {
-    return notifyService.subscribe(authentication, lastEventId);
+  @GetMapping(value = "/connect", produces = "text/event-stream")
+  public SseEmitter connect(Authentication authentication,
+      @RequestHeader(value = "Last-Event-ID", required = false, defaultValue = "") String lastEventId) {
+    return notifyService.connect(authentication, lastEventId);
   }
 
 }

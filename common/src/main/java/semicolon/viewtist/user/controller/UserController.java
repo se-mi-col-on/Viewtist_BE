@@ -89,7 +89,8 @@ public class UserController {
 
   @PreAuthorize("isAuthenticated()")
   @PutMapping("/introduction")
-  public ResponseEntity<String> updateIntroduction(@RequestBody UpdateIntroduction updateIntroduction,
+  public ResponseEntity<String> updateIntroduction(
+      @RequestBody UpdateIntroduction updateIntroduction,
       Authentication authentication) {
     userService.updateIntroduction(updateIntroduction, authentication);
     return ResponseEntity.ok("소개글이 수정되었습니다.");

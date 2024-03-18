@@ -32,7 +32,7 @@ public class NotifyService {
   private final NotifyRepository notifyRepository;
   private final UserRepository userRepository;
 
-  public SseEmitter subscribe(Authentication authentication, String lastEventId) {
+  public SseEmitter connect(Authentication authentication, String lastEventId) {
     User user = userRepository.findByEmail(authentication.getName())
         .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
 
@@ -87,10 +87,10 @@ public class NotifyService {
         String.valueOf(userEmail));
     eventCaches.entrySet().stream()
         .filter(entry -> lastEventId.compareTo(entry.getKey()) < 0)
-        .forEach(entry -> {
-          sendNotification(emitter, entry.getKey(), emitterId, entry.getValue(),
-              VIEWTIST.toString());
-        });
+        .forEach(entry ->
+            sendNotification(emitter, entry.getKey(), emitterId, entry.getValue(),
+                VIEWTIST.toString())
+        );
   }
 
   public void streamingNotifySend(String receiver, NotificationType notificationType,

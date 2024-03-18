@@ -3,11 +3,14 @@ package semicolon.viewtist.user.service;
 import static semicolon.viewtist.global.exception.ErrorCode.ALREADY_EXISTS_SUBSCRIBE;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import semicolon.viewtist.global.exception.ErrorCode;
 import semicolon.viewtist.sse.entity.Subscribe;
 import semicolon.viewtist.sse.repository.SubscribeRepository;
+import semicolon.viewtist.user.dto.response.SubscribeResponse;
 import semicolon.viewtist.user.entity.User;
 import semicolon.viewtist.user.exception.SubscribeException;
 import semicolon.viewtist.user.exception.UserException;
@@ -49,6 +52,12 @@ public class SubscribeService {
     subscribeRepository.deleteByReceiverAndUser(streamer.getNickname(), user.getNickname());
   }
 
+  public Page<SubscribeResponse> getSubscribeList(Authentication authentication,
+      Pageable pageable) {
+    User user = getUserByEmail(authentication.getName());
+    Page<Subscribe> subscribe = subscribeRepository.findAllByUser(user.getNickname(), pageable);
+    return subscribe.map(SubscribeResponse::from);
+  }
 
   private User getUserByEmail(String email) {
     return userRepository.findByEmail(email)
