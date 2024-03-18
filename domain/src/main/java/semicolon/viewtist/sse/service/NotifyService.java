@@ -4,7 +4,6 @@ import static semicolon.viewtist.sse.entity.Notify.NotificationType.STREAMING;
 import static semicolon.viewtist.sse.entity.Notify.NotificationType.TEST;
 import static semicolon.viewtist.sse.entity.Notify.NotificationType.VIEWTIST;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -33,8 +32,7 @@ public class NotifyService {
   private final NotifyRepository notifyRepository;
   private final UserRepository userRepository;
 
-  public SseEmitter subscribe(Authentication authentication, String lastEventId)
-      throws JsonProcessingException {
+  public SseEmitter subscribe(Authentication authentication, String lastEventId) {
     User user = userRepository.findByEmail(authentication.getName())
         .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
 

@@ -24,6 +24,7 @@ import semicolon.viewtist.user.entity.User;
 @NoArgsConstructor
 @Builder
 public class Notify extends BaseTimeEntity {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "notification_id")
@@ -44,7 +45,7 @@ public class Notify extends BaseTimeEntity {
   private User receiver;
 
 
-  public enum NotificationType{
+  public enum NotificationType {
     STREAMING, VIEWTIST, TEST, RESEND,
   }
 }

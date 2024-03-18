@@ -22,10 +22,12 @@ public class GlobalExceptionHandler {
   public ResponseEntity<?> handlerLiveStreamingException(LiveStreamingException e) {
     return toResponse(e.getErrorCode(), e.getMessage());
   }
+
   @ExceptionHandler(ChattingException.class)
   public ResponseEntity<?> handlerChattingException(ChattingException e) {
     return toResponse(e.getErrorCode(), e.getMessage());
   }
+
   @ExceptionHandler(UserException.class)
   public ResponseEntity<?> handlerUserException(UserException e) {
     return toResponse(e.getErrorCode(), e.getMessage());

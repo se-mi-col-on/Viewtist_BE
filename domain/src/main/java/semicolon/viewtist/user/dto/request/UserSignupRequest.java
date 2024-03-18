@@ -26,7 +26,6 @@ public class UserSignupRequest {
   private String password;
 
 
-
   public static UserSignupRequest from(User user) {
     return UserSignupRequest.builder()
         .email(user.getEmail())

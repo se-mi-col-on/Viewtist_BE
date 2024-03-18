@@ -18,6 +18,7 @@ public class NotifyStreamingResponse {
   String receiverName;
   String content;
   String type;
+
   public static NotifyStreamingResponse from(Notify notify) {
     return NotifyStreamingResponse.builder()
         .content(notify.getContent())

@@ -9,9 +9,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @EnableJpaRepositories(basePackages = {"semicolon.viewtist.liveStreaming.repository",
-    "semicolon.viewtist.user.repository", "semicolon.viewtist.jwt.repository", "semicolon.viewtist.sse.repository"})
+    "semicolon.viewtist.user.repository", "semicolon.viewtist.jwt.repository",
+    "semicolon.viewtist.sse.repository"})
 @EntityScan(basePackages = {"semicolon.viewtist.liveStreaming.entity",
-    "semicolon.viewtist.user.entity", "semicolon.viewtist.jwt.entity", "semicolon.viewtist.sse.entity"})
+    "semicolon.viewtist.user.entity", "semicolon.viewtist.jwt.entity",
+    "semicolon.viewtist.sse.entity"})
 @EnableJpaAuditing
 public class StreamingApplication {
 
