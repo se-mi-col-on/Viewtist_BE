@@ -2,7 +2,6 @@ package semicolon.viewtist.user.controller;
 
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,14 +27,14 @@ public class AuthController {
 
   // 회원가입
   @PostMapping("/signup")
-  public ResponseEntity<String> signup(@RequestBody UserSignupRequest request) throws IOException {
+  public ResponseEntity<String> signup(@RequestBody UserSignupRequest request) {
     authService.signup(request);
     return ResponseEntity.ok("회원가입 성공적으로 완료되었습니다.");
   }
 
   // 이메일 전송
   @PostMapping("/send-email")
-  public ResponseEntity<String> sendEmail(String email) {
+  public ResponseEntity<String> sendEmail(@RequestParam(name = "email") String email) {
     authService.sendEmail(email);
     return ResponseEntity.ok("이메일 전송 성공적으로 완료되었습니다.");
   }
