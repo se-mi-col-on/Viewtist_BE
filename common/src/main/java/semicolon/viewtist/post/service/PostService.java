@@ -7,6 +7,7 @@ import static semicolon.viewtist.global.exception.ErrorCode.USER_NOT_FOUND;
 import jakarta.transaction.Transactional;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -33,6 +34,7 @@ public class PostService {
         User user= userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new UserException(USER_NOT_FOUND));
 
+
         // 게시물 작성 로직을 구현
         Post post= Post.builder()
                 .user(user)
@@ -53,6 +55,7 @@ public class PostService {
         // 사용자의 인증 정보를 이용하여 사용자를 식별
         User user = userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new PostException(POST_NOT_FOUND));
+
 
         // 현재 글의 작성자와 로그인한 사용자의 ID를 비교하여 같은 사용자인지 확인
         if (Objects.equals(post.getUser().getId(), user.getId())) {
@@ -77,6 +80,7 @@ public class PostService {
         // 현재 포스트의 작성자와 로그인한 사용자의 ID를 비교하여 같은 사용자인지 확인
         if (!Objects.equals(post.getUser().getId(), user.getId())) {
             throw new GlobalException(ACCESS_DENIED);
+
         }
 
         // 포스트 삭제

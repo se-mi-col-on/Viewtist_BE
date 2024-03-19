@@ -12,7 +12,6 @@ import semicolon.viewtist.user.entity.User;
 public class LiveStreamingCreateRequest {
 
   private String title;
-
   private Category category;
 
 
@@ -21,6 +20,7 @@ public class LiveStreamingCreateRequest {
         .title(liveStreamingCreateRequest.getTitle())
         .user(user)
         .category(liveStreamingCreateRequest.getCategory())
+        .viewerCount(0L)
         .startAt(LocalDateTime.now())
         .build();
   }

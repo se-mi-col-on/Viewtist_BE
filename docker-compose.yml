@@ -6,7 +6,7 @@ services:
       dockerfile: Dockerfile
     image: limhyeantaek/common
     ports:
-      - "8080:8080"
+      - "8083:8083"
     networks:
       - viewtist
     platform: linux/amd64

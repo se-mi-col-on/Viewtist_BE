@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.Date;
 import javax.crypto.SecretKey;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,12 +21,12 @@ import semicolon.viewtist.global.exception.ErrorCode;
 import semicolon.viewtist.user.entity.User;
 import semicolon.viewtist.user.exception.UserException;
 
-
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class TokenProvider {
 
-  private static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 60; // 1시간
+  private static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 3; // 3시간
   private static final long REFRESH_TOKEN_EXPIRE_TIME = TOKEN_EXPIRE_TIME * 24; // 24시간
 
   @Value("${spring.jwt.key}")
@@ -66,8 +67,10 @@ public class TokenProvider {
 
   // 토큰 유효성 검증
   public boolean validateToken(String token) {
+    log.info(token);
     if (StringUtils.hasText(token)) {
       Claims claims = parseClaims(token);
+      log.info("claim subject {}",claims.getSubject());
       return claims.getExpiration().after(new Date());
     }
 
@@ -75,7 +78,7 @@ public class TokenProvider {
   }
 
   // 토큰 복호화
-  private Claims parseClaims(String token) {
+  public Claims parseClaims(String token) {
     try {
       return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody();
     } catch (ExpiredJwtException e) {

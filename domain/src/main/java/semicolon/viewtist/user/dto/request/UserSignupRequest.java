@@ -25,14 +25,11 @@ public class UserSignupRequest {
       message = "비밀번호는 영어와 숫자를 포함해서 8~16자리 입니다.")
   private String password;
 
-  private String profilePhotoUrl;
-
 
   public static UserSignupRequest from(User user) {
     return UserSignupRequest.builder()
         .email(user.getEmail())
         .nickname(user.getNickname())
-        .profilePhotoUrl(user.getProfilePhotoUrl())
         .build();
   }
 }
