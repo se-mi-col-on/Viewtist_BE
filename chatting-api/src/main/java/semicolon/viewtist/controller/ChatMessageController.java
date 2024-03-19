@@ -20,9 +20,9 @@ import semicolon.viewtist.service.ChatMessageService;
 public class ChatMessageController {
   private final ChatMessageService chatMessageService;
   @PreAuthorize("isAuthenticated()")
-  @GetMapping("/chat/{streamKey}")
+  @GetMapping("/chat/{streamingId}")
   @Operation(summary = "입장시 이전의 채팅 내역을 불러온다.", description = "채팅방에 있는 채팅 내역들이 불러와짐")
-  public ResponseEntity<List<ChatMessageResponse>> getChatMessageHistory(@PathVariable String streamKey){
-    return ResponseEntity.ok(chatMessageService.getChatMessages(streamKey));
+  public ResponseEntity<List<ChatMessageResponse>> getChatMessageHistory(@PathVariable Long streamingId){
+    return ResponseEntity.ok(chatMessageService.getChatMessages(streamingId));
   }
 }

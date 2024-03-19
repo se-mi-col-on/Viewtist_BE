@@ -30,14 +30,12 @@ public class ChatRoom extends BaseTimeEntity {
   @JoinColumn(name="streaming_id")
   private LiveStreaming streaming;
   private Long streamerId;
-  private String streamKey;
   private boolean active;
 
 
   public static ChatRoom madeByUser(User user) {
     return ChatRoom.builder()
         .streamerId(user.getId())
-        .streamKey(user.getStreamKey())
         .active(true)
         .build();
   }

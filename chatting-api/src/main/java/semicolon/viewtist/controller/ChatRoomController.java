@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,10 +18,10 @@ import semicolon.viewtist.service.ChatRoomService;
 public class ChatRoomController {
   private final ChatRoomService chatRoomService;
   @PreAuthorize("isAuthenticated()")
-  @PutMapping("/chatroom/{streamKey}")
+  @PutMapping("/chatroom/{streamingId}")
   @Operation(summary = "채팅방 상태를 설정한다.", description = "채팅금지 status = ON 채팅가능 status = OFF")
-  public ResponseEntity<String> enableChatRoom(@PathVariable String streamKey, String status, Authentication authentication) throws Exception {
+  public ResponseEntity<String> enableChatRoom(@PathVariable Long streamingId, String status, Authentication authentication) throws Exception {
 
-    return ResponseEntity.ok(chatRoomService.setChatRoomStatus(streamKey,status,authentication));
+    return ResponseEntity.ok(chatRoomService.setChatRoomStatus(streamingId,status,authentication));
   }
 }

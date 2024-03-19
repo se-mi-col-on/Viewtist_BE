@@ -15,9 +15,10 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import semicolon.viewtist.chatting.dto.request.ChatMessageRequest;
-import semicolon.viewtist.chatting.exception.ChattingException;
+import semicolon.viewtist.chatting.entity.ChatMessage;
+import semicolon.viewtist.chatting.repository.ChatMessageRepository;
 import semicolon.viewtist.global.exception.ErrorCode;
-import semicolon.viewtist.service.ChatMessageService;
+import semicolon.viewtist.service.ChatRoomService;
 import semicolon.viewtist.user.entity.User;
 import semicolon.viewtist.user.exception.UserException;
 import semicolon.viewtist.user.repository.UserRepository;
@@ -28,33 +29,36 @@ import semicolon.viewtist.user.repository.UserRepository;
 @RequiredArgsConstructor
 public class WebSocketChatHandler extends TextWebSocketHandler {
   private final ObjectMapper mapper;
-  private final Set<WebSocketSession> sessions = new HashSet<>();
-  private final Map<String,Set<WebSocketSession>> chatRoomSessionMap = new HashMap<>();
+  private final Map<Long,Set<WebSocketSession>> chatRoomSessionMap = new HashMap<>();
+  private final Map<WebSocketSession, Long> sessionChatRoomMap = new HashMap<>();
   private final UserRepository userRepository;
-
+  private final ChatMessageRepository chatMessageRepository;
+  private final ChatRoomService chatRoomService;
+  private final String ENTER=" 님이 입장하였습니다.";
+  private final String EXIT=" 님이 퇴장하였습니다.";
 // 스트리밍을 시청할때 채팅방 접속
   @Override
   public void afterConnectionEstablished(WebSocketSession session) throws Exception {
     log.info("{} 연결됨", session);
-    sessions.add(session);
+    sessionChatRoomMap.put(session,null);
   }
   @Override
   protected void handleTextMessage(@NonNull WebSocketSession session, TextMessage message) throws Exception {
     String payload = message.getPayload();
     log.info("payload {}", payload);
     ChatMessageRequest chatMessageRequest = mapper.readValue(payload, ChatMessageRequest.class);
-    String streamKey = chatMessageRequest.getStreamKey();
-    if(!chatRoomSessionMap.containsKey(streamKey)){
-      chatRoomSessionMap.put(streamKey,new HashSet<>());
+    Long streamingId= chatMessageRequest.getStreamingId();
+    if(!chatRoomSessionMap.containsKey(streamingId)){
+      chatRoomSessionMap.put(streamingId,new HashSet<>());
     }
-    Set<WebSocketSession> chatRoomSession  = chatRoomSessionMap.get(chatMessageRequest.getStreamKey());
+    Set<WebSocketSession> chatRoomSession  = chatRoomSessionMap.get(chatMessageRequest.getStreamingId());
     if (chatMessageRequest.getMessageType().equals(ChatMessageRequest.MessageType.ENTER)) {
-      User user = userRepository.findById(chatMessageRequest.getSenderId()).orElseThrow(
-          () -> new UserException(ErrorCode.USER_NOT_FOUND)
-      );
-      user.setSessionId(session.getId());
+      User user = chatRoomService.setUserSessionId(chatMessageRequest.getSenderId(), session.getId());
+      chatMessageRequest.setMessage(user.getNickname()+ENTER);
       chatRoomSession.add(session);
+      sessionChatRoomMap.put(session,streamingId);
     }
+    chatMessageRepository.save(ChatMessage.from(chatMessageRequest));
     sendMessageToChatRoom(chatMessageRequest, chatRoomSession);
   }
 
@@ -62,7 +66,16 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
   public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
     // TODO Auto-generated method stub
     log.info("{} 연결 끊김", session.getId());
-    sessions.remove(session);
+
+    User user = userRepository.findBySessionId(session.getId()).orElseThrow(
+        () -> new UserException(ErrorCode.USER_NOT_FOUND)
+    );
+    chatRoomService.removeUserSessionId(user);
+    Long streamingId = sessionChatRoomMap.get(session);
+    Set<WebSocketSession> chatRoomSession  = chatRoomSessionMap.get(streamingId);
+    chatRoomSessionMap.get(streamingId).remove(session);
+    sessionChatRoomMap.remove(session);
+    sendMessageToChatRoom(ChatMessageRequest.builder().message(user.getNickname()+EXIT).build(),chatRoomSession);
   }
 
   private void sendMessageToChatRoom(ChatMessageRequest chatMessage, Set<WebSocketSession> chatRoomSession) {
