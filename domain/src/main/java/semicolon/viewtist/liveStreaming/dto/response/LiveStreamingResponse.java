@@ -20,6 +20,8 @@ public class LiveStreamingResponse {
 
   private String streamerNickname;
 
+  private String profilePhotoUrl;
+
   private LocalDateTime startAt;
 
   private Long viewerCount;
@@ -33,6 +35,7 @@ public class LiveStreamingResponse {
         .streamerNickname(liveStreaming.getUser().getNickname())
         .category(liveStreaming.getCategory())
         .viewerCount(liveStreaming.getViewerCount())
+        .profilePhotoUrl(liveStreaming.getUser().getProfilePhotoUrl())
         .startAt(liveStreaming.getStartAt())
         .build();
   }
