@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,12 +19,9 @@ import semicolon.viewtist.service.ChatMessageService;
 @RequiredArgsConstructor
 public class ChatMessageController {
   private final ChatMessageService chatMessageService;
-  @MessageMapping("/message")
-  public void enter(ChatMessageRequest message) {
-    chatMessageService.sendChatMessage(message);
-  }
+  @PreAuthorize("isAuthenticated()")
   @GetMapping("/chat/{streamKey}")
-  @Operation(summary = "입장시 이전의 채팅 내역을 불러온다.", description = "채팅방에 있는 채팅 내역들이 불러와짐 (최신 메세지 50개)")
+  @Operation(summary = "입장시 이전의 채팅 내역을 불러온다.", description = "채팅방에 있는 채팅 내역들이 불러와짐")
   public ResponseEntity<List<ChatMessageResponse>> getChatMessageHistory(@PathVariable String streamKey){
     return ResponseEntity.ok(chatMessageService.getChatMessages(streamKey));
   }

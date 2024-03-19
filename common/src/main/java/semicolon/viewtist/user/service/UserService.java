@@ -42,14 +42,16 @@ public class UserService {
   private String subject;
   @Value("${mail.password.text}")
   private String text;
+  @Value("${photo.url}")
+  private String photoUrl;
 
   // 유저 정보
   public UserResponse userDetail(Authentication authentication) {
-    User user = findByEmailOrThrow(authentication.getName());
+    User user = findByEmail(authentication.getName());
     return UserResponse.from(user);
   }
 
-  private User findByEmailOrThrow(String email) {
+  private User findByEmail(String email) {
     return userRepository.findByEmail(email)
         .orElseThrow(() -> new UserException(USER_NOT_FOUND));
   }
@@ -58,7 +60,7 @@ public class UserService {
   @Transactional
   public String updateProfilePhoto(MultipartFile newImageFile, Authentication authentication)
       throws IOException {
-    User user = findByEmailOrThrow(authentication.getName());
+    User user = findByEmail(authentication.getName());
 
     // DB에서도 기존 이미지 정보 삭제
     Optional<Image> oldImageOptional = imageRepository.findByImageUrl(user.getProfilePhotoUrl());
@@ -81,10 +83,19 @@ public class UserService {
     return newImageUrl;
   }
 
+  // 프로필사진 기본으로 돌아가기
+  @Transactional
+  public String resetProfilePhoto(Authentication authentication) {
+    User user = findByEmail(authentication.getName());
+    user.setProfilePhotoUrl(photoUrl);
+    userRepository.save(user);
+    return photoUrl;
+  }
+
   // 비밀번호 찾기
   @Transactional
   public void resetAndSendTemporaryPassword(String email) {
-    User user = findByEmailOrThrow(email);
+    User user = findByEmail(email);
     // 임시 비밀번호 지정
     String temporaryPassword = generateTemporaryPassword();
     user.setPassword(passwordEncoder.encode(temporaryPassword));
@@ -111,7 +122,7 @@ public class UserService {
   @Transactional
   public void updatePassword(UpdatePasswordRequest updatePasswordRequest,
       Authentication authentication) {
-    User user = findByEmailOrThrow(authentication.getName());
+    User user = findByEmail(authentication.getName());
     if (!passwordEncoder.matches(updatePasswordRequest.getCurrentPassword(), user.getPassword())) {
       throw new UserException(PASSWORDS_NOT_MATCH);
     }
@@ -129,7 +140,7 @@ public class UserService {
   @Transactional
   public void updateNickname(UpdateNickname updateNickname,
       Authentication authentication) {
-    User user = findByEmailOrThrow(authentication.getName());
+    User user = findByEmail(authentication.getName());
 
     // 닉네임 중복 확인
     if (userRepository.existsByNickname(updateNickname.getNickname())) {
@@ -144,8 +155,9 @@ public class UserService {
 
   // 유저 소개글 수정
   @Transactional
-  public void updateIntroduction(UpdateIntroduction updateIntroduction, Authentication authentication) {
-    User user = findByEmailOrThrow(authentication.getName());
+  public void updateIntroduction(UpdateIntroduction updateIntroduction,
+      Authentication authentication) {
+    User user = findByEmail(authentication.getName());
 
     user.setChannelIntroduction(updateIntroduction.getIntroduction());
 
@@ -154,14 +166,14 @@ public class UserService {
 
   // 스트림키 가져오기
   public String getStreamKey(Authentication authentication) {
-    User user = findByEmailOrThrow(authentication.getName());
+    User user = findByEmail(authentication.getName());
     return user.getStreamKey();
   }
 
   // 새로운 스트림키 생성
   @Transactional
   public String refreshStreamKey(Authentication authentication) {
-    User user = findByEmailOrThrow(authentication.getName());
+    User user = findByEmail(authentication.getName());
     user.setStreamKey(UUID.randomUUID().toString());
     userRepository.save(user); // 새로운 스트림 키 생성 후 저장
     return user.getStreamKey();

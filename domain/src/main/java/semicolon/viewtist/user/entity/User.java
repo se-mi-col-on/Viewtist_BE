@@ -57,6 +57,8 @@ public class User extends BaseTimeEntity {
   @Column
   private String channelIntroduction;
 
+  @Column
+  private String sessionId;
 
   public void setEmailVerified(boolean emailVerified, String emailVerificationToken) {
     isEmailVerified = emailVerified;
@@ -78,10 +80,9 @@ public class User extends BaseTimeEntity {
     this.streamKey = streamKey;
   }
 
-  public void setSignup(String nickname, String password, String profilePhotoUrl) {
+  public void setSignup(String nickname, String password) {
     this.nickname = nickname;
     this.password = password;
-    this.profilePhotoUrl = profilePhotoUrl;
   }
 
   public void setPassword(String password) {
@@ -94,5 +95,8 @@ public class User extends BaseTimeEntity {
 
   public void setChannelIntroduction(String updateIntroduction) {
     this.channelIntroduction = updateIntroduction;
+  }
+  public void setSessionId(String sessionId){
+    this.sessionId = sessionId;
   }
 }

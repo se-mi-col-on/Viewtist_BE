@@ -18,7 +18,6 @@ public class ChatRoomResponse {
 
   public static ChatRoomResponse from(ChatRoom chatroom) {
     return ChatRoomResponse.builder()
-        .streamKey(chatroom.getStreamKey())
         .streamerId(chatroom.getStreamerId())
         .build();
   }

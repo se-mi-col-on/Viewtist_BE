@@ -3,13 +3,31 @@ package semicolon.viewtist.global.exception;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import semicolon.viewtist.chatting.exception.ChattingException;
 import semicolon.viewtist.jwt.exception.JwtException;
 import semicolon.viewtist.post.exception.PostException;
+import semicolon.viewtist.liveStreaming.exception.LiveStreamingException;
+import semicolon.viewtist.user.exception.SubscribeException;
 import semicolon.viewtist.user.exception.UserException;
 
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+  @ExceptionHandler(SubscribeException.class)
+  public ResponseEntity<?> handlerSubscribeException(SubscribeException e) {
+    return toResponse(e.getErrorCode(), e.getMessage());
+  }
+
+  @ExceptionHandler(LiveStreamingException.class)
+  public ResponseEntity<?> handlerLiveStreamingException(LiveStreamingException e) {
+    return toResponse(e.getErrorCode(), e.getMessage());
+  }
+
+  @ExceptionHandler(ChattingException.class)
+  public ResponseEntity<?> handlerChattingException(ChattingException e) {
+    return toResponse(e.getErrorCode(), e.getMessage());
+  }
 
   @ExceptionHandler(UserException.class)
   public ResponseEntity<?> handlerUserException(UserException e) {

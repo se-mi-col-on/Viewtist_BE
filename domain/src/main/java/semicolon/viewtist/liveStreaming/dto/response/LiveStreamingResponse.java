@@ -12,6 +12,8 @@ import semicolon.viewtist.liveStreaming.entity.LiveStreaming;
 @Builder
 public class LiveStreamingResponse {
 
+  private Long id;
+
   private String title;
 
   private Category category;
@@ -23,11 +25,14 @@ public class LiveStreamingResponse {
   private Long viewerCount;
 
 
+
   public static LiveStreamingResponse from(LiveStreaming liveStreaming) {
     return LiveStreamingResponse.builder()
+        .id(liveStreaming.getId())
         .title(liveStreaming.getTitle())
         .streamerNickname(liveStreaming.getUser().getNickname())
         .category(liveStreaming.getCategory())
+        .viewerCount(liveStreaming.getViewerCount())
         .startAt(liveStreaming.getStartAt())
         .build();
   }
