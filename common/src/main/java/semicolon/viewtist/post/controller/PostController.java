@@ -54,7 +54,7 @@ public class PostController {
         return ResponseEntity.ok("글이 삭제되었습니다.");
     }
 
-    @GetMapping("/{postId}")
+    @GetMapping()
     @Operation(summary = "최신 글을 조회한다.", description = "최신 글을 조회한다.")
     public ResponseEntity<Page<PostResponse>> getAllPost(@PageableDefault Pageable pageable) {
         return ResponseEntity.ok(postService.findByPost(pageable));
