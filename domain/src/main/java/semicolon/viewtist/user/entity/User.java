@@ -57,6 +57,8 @@ public class User extends BaseTimeEntity {
   @Column
   private String channelIntroduction;
 
+  @Column
+  private String sessionId;
 
   public void setEmailVerified(boolean emailVerified, String emailVerificationToken) {
     isEmailVerified = emailVerified;
@@ -93,5 +95,8 @@ public class User extends BaseTimeEntity {
 
   public void setChannelIntroduction(String updateIntroduction) {
     this.channelIntroduction = updateIntroduction;
+  }
+  public void setSessionId(String sessionId){
+    this.sessionId = sessionId;
   }
 }

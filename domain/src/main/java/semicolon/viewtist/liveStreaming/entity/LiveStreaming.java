@@ -52,7 +52,7 @@ public class LiveStreaming extends BaseTimeEntity {
   @OneToOne(mappedBy = "streaming",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
   private ChatRoom chatRoom;
 
-  public LiveStreamingResponse form(LiveStreaming liveStreaming) {
+  public LiveStreamingResponse from(LiveStreaming liveStreaming) {
     return LiveStreamingResponse.builder()
         .title(liveStreaming.getTitle())
         .streamerNickname(liveStreaming.getUser().getNickname())

@@ -24,7 +24,6 @@ public class LiveStreamingResponse {
 
   private Long viewerCount;
 
-  private Long chattingRoomId;
 
 
   public static LiveStreamingResponse from(LiveStreaming liveStreaming) {
@@ -33,6 +32,7 @@ public class LiveStreamingResponse {
         .title(liveStreaming.getTitle())
         .streamerNickname(liveStreaming.getUser().getNickname())
         .category(liveStreaming.getCategory())
+        .viewerCount(liveStreaming.getViewerCount())
         .startAt(liveStreaming.getStartAt())
         .build();
   }

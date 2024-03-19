@@ -17,6 +17,10 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import semicolon.viewtist.chatting.dto.request.ChatMessageRequest;
 import semicolon.viewtist.chatting.exception.ChattingException;
 import semicolon.viewtist.global.exception.ErrorCode;
+import semicolon.viewtist.service.ChatMessageService;
+import semicolon.viewtist.user.entity.User;
+import semicolon.viewtist.user.exception.UserException;
+import semicolon.viewtist.user.repository.UserRepository;
 
 
 @Slf4j
@@ -26,13 +30,15 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
   private final ObjectMapper mapper;
   private final Set<WebSocketSession> sessions = new HashSet<>();
   private final Map<String,Set<WebSocketSession>> chatRoomSessionMap = new HashMap<>();
+  private UserRepository userRepository;
+  private ChatMessageService chatMessageService;
 
+// 스트리밍을 시청할때 채팅방 접속
   @Override
   public void afterConnectionEstablished(WebSocketSession session) throws Exception {
     log.info("{} 연결됨", session);
     sessions.add(session);
   }
-
   @Override
   protected void handleTextMessage(@NonNull WebSocketSession session, TextMessage message) throws Exception {
     String payload = message.getPayload();
@@ -44,6 +50,10 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
     }
     Set<WebSocketSession> chatRoomSession  = chatRoomSessionMap.get(chatMessageRequest.getStreamKey());
     if (chatMessageRequest.getMessageType().equals(ChatMessageRequest.MessageType.ENTER)) {
+      User user = userRepository.findById(chatMessageRequest.getSenderId()).orElseThrow(
+          () -> new UserException(ErrorCode.USER_NOT_FOUND)
+      );
+      user.setSessionId(session.getId());
       chatRoomSession.add(session);
     }
     sendMessageToChatRoom(chatMessageRequest, chatRoomSession);

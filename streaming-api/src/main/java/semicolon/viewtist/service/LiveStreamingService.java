@@ -51,16 +51,22 @@ public class LiveStreamingService {
     // 스트리밍 생성
     LiveStreaming liveStreaming =
       liveStreamingRepository.save(liveStreamingCreateRequest.from(liveStreamingCreateRequest, user));
+    // 채팅방 생성
+   createChatRoom(user,liveStreaming);
+    // 알림전송
+    sendAlarmToSubscriber(user);
+    return LiveStreamingResponse.from(liveStreaming);
+  }
 
-
+  private void createChatRoom(User user, LiveStreaming liveStreaming){
     if(chatRoomRepository.existsByStreamerId(user.getId())){
       throw new ChattingException(ErrorCode.ALREADY_CREATE_ANOTHER_ROOM);
     }
-    // 채팅방 생성
     ChatRoom chatRoom =
         chatRoomRepository.save(ChatRoom.madeByUser(user));
     liveStreaming.createChatRoom(chatRoom);
-
+  }
+  private void sendAlarmToSubscriber(User user){
     List<Subscribe> subscribeList = subscribeRepository.findByReceiver(user.getNickname());
     for (Subscribe subscribe : subscribeList) {
       notifyService.streamingNotifySend(subscribe.getUser(), NotificationType.STREAMING,
@@ -68,7 +74,6 @@ public class LiveStreamingService {
       );
       log.info(subscribe.getUser() + "에게 알림을 보냈습니다.");
     }
-    return LiveStreamingResponse.from(liveStreaming);
   }
 
   // 스트리밍 업데이트

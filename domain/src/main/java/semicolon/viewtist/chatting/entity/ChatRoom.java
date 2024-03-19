@@ -1,8 +1,7 @@
 package semicolon.viewtist.chatting.entity;
 
-import jakarta.persistence.CascadeType;
+
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -12,7 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import semicolon.viewtist.chatting.dto.request.ChatRoomRequest;
 import semicolon.viewtist.global.entitiy.BaseTimeEntity;
 import semicolon.viewtist.liveStreaming.entity.LiveStreaming;
 import semicolon.viewtist.user.entity.User;
