@@ -85,8 +85,8 @@ public class PostService {
 
 
     public Page<PostResponse> findByPost(Pageable pageable) {
-        Page<Post> PagePost = postRepository.findAllByOrderByCreatedAtDesc(pageable);
-        return PagePost.map(PostResponse::from);
+        Page<Post> pagePost = postRepository.findAllByOrderByCreatedAtDesc(pageable);
+        return pagePost.map(PostResponse::from);
     }
 
 }
