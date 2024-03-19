@@ -30,8 +30,7 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
   private final ObjectMapper mapper;
   private final Set<WebSocketSession> sessions = new HashSet<>();
   private final Map<String,Set<WebSocketSession>> chatRoomSessionMap = new HashMap<>();
-  private UserRepository userRepository;
-  private ChatMessageService chatMessageService;
+  private final UserRepository userRepository;
 
 // 스트리밍을 시청할때 채팅방 접속
   @Override
