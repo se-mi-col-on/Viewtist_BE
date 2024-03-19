@@ -78,6 +78,11 @@ public class LiveStreamingController {
       Authentication authentication) {
     liveStreamingService.stopStreaming(streamingId, authentication);
     return ResponseEntity.ok("스트리밍이 종료되었습니다.");
+  }
 
+  @GetMapping("/search")
+  public ResponseEntity<Page<LiveStreamingResponse>> searchLiveStreamings(
+      @RequestParam(value = "keyword") String keyword, Pageable pageable) {
+    return ResponseEntity.ok(liveStreamingService.findLiveStreaming(keyword, pageable));
   }
 }
