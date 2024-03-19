@@ -47,6 +47,7 @@ public enum ErrorCode {
 
   ALREADY_ENTER_ANOTHER_ROOM(HttpStatus.BAD_REQUEST,"이미 다른 방에 있습니다."),
 
+  // post
   POST_NOT_FOUND(NOT_FOUND, "게시글을 찾을 수 없습니다.");
 
 

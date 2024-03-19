@@ -16,11 +16,14 @@ public class PostResponse {
 
     private String content;
 
+    private String nickname;
+
     public static PostResponse from(Post post) {
         return PostResponse.builder()
                 .id(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
+                .nickname(post.getUser().getNickname())
                 .build();
     }
 }

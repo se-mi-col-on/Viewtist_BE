@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import semicolon.viewtist.global.entitiy.BaseTimeEntity;
 import semicolon.viewtist.user.entity.User;
 
 @Entity
@@ -18,7 +19,7 @@ import semicolon.viewtist.user.entity.User;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Post {
+public class Post extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

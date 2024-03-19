@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import semicolon.viewtist.chatting.exception.ChattingException;
 import semicolon.viewtist.jwt.exception.JwtException;
+import semicolon.viewtist.post.exception.PostException;
 import semicolon.viewtist.liveStreaming.exception.LiveStreamingException;
 import semicolon.viewtist.user.exception.SubscribeException;
 import semicolon.viewtist.user.exception.UserException;
@@ -35,6 +36,16 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler(JwtException.class)
   public ResponseEntity<?> handlerJwtException(JwtException e) {
+    return toResponse(e.getErrorCode(), e.getMessage());
+  }
+
+  @ExceptionHandler(PostException.class)
+  public ResponseEntity<?> handlerPostException(PostException e) {
+    return toResponse(e.getErrorCode(), e.getMessage());
+  }
+
+  @ExceptionHandler(GlobalException.class)
+  public ResponseEntity<?> handlerGlobalException(GlobalException e) {
     return toResponse(e.getErrorCode(), e.getMessage());
   }
 
