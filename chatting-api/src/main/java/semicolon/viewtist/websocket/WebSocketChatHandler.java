@@ -9,15 +9,22 @@ import java.util.Set;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import semicolon.viewtist.chatting.dto.request.ChatMessageRequest;
 import semicolon.viewtist.chatting.entity.ChatMessage;
+import semicolon.viewtist.chatting.entity.ChatRoom;
+import semicolon.viewtist.chatting.exception.ChattingException;
 import semicolon.viewtist.chatting.repository.ChatMessageRepository;
+import semicolon.viewtist.chatting.repository.ChatRoomRepository;
 import semicolon.viewtist.global.exception.ErrorCode;
+import semicolon.viewtist.liveStreaming.entity.LiveStreaming;
+import semicolon.viewtist.liveStreaming.repository.LiveStreamingRepository;
 import semicolon.viewtist.service.ChatRoomService;
 import semicolon.viewtist.user.entity.User;
 import semicolon.viewtist.user.exception.UserException;
@@ -34,6 +41,8 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
   private final UserRepository userRepository;
   private final ChatMessageRepository chatMessageRepository;
   private final ChatRoomService chatRoomService;
+  private final ChatRoomRepository chatRoomRepository;
+  private final LiveStreamingRepository liveStreamingRepository;
   private final String ENTER=" 님이 입장하였습니다.";
   private final String EXIT=" 님이 퇴장하였습니다.";
 // 스트리밍을 시청할때 채팅방 접속
@@ -65,7 +74,7 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
   @Override
   public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
     // TODO Auto-generated method stub
-    log.info("{} 연결 끊김", session.getId());
+    log.info("{} 연결 끊김", status);
 
     User user = userRepository.findBySessionId(session.getId()).orElseThrow(
         () -> new UserException(ErrorCode.USER_NOT_FOUND)
@@ -87,5 +96,37 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
     } catch (IOException e) {
       log.error(e.getMessage(), e);
     }
+  }
+@Transactional
+  public void kickUser(String nickname, Long streamingId, Authentication authentication) throws Exception {
+    User user = userRepository.findByEmail(authentication.getName()).orElseThrow(
+        () -> new UserException(ErrorCode.USER_NOT_FOUND)
+    );
+    LiveStreaming liveStreaming = liveStreamingRepository.findByUser(user).orElseThrow(
+        () -> new ChattingException(ErrorCode.NOT_EXIST_STREAMKEY)
+    );
+    if(!user.getId().equals(liveStreaming.getChatRoom().getStreamerId())){
+      throw new UserException(ErrorCode.ACCESS_DENIED);
+    }
+    User viewer = userRepository.findByNickname(nickname).orElseThrow(
+        () -> new UserException(ErrorCode.USER_NOT_FOUND)
+    );
+    Set<WebSocketSession> chatRoomSession  = chatRoomSessionMap.get(streamingId);
+    for(WebSocketSession webSocketSession: chatRoomSession){
+     if(webSocketSession.getId().equals(viewer.getSessionId())){
+       log.info(webSocketSession.getId()+viewer.getNickname());
+       afterConnectionClosed(webSocketSession,new CloseStatus(1000,null));
+     }
+    }
+  }
+
+  public Integer getViewerCount(Long streamingId) {
+    ChatRoom chatRoom = chatRoomRepository.findByStreamingId(streamingId).orElseThrow(
+        () -> new ChattingException(ErrorCode.NOT_EXIST_STREAMKEY)
+    );
+    if(chatRoomSessionMap.get(streamingId)==null){
+      return 0;
+    }
+    return chatRoomSessionMap.get(streamingId).size();
   }
 }

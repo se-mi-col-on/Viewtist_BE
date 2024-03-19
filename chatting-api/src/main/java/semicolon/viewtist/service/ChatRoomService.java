@@ -15,6 +15,8 @@ import semicolon.viewtist.chatting.entity.type.Status;
 import semicolon.viewtist.chatting.repository.ChatRoomRepository;
 import semicolon.viewtist.chatting.exception.ChattingException;
 import semicolon.viewtist.global.exception.ErrorCode;
+import semicolon.viewtist.liveStreaming.entity.LiveStreaming;
+import semicolon.viewtist.liveStreaming.repository.LiveStreamingRepository;
 import semicolon.viewtist.user.entity.User;
 import semicolon.viewtist.user.exception.UserException;
 import semicolon.viewtist.user.repository.UserRepository;
@@ -26,6 +28,7 @@ import semicolon.viewtist.websocket.WebSocketChatHandler;
 public class ChatRoomService {
   private final ChatRoomRepository chatRoomRepository;
   private final UserRepository userRepository;
+  private final LiveStreamingRepository liveStreamingRepository;
   // 채팅방 상태 설정
   @Transactional
   public String setChatRoomStatus(Long streamingId, String status, Authentication authentication) {
@@ -33,7 +36,7 @@ public class ChatRoomService {
         () -> new ChattingException(ErrorCode.NOT_EXIST_STREAMKEY)
     );
     User user = userRepository.findByEmail(authentication.getName()).orElseThrow(
-        () -> new UserException(ErrorCode.ALREADY_EXISTS_EMAIL)
+        () -> new UserException(ErrorCode.USER_NOT_FOUND)
     );
     if(!user.getId().equals(chatRoom.getStreamerId())){
         throw new UserException(ErrorCode.ACCESS_DENIED);
@@ -60,4 +63,5 @@ public class ChatRoomService {
   public void removeUserSessionId(User user){
     user.setSessionId(null);
   }
+
 }
