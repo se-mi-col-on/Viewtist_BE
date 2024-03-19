@@ -16,9 +16,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @EnableJpaAuditing
 @EnableJpaRepositories(basePackages = {"semicolon.viewtist.chatting.repository",
-    "semicolon.viewtist.jwt.repository", "semicolon.viewtist.user.repository", "semicolon.viewtist.sse.repository"})
+    "semicolon.viewtist.jwt.repository", "semicolon.viewtist.user.repository", "semicolon.viewtist.sse.repository"
+    ,"semicolon.viewtist.liveStreaming.repository"})
 @EntityScan(basePackages = {"semicolon.viewtist.chatting.entity",
-    "semicolon.viewtist.jwt.entity", "semicolon.viewtist.user.entity", "semicolon.viewtist.sse.entity"})
+    "semicolon.viewtist.jwt.entity", "semicolon.viewtist.user.entity", "semicolon.viewtist.sse.entity"
+,"semicolon.viewtist.liveStreaming.entity"})
 @SpringBootApplication(exclude = SecurityAutoConfiguration.class)
 public class ChattingApplication {
 

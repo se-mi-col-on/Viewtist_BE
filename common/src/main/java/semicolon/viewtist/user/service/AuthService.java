@@ -35,8 +35,6 @@ import semicolon.viewtist.user.repository.UserRepository;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-
-
   private final RefreshTokenRepository refreshTokenRepository;
   private final TokenBlacklistRepository tokenBlacklistRepository;
   private final MailgunClient mailgunClient;
