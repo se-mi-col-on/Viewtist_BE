@@ -15,4 +15,6 @@ public interface LiveStreamingRepository extends JpaRepository<LiveStreaming, Lo
   Page<LiveStreaming> findAllByOrderByViewerCountDesc(Pageable pageable);
 
   Page<LiveStreaming> findAllByCategory(Category category, Pageable pageable);
+
+  Page<LiveStreaming> findByTitleContainingOrUser_NicknameContaining(String title, String nickname, Pageable pageable);
 }

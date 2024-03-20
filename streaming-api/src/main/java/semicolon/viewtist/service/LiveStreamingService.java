@@ -32,6 +32,7 @@ import semicolon.viewtist.user.repository.UserRepository;
 @RequiredArgsConstructor
 @Slf4j
 public class LiveStreamingService {
+
   private final LiveStreamingRepository liveStreamingRepository;
   private final UserRepository userRepository;
   private final NotifyService notifyService;
@@ -50,23 +51,25 @@ public class LiveStreamingService {
     }
     // 스트리밍 생성
     LiveStreaming liveStreaming =
-      liveStreamingRepository.save(liveStreamingCreateRequest.from(liveStreamingCreateRequest, user));
+        liveStreamingRepository.save(
+            liveStreamingCreateRequest.from(liveStreamingCreateRequest, user));
     // 채팅방 생성
-   createChatRoom(user,liveStreaming);
+    createChatRoom(user, liveStreaming);
     // 알림전송
     sendAlarmToSubscriber(user);
     return LiveStreamingResponse.from(liveStreaming);
   }
 
-  private void createChatRoom(User user, LiveStreaming liveStreaming){
-    if(chatRoomRepository.existsByStreamerId(user.getId())){
+  private void createChatRoom(User user, LiveStreaming liveStreaming) {
+    if (chatRoomRepository.existsByStreamerId(user.getId())) {
       throw new ChattingException(ErrorCode.ALREADY_CREATE_ANOTHER_ROOM);
     }
     ChatRoom chatRoom =
         chatRoomRepository.save(ChatRoom.madeByUser(user));
     liveStreaming.createChatRoom(chatRoom);
   }
-  private void sendAlarmToSubscriber(User user){
+
+  private void sendAlarmToSubscriber(User user) {
     List<Subscribe> subscribeList = subscribeRepository.findByReceiver(user.getNickname());
     for (Subscribe subscribe : subscribeList) {
       notifyService.streamingNotifySend(subscribe.getUser(), NotificationType.STREAMING,
@@ -116,6 +119,13 @@ public class LiveStreamingService {
       throw new UserException(ErrorCode.USER_NOT_MATCH);
     }
     liveStreamingRepository.delete(liveStreaming);
+  }
+
+  public Page<LiveStreamingResponse> findLiveStreaming(String keyword, Pageable pageable) {
+
+    Page<LiveStreaming> liveStreamings =
+        liveStreamingRepository.findByTitleContainingOrUser_NicknameContaining(keyword, keyword, pageable);
+    return liveStreamings.map(LiveStreamingResponse::from);
   }
 
 

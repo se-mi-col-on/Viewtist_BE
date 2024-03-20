@@ -11,20 +11,20 @@ import semicolon.viewtist.post.entity.Post;
 @Builder
 public class PostResponse {
 
-    private Long id;
+  private Long id;
 
-    private String title;
+  private String title;
 
-    private String content;
+  private String content;
 
-    private String nickname;
+  private String nickname;
 
-    private LocalDateTime createdAt;
+  private LocalDateTime createdAt;
 
-    private LocalDateTime updatedAt;
+  private LocalDateTime updatedAt;
 
-    public static PostResponse from(Post post) {
-        return PostResponse.builder()
+  public static PostResponse from(Post post) {
+      return PostResponse.builder()
                 .id(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
@@ -32,5 +32,6 @@ public class PostResponse {
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt())
                 .build();
-    }
+  }
+
 }
