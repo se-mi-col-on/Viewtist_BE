@@ -21,13 +21,17 @@ public class PostResponse {
 
   private LocalDateTime createdAt;
 
+  private LocalDateTime updatedAt;
+
   public static PostResponse from(Post post) {
-    return PostResponse.builder()
-        .id(post.getId())
-        .title(post.getTitle())
-        .content(post.getContent())
-        .nickname(post.getUser().getNickname())
-        .createdAt(post.getCreatedAt())
-        .build();
+      return PostResponse.builder()
+                .id(post.getId())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .nickname(post.getUser().getNickname())
+                .createdAt(post.getCreatedAt())
+                .updatedAt(post.getUpdatedAt())
+                .build();
   }
+
 }
