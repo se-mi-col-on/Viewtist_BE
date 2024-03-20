@@ -178,4 +178,15 @@ public class UserService {
     userRepository.save(user); // 새로운 스트림 키 생성 후 저장
     return user.getStreamKey();
   }
+
+  // 닉네임으로 유저정보 불러오기
+  public UserResponse getUserInfo(String userNickname) {
+    User user = findByNickname(userNickname);
+    return UserResponse.from(user);
+  }
+
+  private User findByNickname(String nickname) {
+    return userRepository.findByNickname(nickname)
+        .orElseThrow(() -> new UserException(USER_NOT_FOUND));
+  }
 }
