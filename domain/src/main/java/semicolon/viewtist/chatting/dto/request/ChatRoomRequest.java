@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ChatRoomRequest {
 
-  private String streamKey;
+  private Long streamingId;
   private Long streamerId;
 }

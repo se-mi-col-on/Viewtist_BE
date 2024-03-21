@@ -13,7 +13,7 @@ import semicolon.viewtist.chatting.entity.ChatRoom;
 @NoArgsConstructor
 public class ChatRoomResponse {
 
-  private String streamKey;
+  private Long streamingId;
   private Long streamerId;
 
   public static ChatRoomResponse from(ChatRoom chatroom) {

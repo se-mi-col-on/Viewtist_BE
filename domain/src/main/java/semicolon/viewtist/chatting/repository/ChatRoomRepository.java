@@ -15,5 +15,5 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
 
   Page<ChatRoom> findByActiveIsTrue(Pageable pageable);
 
-  Optional<ChatRoom> findByStreamKey(String streamKey);
+  Optional<ChatRoom> findByStreamingId(Long streamingId);
 }

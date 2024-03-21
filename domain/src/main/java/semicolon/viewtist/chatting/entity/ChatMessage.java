@@ -23,13 +23,13 @@ public class ChatMessage extends BaseTimeEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private MessageType messageType; // 메시지 타입
-  private String streamKey; // 방 번호
+  private Long streamingId; // 방 번호
   private Long senderId; // 채팅을 보낸 사람
   private String message; // 메시지
 
   public static ChatMessage from(ChatMessageRequest request) {
     return ChatMessage.builder()
-        .streamKey(request.getStreamKey())
+        .streamingId(request.getStreamingId())
         .senderId(request.getSenderId())
         .message(request.getMessage())
         .build();

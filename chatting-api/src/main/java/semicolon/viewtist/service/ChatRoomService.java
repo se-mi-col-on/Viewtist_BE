@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.socket.WebSocketSession;
 import semicolon.viewtist.chatting.dto.request.ChatRoomRequest;
 import semicolon.viewtist.chatting.dto.response.ChatRoomResponse;
 import semicolon.viewtist.chatting.entity.ChatRoom;
@@ -14,9 +15,12 @@ import semicolon.viewtist.chatting.entity.type.Status;
 import semicolon.viewtist.chatting.repository.ChatRoomRepository;
 import semicolon.viewtist.chatting.exception.ChattingException;
 import semicolon.viewtist.global.exception.ErrorCode;
+import semicolon.viewtist.liveStreaming.entity.LiveStreaming;
+import semicolon.viewtist.liveStreaming.repository.LiveStreamingRepository;
 import semicolon.viewtist.user.entity.User;
 import semicolon.viewtist.user.exception.UserException;
 import semicolon.viewtist.user.repository.UserRepository;
+import semicolon.viewtist.websocket.WebSocketChatHandler;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -24,14 +28,15 @@ import semicolon.viewtist.user.repository.UserRepository;
 public class ChatRoomService {
   private final ChatRoomRepository chatRoomRepository;
   private final UserRepository userRepository;
+  private final LiveStreamingRepository liveStreamingRepository;
   // 채팅방 상태 설정
   @Transactional
-  public String setChatRoomStatus(String streamKey, String status, Authentication authentication) {
-    ChatRoom chatRoom = chatRoomRepository.findByStreamKey(streamKey).orElseThrow(
+  public String setChatRoomStatus(Long streamingId, String status, Authentication authentication) {
+    ChatRoom chatRoom = chatRoomRepository.findByStreamingId(streamingId).orElseThrow(
         () -> new ChattingException(ErrorCode.NOT_EXIST_STREAMKEY)
     );
     User user = userRepository.findByEmail(authentication.getName()).orElseThrow(
-        () -> new UserException(ErrorCode.ALREADY_EXISTS_EMAIL)
+        () -> new UserException(ErrorCode.USER_NOT_FOUND)
     );
     if(!user.getId().equals(chatRoom.getStreamerId())){
         throw new UserException(ErrorCode.ACCESS_DENIED);
@@ -46,4 +51,17 @@ public class ChatRoomService {
   private void setStatus(ChatRoom chatRoom, boolean status){
     chatRoom.setChatRoomActivate(status);
   }
+  @Transactional
+  public User setUserSessionId(Long userId, String session){
+    User user = userRepository.findById(userId).orElseThrow(
+        () -> new UserException(ErrorCode.USER_NOT_FOUND)
+    );
+    user.setSessionId(session);
+    return user;
+  }
+  @Transactional
+  public void removeUserSessionId(User user){
+    user.setSessionId(null);
+  }
+
 }

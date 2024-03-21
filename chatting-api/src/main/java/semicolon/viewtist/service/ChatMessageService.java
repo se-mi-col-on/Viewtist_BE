@@ -22,13 +22,10 @@ import semicolon.viewtist.websocket.WebSocketChatHandler;
 @RequiredArgsConstructor
 public class ChatMessageService {
   private final ChatMessageRepository chatMessageRepository;
-  private final ChatRoomRepository chatRoomRepository;
-  private UserRepository userRepository;
-
 
   // 이전 채팅 메세지 내역
-  public List<ChatMessageResponse> getChatMessages(String streamKey){
-    return chatMessageRepository.findByStreamKeyOrderByCreatedAtDesc(streamKey)
+  public List<ChatMessageResponse> getChatMessages(Long streamingId){
+    return chatMessageRepository.findByStreamingIdOrderByCreatedAtDesc(streamingId)
         .stream().map(ChatMessageResponse::from)
         .collect(Collectors.toList());
   }
