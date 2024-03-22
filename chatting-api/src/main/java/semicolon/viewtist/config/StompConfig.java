@@ -12,7 +12,8 @@ public class StompConfig  implements WebSocketMessageBrokerConfigurer {
   @Override
   public void registerStompEndpoints(StompEndpointRegistry registry) {
     // 테스트할 때만 setAllowedOrigins("*"); 허용
-    registry.addEndpoint("/live/chat").setAllowedOrigins("*");
+    registry.addEndpoint("/live/chat")
+        .setAllowedOrigins("http://localhost:3000").withSockJS();
   }
   @Override
   public void configureMessageBroker(MessageBrokerRegistry registry) {
