@@ -2,25 +2,19 @@ package semicolon.viewtist.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.socket.WebSocketSession;
-import semicolon.viewtist.chatting.dto.request.ChatRoomRequest;
-import semicolon.viewtist.chatting.dto.response.ChatRoomResponse;
 import semicolon.viewtist.chatting.entity.ChatRoom;
 import semicolon.viewtist.chatting.entity.type.Status;
 import semicolon.viewtist.chatting.repository.ChatRoomRepository;
 import semicolon.viewtist.chatting.exception.ChattingException;
 import semicolon.viewtist.global.exception.ErrorCode;
-import semicolon.viewtist.liveStreaming.entity.LiveStreaming;
 import semicolon.viewtist.liveStreaming.repository.LiveStreamingRepository;
 import semicolon.viewtist.user.entity.User;
 import semicolon.viewtist.user.exception.UserException;
 import semicolon.viewtist.user.repository.UserRepository;
-import semicolon.viewtist.websocket.WebSocketChatHandler;
+
 
 @Slf4j
 @RequiredArgsConstructor
