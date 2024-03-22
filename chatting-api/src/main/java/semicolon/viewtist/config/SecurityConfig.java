@@ -34,14 +34,4 @@ public class SecurityConfig {
         .httpBasic(AbstractHttpConfigurer::disable);
     return http.build();
   }
-  @Bean
-  public CorsConfigurationSource corsConfigurationSource() {
-    CorsConfiguration configuration = new CorsConfiguration();
-    configuration.addAllowedOrigin("*"); // 모든 출처를 허용하도록 설정합니다. 보안상 취약할 수 있으니 필요에 따라 출처를 조정하세요.
-    configuration.addAllowedMethod("*"); // 모든 HTTP 메서드를 허용하도록 설정합니다.
-    configuration.addAllowedHeader("*"); // 모든 헤더를 허용하도록 설정합니다.
-    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", configuration);
-    return source;
-  }
 }

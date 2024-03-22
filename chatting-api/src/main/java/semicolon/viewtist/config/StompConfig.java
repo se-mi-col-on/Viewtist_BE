@@ -11,8 +11,9 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 public class StompConfig  implements WebSocketMessageBrokerConfigurer {
   @Override
   public void registerStompEndpoints(StompEndpointRegistry registry) {
+    // 테스트할 때만 setAllowedOrigins("*"); 허용
     registry.addEndpoint("/live/chat")
-        .setAllowedOrigins("https://ec2-3-35-234-97.ap-northeast-2.compute.amazonaws.com").withSockJS();
+        .setAllowedOrigins("http://localhost:5173").withSockJS();
   }
   @Override
   public void configureMessageBroker(MessageBrokerRegistry registry) {
