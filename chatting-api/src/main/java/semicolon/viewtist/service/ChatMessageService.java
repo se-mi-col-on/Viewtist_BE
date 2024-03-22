@@ -3,20 +3,9 @@ package semicolon.viewtist.service;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import semicolon.viewtist.chatting.dto.request.ChatMessageRequest;
-import semicolon.viewtist.chatting.dto.request.ChatMessageRequest.MessageType;
 import semicolon.viewtist.chatting.dto.response.ChatMessageResponse;
-import semicolon.viewtist.chatting.entity.ChatMessage;
 import semicolon.viewtist.chatting.repository.ChatMessageRepository;
-import semicolon.viewtist.chatting.repository.ChatRoomRepository;
-import semicolon.viewtist.chatting.exception.ChattingException;
-import semicolon.viewtist.global.exception.ErrorCode;
-import semicolon.viewtist.user.entity.User;
-import semicolon.viewtist.user.repository.UserRepository;
-import semicolon.viewtist.websocket.WebSocketChatHandler;
 
 @Service
 @RequiredArgsConstructor
