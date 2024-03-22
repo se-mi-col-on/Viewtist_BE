@@ -23,10 +23,10 @@ import semicolon.viewtist.service.ChatMessageService;
 public class ChatMessageController {
   private final ChatMessageService chatMessageService;
   private final SimpMessageSendingOperations operations;
-  @MessageMapping("/channel")
+  @MessageMapping("/message")
   public void sendMessage(ChatMessageRequest message) {
     operations.convertAndSend
-        ("/sub/channel/" + message.getStreamingId(), message);
+        ("/sub/room/" + message.getStreamingId(), message);
     log.info("메세지 전송 성공");
   }
   @PreAuthorize("isAuthenticated()")
