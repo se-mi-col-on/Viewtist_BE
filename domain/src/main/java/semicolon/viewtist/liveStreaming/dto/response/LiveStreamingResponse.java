@@ -26,6 +26,8 @@ public class LiveStreamingResponse {
 
   private Long viewerCount;
 
+  private String thumbnail;
+
 
 
   public static LiveStreamingResponse from(LiveStreaming liveStreaming) {
@@ -37,6 +39,7 @@ public class LiveStreamingResponse {
         .viewerCount(liveStreaming.getViewerCount())
         .profilePhotoUrl(liveStreaming.getUser().getProfilePhotoUrl())
         .startAt(liveStreaming.getStartAt())
+        .thumbnail(liveStreaming.getThumbnail())
         .build();
   }
 }

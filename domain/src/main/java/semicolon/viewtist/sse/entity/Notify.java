@@ -46,6 +46,6 @@ public class Notify extends BaseTimeEntity {
 
 
   public enum NotificationType {
-    STREAMING, VIEWTIST, TEST, RESEND,
+    STREAMING, VIEWTIST, TEST, RESEND, POST,
   }
 }

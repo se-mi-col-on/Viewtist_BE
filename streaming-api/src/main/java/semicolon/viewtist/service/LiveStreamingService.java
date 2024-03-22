@@ -14,6 +14,7 @@ import semicolon.viewtist.chatting.exception.ChattingException;
 import semicolon.viewtist.chatting.repository.ChatRoomRepository;
 import semicolon.viewtist.global.exception.ErrorCode;
 import semicolon.viewtist.liveStreaming.dto.request.LiveStreamingCreateRequest;
+import semicolon.viewtist.liveStreaming.dto.request.LiveStreamingThumbnailRequest;
 import semicolon.viewtist.liveStreaming.dto.request.LiveStreamingUpdateRequest;
 import semicolon.viewtist.liveStreaming.dto.response.LiveStreamingResponse;
 import semicolon.viewtist.liveStreaming.entity.Category;
@@ -72,7 +73,7 @@ public class LiveStreamingService {
   private void sendAlarmToSubscriber(User user) {
     List<Subscribe> subscribeList = subscribeRepository.findByReceiver(user.getNickname());
     for (Subscribe subscribe : subscribeList) {
-      notifyService.streamingNotifySend(subscribe.getUser(), NotificationType.STREAMING,
+      notifyService.notifySend(subscribe.getUser(), NotificationType.STREAMING,
           user.getNickname() + " is start stremaing"
       );
       log.info(subscribe.getUser() + "에게 알림을 보냈습니다.");
@@ -119,6 +120,13 @@ public class LiveStreamingService {
       throw new UserException(ErrorCode.USER_NOT_MATCH);
     }
     liveStreamingRepository.delete(liveStreaming);
+  }
+
+  public LiveStreamingResponse thumbnail(Long streamingId, LiveStreamingThumbnailRequest thumbnail) {
+    LiveStreaming liveStreaming = liveStreamingFindById(streamingId);
+    liveStreaming.updateThumbnail(thumbnail.getThumbnail());
+    liveStreamingRepository.save(liveStreaming);
+    return LiveStreamingResponse.from(liveStreaming);
   }
 
   public Page<LiveStreamingResponse> findLiveStreaming(String keyword, Pageable pageable) {

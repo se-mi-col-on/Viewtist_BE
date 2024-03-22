@@ -1,6 +1,5 @@
 package semicolon.viewtist.sse.service;
 
-import static semicolon.viewtist.sse.entity.Notify.NotificationType.STREAMING;
 import static semicolon.viewtist.sse.entity.Notify.NotificationType.TEST;
 import static semicolon.viewtist.sse.entity.Notify.NotificationType.VIEWTIST;
 
@@ -93,7 +92,7 @@ public class NotifyService {
         );
   }
 
-  public void streamingNotifySend(String receiver, NotificationType notificationType,
+  public void notifySend(String receiver, NotificationType notificationType,
       String content) {
 
     String eventId = receiver + "_" + System.currentTimeMillis();
@@ -102,7 +101,7 @@ public class NotifyService {
         .receiverName(receiver)
         .notifyId(eventId)
         .content(content)
-        .type(STREAMING.toString())
+        .type(notificationType.toString())
         .build();
 
     User receiverUser = userRepository.findByNickname(receiver)
@@ -114,7 +113,7 @@ public class NotifyService {
     emitterRepository.get(receiver).ifPresentOrElse(sseEmitter -> {
       try {
         sseEmitter.send(
-            SseEmitter.event().id(eventId).name(String.valueOf(STREAMING))
+            SseEmitter.event().id(eventId).name(notificationType.toString())
                 .data(response));
       } catch (IOException e) {
         emitterRepository.delete(receiver);

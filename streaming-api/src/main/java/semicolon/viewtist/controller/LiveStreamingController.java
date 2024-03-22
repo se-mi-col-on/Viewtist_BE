@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import semicolon.viewtist.liveStreaming.dto.request.LiveStreamingCreateRequest;
+import semicolon.viewtist.liveStreaming.dto.request.LiveStreamingThumbnailRequest;
 import semicolon.viewtist.liveStreaming.dto.request.LiveStreamingUpdateRequest;
 import semicolon.viewtist.liveStreaming.dto.response.LiveStreamingResponse;
 import semicolon.viewtist.liveStreaming.entity.Category;
@@ -84,5 +85,12 @@ public class LiveStreamingController {
   public ResponseEntity<Page<LiveStreamingResponse>> searchLiveStreamings(
       @RequestParam(value = "keyword") String keyword, Pageable pageable) {
     return ResponseEntity.ok(liveStreamingService.findLiveStreaming(keyword, pageable));
+  }
+
+  @PutMapping("/thumbnail/{streamingId}")
+  public ResponseEntity<LiveStreamingResponse> thumbnail(@PathVariable Long streamingId,
+      @RequestBody LiveStreamingThumbnailRequest thumbnail) {
+    LiveStreamingResponse liveStreaming = liveStreamingService.thumbnail(streamingId, thumbnail);
+    return ResponseEntity.ok(liveStreaming);
   }
 }
