@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,12 +23,11 @@ import semicolon.viewtist.service.ChatMessageService;
 @RequiredArgsConstructor
 public class ChatMessageController {
   private final ChatMessageService chatMessageService;
-  private final SimpMessageSendingOperations operations;
+
+  @PreAuthorize("isAuthenticated()")
   @MessageMapping("/message")
-  public void sendMessage(ChatMessageRequest message) {
-    operations.convertAndSend
-        ("/sub/room/" + message.getStreamingId(), message);
-    log.info("메세지 전송 성공");
+  public void sendMessage(ChatMessageRequest chatMessageRequest, Authentication authentication) {
+    chatMessageService.sendMessage(chatMessageRequest,authentication);
   }
   @PreAuthorize("isAuthenticated()")
   @GetMapping("/chat/{streamingId}")

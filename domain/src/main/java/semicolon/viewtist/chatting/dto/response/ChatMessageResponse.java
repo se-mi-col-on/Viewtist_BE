@@ -11,11 +11,11 @@ import semicolon.viewtist.chatting.entity.ChatMessage;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChatMessageResponse {
-  private Long senderId;
+  private String nickname;
   private String message;
   public static ChatMessageResponse from(ChatMessage chatMessage) {
     return ChatMessageResponse.builder()
-        .senderId(chatMessage.getSenderId())
+        .nickname(chatMessage.getNickname())
         .message(chatMessage.getMessage())
         .build();
   }
