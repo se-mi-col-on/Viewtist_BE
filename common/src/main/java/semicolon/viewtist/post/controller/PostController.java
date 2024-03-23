@@ -60,5 +60,9 @@ public class PostController {
         return ResponseEntity.ok(postService.findByPost(pageable));
     }
 
-
+    @GetMapping("/{postId}")
+    @Operation(summary = "게시글 상세보기.", description = "게시글 아이디를 입력하고 게시글 상세 정보를 조회한다.")
+    public ResponseEntity<PostResponse> getPost(@PathVariable Long postId) {
+        return ResponseEntity.ok(postService.getPost(postId));
+    }
 }

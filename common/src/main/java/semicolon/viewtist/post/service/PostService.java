@@ -93,4 +93,10 @@ public class PostService {
         return pagePost.map(PostResponse::from);
     }
 
+  public PostResponse getPost(Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(
+            () -> new PostException(POST_NOT_FOUND)
+        );
+        return PostResponse.from(post);
+  }
 }
