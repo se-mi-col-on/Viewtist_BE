@@ -28,7 +28,7 @@ public class SubscribeService {
   public void subscribe(String streamerNickname, Authentication authentication) {
 
     User streamer = getUserByNickname(streamerNickname);
-
+    System.out.println(authentication.getName()+"  ===========");
     User user = getUserByEmail(authentication.getName());
 
     if (subscribeRepository.existsByReceiverAndUser(streamerNickname, user.getNickname())) {
@@ -57,9 +57,8 @@ public class SubscribeService {
       Pageable pageable) {
     User user = getUserByNickname(userNickname);
     Page<Subscribe> subscribes = subscribeRepository.findAllByUser(user.getNickname(), pageable);
-
     return subscribes.map(subscribe -> {
-      User streamer = userRepository.findByNickname(subscribe.getUser()).orElseThrow(
+      User streamer = userRepository.findByNickname(subscribe.getReceiver()).orElseThrow(
           () -> new SubscribeException(USER_NOT_FOUND)
       );
       return SubscribeResponse.from(streamer.getNickname(), streamer.getProfilePhotoUrl());

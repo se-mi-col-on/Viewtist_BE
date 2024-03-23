@@ -31,7 +31,6 @@ public class SubscribeController {
     return ResponseEntity.ok("구독이 완료되었습니다.");
   }
 
-
   @PreAuthorize("isAuthenticated()")
   @DeleteMapping("/unsubscribe")
   public ResponseEntity<String> unsubscribe(@RequestBody String streamerNickname,
@@ -39,7 +38,6 @@ public class SubscribeController {
     subscribeService.unsubscribe(streamerNickname, authentication);
     return ResponseEntity.ok("구독이 취소되었습니다.");
   }
-
   @PreAuthorize("isAuthenticated()")
   @GetMapping("/subscribe/{userNickname}")
   public Page<SubscribeResponse> getSubscribeList(@PathVariable String userNickname, Pageable pageable) {
