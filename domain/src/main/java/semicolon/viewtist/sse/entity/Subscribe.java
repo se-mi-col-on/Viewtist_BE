@@ -20,11 +20,7 @@ public class Subscribe extends BaseTimeEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-
-
   private String receiver;
-
-
   private String user;
 
 }

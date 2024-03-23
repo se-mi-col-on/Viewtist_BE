@@ -13,14 +13,14 @@ import semicolon.viewtist.sse.entity.Subscribe;
 public class SubscribeResponse {
 
   private String streamerNickname;
+  private String profilephotoURL;
 
-  private String nickname;
+  //private String nickname;
 
-  public static SubscribeResponse from(Subscribe subscribe) {
+  public static SubscribeResponse from(String streamerNickname, String profilephotoURL) {
     return SubscribeResponse.builder()
-        .streamerNickname(subscribe.getReceiver())
-        .nickname(subscribe.getUser())
+        .streamerNickname(streamerNickname)
+        .profilephotoURL(profilephotoURL)
         .build();
-
   }
 }
