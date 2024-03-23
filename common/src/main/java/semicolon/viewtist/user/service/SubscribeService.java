@@ -43,7 +43,7 @@ public class SubscribeService {
     subscribeRepository.save(subscribe);
   }
 
-
+  @Transactional
   public void unsubscribe(String streamerNickname, Authentication authentication) {
 
     User streamer = getUserByNickname(streamerNickname);
