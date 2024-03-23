@@ -19,5 +19,4 @@ import semicolon.viewtist.service.ChatRoomService;
 @RequiredArgsConstructor
 public class ChatRoomController {
   private final ChatRoomService chatRoomService;
-
 }
