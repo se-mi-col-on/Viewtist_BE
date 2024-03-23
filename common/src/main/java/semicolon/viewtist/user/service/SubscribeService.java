@@ -16,6 +16,7 @@ import semicolon.viewtist.user.entity.User;
 import semicolon.viewtist.user.exception.SubscribeException;
 import semicolon.viewtist.user.exception.UserException;
 import semicolon.viewtist.user.repository.UserRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
