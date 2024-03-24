@@ -25,11 +25,13 @@ import semicolon.viewtist.service.ChatMessageService;
 @RequiredArgsConstructor
 public class ChatMessageController {
   private final ChatMessageService chatMessageService;
-
+  private final SimpMessageSendingOperations operations;
 
   @MessageMapping("/message")
-  public ResponseEntity<ChatMessageResponse> sendMessage(ChatMessageRequest chatMessageRequest) {
-    return ResponseEntity.ok(chatMessageService.sendMessage(chatMessageRequest));
+  public void sendMessage(ChatMessageRequest chatMessageRequest) {
+    ChatMessageResponse chatMessage = chatMessageService.manageChatMessage(chatMessageRequest);
+    operations.convertAndSend
+        ("/sub/room/" + chatMessage.getStreamingId(), chatMessage);
   }
 
   @GetMapping("/chat/{streamingId}")
