@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -29,10 +31,10 @@ public class ChatMessageController {
   public ResponseEntity<ChatMessageResponse> sendMessage(ChatMessageRequest chatMessageRequest) {
     return ResponseEntity.ok(chatMessageService.sendMessage(chatMessageRequest));
   }
-  @PreAuthorize("isAuthenticated()")
+
   @GetMapping("/chat/{streamingId}")
   @Operation(summary = "입장시 이전의 채팅 내역을 불러온다.", description = "채팅방에 있는 채팅 내역들이 불러와짐")
-  public ResponseEntity<List<ChatMessageResponse>> getChatMessageHistory(@PathVariable Long streamingId){
-    return ResponseEntity.ok(chatMessageService.getChatMessages(streamingId));
+  public ResponseEntity<Page<ChatMessageResponse>> getChatMessageHistory(@PathVariable Long streamingId, Pageable pageable){
+    return ResponseEntity.ok(chatMessageService.getChatMessages(streamingId,pageable));
   }
 }

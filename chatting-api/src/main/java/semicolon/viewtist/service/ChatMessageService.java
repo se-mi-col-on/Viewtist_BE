@@ -3,6 +3,8 @@ package semicolon.viewtist.service;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import semicolon.viewtist.chatting.dto.response.ChatMessageResponse;
 import semicolon.viewtist.chatting.entity.ChatMessage;
 import semicolon.viewtist.chatting.exception.ChattingException;
 import semicolon.viewtist.chatting.repository.ChatMessageRepository;
+import semicolon.viewtist.chatting.repository.ChatRoomRepository;
 import semicolon.viewtist.global.exception.ErrorCode;
 import semicolon.viewtist.user.entity.User;
 import semicolon.viewtist.user.repository.UserRepository;
@@ -21,28 +24,31 @@ import semicolon.viewtist.user.repository.UserRepository;
 @RequiredArgsConstructor
 public class ChatMessageService {
   private final ChatMessageRepository chatMessageRepository;
+  private final ChatRoomRepository chatRoomRepository;
   private final UserRepository userRepository;
   private final SimpMessageSendingOperations operations;
   private final String WELCOME = " 님이 들어오셨습니다.";
   private final String GOODBYE = " 님이 나가셨습니다.";
   // 이전 채팅 메세지 내역
-  public List<ChatMessageResponse> getChatMessages(Long streamingId){
-    return chatMessageRepository.findByStreamingIdOrderByCreatedAtDesc(streamingId)
-        .stream().map(ChatMessageResponse::from)
-        .collect(Collectors.toList());
+  public Page<ChatMessageResponse> getChatMessages(Long streamingId, Pageable pageable){
+    Page<ChatMessage> chatMessages = chatMessageRepository.findByStreamingIdOrderByCreatedAtDesc(streamingId, pageable);
+   return chatMessages.map(ChatMessageResponse::from);
   }
 @Transactional
   public ChatMessageResponse sendMessage(ChatMessageRequest chatMessageRequest) {
    User user = userRepository.findByNickname(chatMessageRequest.getNickname()).orElseThrow(
        () -> new ChattingException(ErrorCode.USER_NOT_FOUND)
    );
+    chatRoomRepository.findByStreamingId(chatMessageRequest.getStreamingId()).orElseThrow(
+        () -> new ChattingException(ErrorCode.NOT_EXIST_STREAMINGID)
+    );
     if(MessageType.ENTER.equals(chatMessageRequest.getMessageType())){
-      chatMessageRequest.setMessage(user.getNickname()+WELCOME);
+    chatMessageRequest.setMessage(user.getNickname()+WELCOME);
     }
     ChatMessage chatMessage = ChatMessage.from(chatMessageRequest);
     chatMessageRepository.save(chatMessage);
     operations.convertAndSend
-        ("/sub/room/" + chatMessage.getStreamingId(), chatMessage.getMessage());
+        ("/sub/room/" + chatMessageRequest.getStreamingId(), chatMessageRequest.getMessage());
     return ChatMessageResponse.from(chatMessage);
   }
 }
