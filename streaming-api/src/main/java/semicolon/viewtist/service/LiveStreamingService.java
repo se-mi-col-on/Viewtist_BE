@@ -8,7 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import semicolon.viewtist.chatting.entity.ChatRoom;
 import semicolon.viewtist.chatting.exception.ChattingException;
 import semicolon.viewtist.chatting.repository.ChatRoomRepository;
@@ -42,7 +41,6 @@ public class LiveStreamingService {
 
 
   // 스트리밍 시작
-  @Transactional
   public LiveStreamingResponse startLiveStreaming(
       LiveStreamingCreateRequest liveStreamingCreateRequest,
       Authentication authentication) {
