@@ -20,8 +20,6 @@ import semicolon.viewtist.user.repository.UserRepository;
 @Component
 @Slf4j
 public class StompHandler  implements ChannelInterceptor {
-  private final UserRepository userRepository;
-  private final TokenProvider tokenProvider;
 //  @Override
 //  public Message<?> preSend(Message<?> message, MessageChannel channel) {
 //    StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);

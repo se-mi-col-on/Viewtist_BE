@@ -13,10 +13,12 @@ import semicolon.viewtist.chatting.entity.ChatMessage;
 public class ChatMessageResponse {
   private String nickname;
   private String message;
+  private Long streamingId;
   public static ChatMessageResponse from(ChatMessage chatMessage) {
     return ChatMessageResponse.builder()
         .nickname(chatMessage.getNickname())
         .message(chatMessage.getMessage())
+        .streamingId(chatMessage.getStreamingId())
         .build();
   }
 }

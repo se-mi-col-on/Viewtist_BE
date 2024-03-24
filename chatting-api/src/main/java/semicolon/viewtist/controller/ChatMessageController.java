@@ -24,10 +24,10 @@ import semicolon.viewtist.service.ChatMessageService;
 public class ChatMessageController {
   private final ChatMessageService chatMessageService;
 
-  @PreAuthorize("isAuthenticated()")
+
   @MessageMapping("/message")
-  public void sendMessage(ChatMessageRequest chatMessageRequest, Authentication authentication) {
-    chatMessageService.sendMessage(chatMessageRequest,authentication);
+  public ResponseEntity<ChatMessageResponse> sendMessage(ChatMessageRequest chatMessageRequest) {
+    return ResponseEntity.ok(chatMessageService.sendMessage(chatMessageRequest));
   }
   @PreAuthorize("isAuthenticated()")
   @GetMapping("/chat/{streamingId}")

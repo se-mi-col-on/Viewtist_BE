@@ -30,10 +30,8 @@ public class ChatMessage extends BaseTimeEntity {
   public static ChatMessage from(ChatMessageRequest request) {
     return ChatMessage.builder()
         .streamingId(request.getStreamingId())
+        .nickname(request.getNickname())
         .message(request.getMessage())
         .build();
-  }
-  public void setNickname(String nickname){
-    this.nickname = nickname;
   }
 }

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import semicolon.viewtist.chatting.dto.request.ChatMessageRequest;
 import semicolon.viewtist.chatting.dto.request.ChatMessageRequest.MessageType;
 import semicolon.viewtist.chatting.dto.response.ChatMessageResponse;
@@ -30,17 +31,18 @@ public class ChatMessageService {
         .stream().map(ChatMessageResponse::from)
         .collect(Collectors.toList());
   }
-
-  public void sendMessage(ChatMessageRequest chatMessageRequest, Authentication authentication) {
-    User user = userRepository.findByEmail(authentication.getName()).orElseThrow(
-        () -> new ChattingException(ErrorCode.USER_NOT_FOUND)
-    );
+@Transactional
+  public ChatMessageResponse sendMessage(ChatMessageRequest chatMessageRequest) {
+   User user = userRepository.findByNickname(chatMessageRequest.getNickname()).orElseThrow(
+       () -> new ChattingException(ErrorCode.USER_NOT_FOUND)
+   );
     if(MessageType.ENTER.equals(chatMessageRequest.getMessageType())){
       chatMessageRequest.setMessage(user.getNickname()+WELCOME);
     }
     ChatMessage chatMessage = ChatMessage.from(chatMessageRequest);
-    chatMessage.setNickname(user.getNickname());
+    chatMessageRepository.save(chatMessage);
     operations.convertAndSend
         ("/sub/room/" + chatMessage.getStreamingId(), chatMessage.getMessage());
+    return ChatMessageResponse.from(chatMessage);
   }
 }
