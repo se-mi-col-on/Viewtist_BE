@@ -1,5 +1,6 @@
 package semicolon.viewtist.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,9 @@ import semicolon.viewtist.chatting.repository.ChatMessageRepository;
 import semicolon.viewtist.chatting.repository.ChatRoomRepository;
 import semicolon.viewtist.global.exception.ErrorCode;
 import semicolon.viewtist.jwt.TokenProvider;
+import semicolon.viewtist.liveStreaming.entity.LiveStreaming;
+import semicolon.viewtist.liveStreaming.exception.LiveStreamingException;
+import semicolon.viewtist.liveStreaming.repository.LiveStreamingRepository;
 import semicolon.viewtist.user.entity.User;
 import semicolon.viewtist.user.repository.UserRepository;
 
@@ -27,7 +31,8 @@ public class ChatMessageService {
   private final ChatMessageRepository chatMessageRepository;
   private final ChatRoomRepository chatRoomRepository;
   private final UserRepository userRepository;
-  private final TokenProvider tokenProvider;
+  private final LiveStreamingRepository liveStreamingRepository;
+
 
   private final String WELCOME = " 님이 들어오셨습니다.";
   private final String GOODBYE = " 님이 나가셨습니다.";
@@ -44,20 +49,8 @@ public class ChatMessageService {
     chatRoomRepository.findByStreamingId(chatMessageRequest.getStreamingId()).orElseThrow(
         () -> new ChattingException(ErrorCode.NOT_EXIST_STREAMINGID)
     );
-    if(MessageType.ENTER.equals(chatMessageRequest.getMessageType())){
-      chatMessageRequest.setMessage(user.getNickname()+WELCOME);
-    }
     ChatMessage chatMessage = ChatMessage.from(chatMessageRequest);
     chatMessageRepository.save(chatMessage);
     return ChatMessageResponse.from(chatMessage);
-  }
-  @Transactional
-  public void setUserSessionId(String sessionId, String token){
-    if(tokenProvider.validateToken(token)){
-      throw new ChattingException(ErrorCode.ACCESS_DENIED);
-    }
-    User user = userRepository.findByEmail(tokenProvider.getAuthentication(token).getName())
-        .orElseThrow(() -> new ChattingException(ErrorCode.INVALID_TOKEN));
-    user.setSessionId(sessionId);
   }
 }
