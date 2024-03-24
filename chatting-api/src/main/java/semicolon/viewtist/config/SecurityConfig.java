@@ -46,7 +46,9 @@ public class SecurityConfig {
             .authenticationEntryPoint(customAuthenticationEntryPoint)
             .accessDeniedHandler(customAccessDeniedHandler)
         )
+
         .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
     return http.build();
   }
 }

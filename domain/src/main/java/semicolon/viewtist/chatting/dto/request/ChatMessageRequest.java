@@ -19,5 +19,6 @@ public class ChatMessageRequest {
   }
   private MessageType messageType; // 메시지 타입
   private Long streamingId; // 방 번호
+  private String nickname;
   private String message; // 메시지
 }
