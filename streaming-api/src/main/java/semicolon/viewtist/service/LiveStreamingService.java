@@ -40,6 +40,7 @@ public class LiveStreamingService {
   private final SubscribeRepository subscribeRepository;
   private final ChatRoomRepository chatRoomRepository;
 
+
   // 스트리밍 시작
   @Transactional
   public LiveStreamingResponse startLiveStreaming(
@@ -148,4 +149,10 @@ public class LiveStreamingService {
         .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
   }
 
+  public Long getViewerCount(Long streamingId) {
+   LiveStreaming liveStreaming = liveStreamingRepository.findById(streamingId).orElseThrow(
+       () -> new LiveStreamingException(ErrorCode.NOT_EXIST_STREAMINGID)
+   );
+   return liveStreaming.getViewerCount();
+  }
 }

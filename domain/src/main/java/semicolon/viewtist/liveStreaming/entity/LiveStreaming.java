@@ -54,6 +54,9 @@ public class LiveStreaming extends BaseTimeEntity {
   @Column(columnDefinition = "TEXT")
   private String thumbnail;
 
+
+
+
   public LiveStreamingResponse from(LiveStreaming liveStreaming) {
     return LiveStreamingResponse.builder()
         .title(liveStreaming.getTitle())
@@ -77,5 +80,12 @@ public class LiveStreaming extends BaseTimeEntity {
 
   public void updateThumbnail(String thumbnail) {
     this.thumbnail = thumbnail;
+  }
+
+  public void addViewCount(){
+    this.viewerCount++;
+  }
+  public void minusViewCount(){
+    this.viewerCount--;
   }
 }

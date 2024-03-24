@@ -1,5 +1,6 @@
 package semicolon.viewtist.service;
 
+import java.util.HashMap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -10,6 +11,8 @@ import semicolon.viewtist.chatting.entity.type.Status;
 import semicolon.viewtist.chatting.repository.ChatRoomRepository;
 import semicolon.viewtist.chatting.exception.ChattingException;
 import semicolon.viewtist.global.exception.ErrorCode;
+import semicolon.viewtist.liveStreaming.entity.LiveStreaming;
+import semicolon.viewtist.liveStreaming.exception.LiveStreamingException;
 import semicolon.viewtist.liveStreaming.repository.LiveStreamingRepository;
 import semicolon.viewtist.user.entity.User;
 import semicolon.viewtist.user.exception.UserException;
@@ -20,42 +23,34 @@ import semicolon.viewtist.user.repository.UserRepository;
 @RequiredArgsConstructor
 @Service
 public class ChatRoomService {
-  private final ChatRoomRepository chatRoomRepository;
-  private final UserRepository userRepository;
   private final LiveStreamingRepository liveStreamingRepository;
-  // 채팅방 상태 설정
-  @Transactional
-  public String setChatRoomStatus(Long streamingId, String status, Authentication authentication) {
-    ChatRoom chatRoom = chatRoomRepository.findByStreamingId(streamingId).orElseThrow(
-        () -> new ChattingException(ErrorCode.NOT_EXIST_STREAMKEY)
+@Transactional
+  public HashMap<String,Long> enter(String sessionId, Long streamingId, HashMap<String,Long> sessionMap) {
+    LiveStreaming streaming = liveStreamingRepository.findById(streamingId).orElseThrow(
+        () -> new LiveStreamingException(ErrorCode.NOT_EXIST_STREAMINGID)
     );
-    User user = userRepository.findByEmail(authentication.getName()).orElseThrow(
-        () -> new UserException(ErrorCode.USER_NOT_FOUND)
-    );
-    if(!user.getId().equals(chatRoom.getStreamerId())){
-        throw new UserException(ErrorCode.ACCESS_DENIED);
-    }
-    if(status.equals(Status.ON.toString())){
-      setStatus(chatRoom,true);
-    }else{
-      setStatus(chatRoom,false);
-    }
-    return status;
-  }
-  private void setStatus(ChatRoom chatRoom, boolean status){
-    chatRoom.setChatRoomActivate(status);
+    streaming.addViewCount();
+    sessionMap.put(sessionId,streamingId);
+    return sessionMap;
   }
   @Transactional
-  public User setUserSessionId(Long userId, String session){
-    User user = userRepository.findById(userId).orElseThrow(
-        () -> new UserException(ErrorCode.USER_NOT_FOUND)
+  public HashMap<String, Long> exit(String sessionId, HashMap<String,Long> sessionMap){
+  Long streamingId = sessionMap.get(sessionId);
+  if(streamingId != null){
+    LiveStreaming streaming = liveStreamingRepository.findById(streamingId).orElseThrow(
+        () -> new LiveStreamingException(ErrorCode.NOT_EXIST_STREAMINGID)
     );
-    user.setSessionId(session);
-    return user;
+    streaming.minusViewCount();
+    sessionMap.remove(sessionId);
   }
-  @Transactional
-  public void removeUserSessionId(User user){
-    user.setSessionId(null);
+
+    return sessionMap;
+  }
+  public Long getViews(Long streamingId){
+    LiveStreaming streaming = liveStreamingRepository.findById(streamingId).orElseThrow(
+        () -> new LiveStreamingException(ErrorCode.NOT_EXIST_STREAMINGID)
+    );
+    return streaming.getViewerCount();
   }
 
 }
