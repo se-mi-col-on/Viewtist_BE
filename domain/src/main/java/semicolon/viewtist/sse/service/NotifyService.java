@@ -114,7 +114,7 @@ public class NotifyService {
       try {
         sseEmitter.send(
             SseEmitter.event().id(eventId).name(notificationType.toString())
-                .data(response));
+                .data("data:" + response + "\n\n"));
       } catch (IOException e) {
         emitterRepository.delete(receiver);
       }
