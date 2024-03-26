@@ -23,11 +23,13 @@ public class StompConfig  implements WebSocketMessageBrokerConfigurer {
   private final StompHandler stompHandler;
   @Value("${stomp.test-server}")
   private String testServer;
+  @Value("${stomp.deploy-server}")
+  private String deployServer;
   @Override
   public void registerStompEndpoints(StompEndpointRegistry registry) {
     // 테스트할 때만 setAllowedOrigins("*"); 허용
     registry.addEndpoint("/live/chat")
-        .setAllowedOrigins(testServer)
+        .setAllowedOrigins(testServer,deployServer)
         .withSockJS();
   }
   @Override
