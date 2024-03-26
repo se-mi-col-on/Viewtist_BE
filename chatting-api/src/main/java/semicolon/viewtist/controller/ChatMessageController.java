@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -23,16 +25,18 @@ import semicolon.viewtist.service.ChatMessageService;
 @RequiredArgsConstructor
 public class ChatMessageController {
   private final ChatMessageService chatMessageService;
+  private final SimpMessageSendingOperations operations;
 
-  @PreAuthorize("isAuthenticated()")
   @MessageMapping("/message")
-  public void sendMessage(ChatMessageRequest chatMessageRequest, Authentication authentication) {
-    chatMessageService.sendMessage(chatMessageRequest,authentication);
+  public void sendMessage(ChatMessageRequest chatMessageRequest) {
+    ChatMessageResponse chatMessage = chatMessageService.manageChatMessage(chatMessageRequest);
+    operations.convertAndSend
+        ("/sub/room/" + chatMessage.getStreamingId(), chatMessage);
   }
-  @PreAuthorize("isAuthenticated()")
+
   @GetMapping("/chat/{streamingId}")
   @Operation(summary = "입장시 이전의 채팅 내역을 불러온다.", description = "채팅방에 있는 채팅 내역들이 불러와짐")
-  public ResponseEntity<List<ChatMessageResponse>> getChatMessageHistory(@PathVariable Long streamingId){
-    return ResponseEntity.ok(chatMessageService.getChatMessages(streamingId));
+  public ResponseEntity<Page<ChatMessageResponse>> getChatMessageHistory(@PathVariable Long streamingId, Pageable pageable){
+    return ResponseEntity.ok(chatMessageService.getChatMessages(streamingId,pageable));
   }
 }

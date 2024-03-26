@@ -8,7 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import semicolon.viewtist.chatting.entity.ChatRoom;
 import semicolon.viewtist.chatting.exception.ChattingException;
 import semicolon.viewtist.chatting.repository.ChatRoomRepository;
@@ -40,8 +39,8 @@ public class LiveStreamingService {
   private final SubscribeRepository subscribeRepository;
   private final ChatRoomRepository chatRoomRepository;
 
+
   // 스트리밍 시작
-  @Transactional
   public LiveStreamingResponse startLiveStreaming(
       LiveStreamingCreateRequest liveStreamingCreateRequest,
       Authentication authentication) {
@@ -148,4 +147,10 @@ public class LiveStreamingService {
         .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
   }
 
+  public Long getViewerCount(Long streamingId) {
+   LiveStreaming liveStreaming = liveStreamingRepository.findById(streamingId).orElseThrow(
+       () -> new LiveStreamingException(ErrorCode.NOT_EXIST_STREAMINGID)
+   );
+   return liveStreaming.getViewerCount();
+  }
 }

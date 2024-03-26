@@ -1,5 +1,6 @@
 package semicolon.viewtist.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -92,5 +93,12 @@ public class LiveStreamingController {
       @RequestBody LiveStreamingThumbnailRequest thumbnail) {
     LiveStreamingResponse liveStreaming = liveStreamingService.thumbnail(streamingId, thumbnail);
     return ResponseEntity.ok(liveStreaming);
+  }
+
+
+  @GetMapping("/viewers/{streamingId}")
+  @Operation(summary = "현재 스트리밍을 보고 있는 시청자 수를 조회한다.", description = "")
+  public ResponseEntity<Long> getViewCount(@PathVariable Long streamingId){
+    return ResponseEntity.ok(liveStreamingService.getViewerCount(streamingId));
   }
 }

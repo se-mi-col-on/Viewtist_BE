@@ -8,7 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import semicolon.viewtist.global.exception.ErrorCode;
 import semicolon.viewtist.sse.entity.Subscribe;
 import semicolon.viewtist.sse.repository.SubscribeRepository;
@@ -17,6 +16,7 @@ import semicolon.viewtist.user.entity.User;
 import semicolon.viewtist.user.exception.SubscribeException;
 import semicolon.viewtist.user.exception.UserException;
 import semicolon.viewtist.user.repository.UserRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -44,7 +44,7 @@ public class SubscribeService {
     subscribeRepository.save(subscribe);
   }
 
-@Transactional
+  @Transactional
   public void unsubscribe(String streamerNickname, Authentication authentication) {
 
     User streamer = getUserByNickname(streamerNickname);

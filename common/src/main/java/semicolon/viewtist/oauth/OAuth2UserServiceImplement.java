@@ -39,9 +39,9 @@ public class OAuth2UserServiceImplement extends DefaultOAuth2UserService {
     String email;
     SocialUserRequest socialUserRequest;
     if (oauthClientName.equals("kakao")) {
-      userId = "kakao_" + oAuth2User.getAttributes().get("id");
-      Optional<User> optionalUser = userRepository.findByNickname(userId);
-      if (optionalUser.isPresent()) {
+      userId = "kakao_" + oAuth2User.getAttributes().get("id") + "@email.com";
+      Optional<User> optionalUserByEmail = userRepository.findByEmail(userId);
+      if (optionalUserByEmail.isPresent()) {
         return new CustomOAuth2User(userId);
       } else {
         @SuppressWarnings("unchecked")
@@ -52,7 +52,7 @@ public class OAuth2UserServiceImplement extends DefaultOAuth2UserService {
             .userId(userId)
             .type(Type.kakao)
             .profilePhotoUrl(photoUrl)
-            .email(userId + "@email.com")
+            .email(userId)
             .build();
         user = SocialUserRequest.from(socialUserRequest);
       }
@@ -62,37 +62,35 @@ public class OAuth2UserServiceImplement extends DefaultOAuth2UserService {
       @SuppressWarnings("unchecked")
       Map<String, String> response = (Map<String, String>) oAuth2User.getAttributes()
           .get("response");
-      userId = "naver_" + response.get("id").substring(0, 14);
-      Optional<User> optionalUser = userRepository.findByNickname(userId);
+      userId = response.get("email");
+      Optional<User> optionalUser = userRepository.findByEmail(userId);
       if (optionalUser.isPresent()) {
         return new CustomOAuth2User(userId);
       } else {
-        email = response.get("email");
         photoUrl = response.get("profile_image");
         socialUserRequest = SocialUserRequest.builder()
             .userId(userId)
             .type(Type.naver)
             .profilePhotoUrl(photoUrl)
-            .email(email)
+            .email(userId)
             .build();
         user = SocialUserRequest.from(socialUserRequest);
       }
     }
 
     if (oauthClientName.equals("Google")) {
-      userId = "google_" + oAuth2User.getAttributes().get("sub");
-      Optional<User> optionalUser = userRepository.findByNickname(userId);
+      userId = oAuth2User.getAttributes().get("email").toString();
+      Optional<User> optionalUser = userRepository.findByEmail(userId);
       if (optionalUser.isPresent()) {
         return new CustomOAuth2User(userId);
       } else {
-        email = oAuth2User.getAttributes().get("email").toString();
         photoUrl = oAuth2User.getAttributes().get("picture").toString();
 
         socialUserRequest = SocialUserRequest.builder()
             .userId(userId)
             .type(Type.google)
             .profilePhotoUrl(photoUrl)
-            .email(email)
+            .email(userId)
             .build();
 
         user = SocialUserRequest.from(socialUserRequest);
