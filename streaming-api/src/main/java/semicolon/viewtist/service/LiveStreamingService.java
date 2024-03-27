@@ -1,5 +1,6 @@
 package semicolon.viewtist.service;
 
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,7 @@ public class LiveStreamingService {
 
 
   // 스트리밍 시작
+  @Transactional
   public LiveStreamingResponse startLiveStreaming(
       LiveStreamingCreateRequest liveStreamingCreateRequest,
       Authentication authentication) {
