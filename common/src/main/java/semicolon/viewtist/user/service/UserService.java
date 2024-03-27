@@ -165,8 +165,8 @@ public class UserService {
   }
 
   // 스트림키 가져오기
-  public String getStreamKey(Authentication authentication) {
-    User user = findByEmail(authentication.getName());
+  public String getStreamKey(Authentication authentication, String streamerNickname) {
+    User user = findByNickname(streamerNickname);
     return user.getStreamKey();
   }
 

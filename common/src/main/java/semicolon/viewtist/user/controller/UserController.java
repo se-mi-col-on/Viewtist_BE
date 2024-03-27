@@ -98,9 +98,10 @@ public class UserController {
   }
 
   @PreAuthorize("isAuthenticated()")
-  @GetMapping("/stream-key")
-  public ResponseEntity<String> getStreamKey(Authentication authentication) {
-    String streamKey = userService.getStreamKey(authentication);
+  @GetMapping("/stream-key/{streamerNickname}")
+  public ResponseEntity<String> getStreamKey(Authentication authentication,
+      @PathVariable(value = "streamerNickname") String streamerNickname) {
+    String streamKey = userService.getStreamKey(authentication, streamerNickname);
     return ResponseEntity.ok(streamKey);
   }
 
